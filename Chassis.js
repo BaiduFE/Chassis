@@ -182,6 +182,18 @@ Chassis.noConflict = function() {
         value = object[property];
         return Chassis.isFunction(value) ? value.call(object) : value;
     };
+    
+    Chassis.escape = function(str){
+        return str ?
+            str.replace(/\&/g,'&amp;')
+                .replace(/\</g,'&lt;')
+                .replace(/\>/g,'&gt;')
+                .replace(/\"/g,'&quot;')
+                .replace(/\'/g,'&#x27')
+                .replace(/\//g,'&#x2F'):
+            str;
+    
+    };
   
     /**
      * Chassis EventsÄ£¿é
@@ -472,9 +484,10 @@ Chassis.noConflict = function() {
         options || (options = {});
         
         this.attributes = {};
+        this.cid = _.uniqueId('c');
         
-        attrs = Chassis.mixin({},options.defaults || {},attrs);
         
+        attrs = Chassis.mixin({},this.defaults || {},attrs);
         this.set(attrs, options);
 
         this.initialize.apply(this,arguments);
@@ -482,14 +495,19 @@ Chassis.noConflict = function() {
     
     Chassis.mixin(Model.prototype, Events, {
         
+        idAttribute : 'id',
+        
         initialize : function(){},
         
-        get : function(key){
+        get : function(key) {
             return this.attributes[ key ];
         },
         
+        has : function( key ){
+            return this.get( key ) != null;
+        },
         
-        set : function(key, val, options){
+        set : function(key, val, options) {
             var self = this,
                 attr, 
                 attrs, 
@@ -513,6 +531,11 @@ Chassis.noConflict = function() {
 
             options || (options = {});
             
+            this._previousAttributes = Chassis.clone( this.attributes );
+            
+            if (this.idAttribute in attrs) {
+                this.id = attrs[this.idAttribute];
+            }
             
             Chassis.each(attrs,function(item,key){
                 options.unset ?
@@ -522,12 +545,11 @@ Chassis.noConflict = function() {
             });
         },
         
-        unset : function( attr, options ){
+        unset : function( attr, options ) {
             return this.set(attr, void 0, Chassis.mixin({}, options, {unset: true}));
         },
-        
-        
-        clear : function(options){
+                
+        clear : function(options) {
             var attrs = {};
             Chassis.each(this.attributes,function(item,key){
                 attrs[key] = void 0;
@@ -536,12 +558,29 @@ Chassis.noConflict = function() {
             return this.unset(attrs,options);
         },
         
-        toJSON : function(){
+        toJSON : function() {
             return Chassis.clone(this.attributes);
         },
         
-        clone : function(){
+        clone : function() {
             return new this.constructor(this.attributes);
+        },
+        
+        escape : function( attr ) {
+            return Chassis.escape(this.get(attr));
+        },
+        
+        previous : function( attr ) {
+            return (attr == null || !this._previousAttributes) ?
+                    null : this._previousAttributes[attr];
+        },
+        
+        previousAttributes : function(){
+            return Chassis.clone(this._previousAttributes);
+        },
+        
+        isNew : function(){
+            return this.id == null;
         }
         
         

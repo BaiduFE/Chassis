@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   var proxy = Chassis.Model.extend();
  
-  var doc, collection;
+ 
 
     module("Chassis.Model");
 
@@ -29,10 +29,22 @@ $(document).ready(function() {
     equal(model.one, 1);
   });
   
-  test("get attributes", 1, function() {
+  test("get attributes for defaults", 1, function() {
+    var Model = Chassis.Model.extend({defaults:{a:100}});
+    var model = new Model({});
+    equal(model.get('a'), 100);
+  });
+  
+  test("get attributes for new", 1, function() {
     var Model = Chassis.Model.extend({defaults:{a:1}});
     var model = new Model({a: 2});
     equal(model.get('a'), 2);
+  });
+  
+  test("has attributes", 1, function() {
+    var Model = Chassis.Model.extend({defaults:{a:1}});
+    var model = new Model();
+    equal(model.has('a'), true);
   });
   
   test("unset attributes", 1, function() {
@@ -54,6 +66,20 @@ $(document).ready(function() {
     var model = new Model({a: 2});
     var clone = model.clone();
     equal(clone.get('a'), 2);
+  });
+  
+  test("escape model attribute", 1, function() {
+    var Model = Chassis.Model.extend({defaults:{}});
+    var model = new Model({a:"<script>alert('xss')</script>"});
+    equal(model.escape('a'), '&lt;script&gt;alert(&#x27xss&#x27)&lt;&#x2Fscript&gt;');
+  });
+  
+  test("get previous attribute", 2, function() {
+    var Model = Chassis.Model.extend({});
+    var model = new Model({a:1});
+    model.set('a',2);
+    equal(model.previous('a'), 1);
+    equal(model.previousAttributes()['a'], 1);
   });
   
     /*

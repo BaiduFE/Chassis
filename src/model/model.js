@@ -1,68 +1,66 @@
     var Model = Chassis.Model = function(attributes, options) {
         var defaults,
-            attrs = attributes || {};
-            
+            attrs;
+        
+        attrs = attributes || {};
         options || (options = {});
-
+        
         this.attributes = {};
+        this.cid = _.uniqueId('c');
         
-        if (options.parse) {
-            attrs = this.parse(attrs, options) || {};
-        }
         
-        options._attrs || (options._attrs = attrs);
-        
-        if (defaults = _.result(this, 'defaults')) {
-            attrs = _.defaults({}, attrs, defaults);
-        }
+        attrs = Chassis.mixin({},this.defaults || {},attrs);
         this.set(attrs, options);
-        this.changed = {};
-        this.initialize.apply(this, arguments);
+        
+        
+        
+        this.initialize.apply(this,arguments);
     };
-
+    
     Chassis.mixin(Model.prototype, Events, {
         
+        idAttribute : 'id',
+        
+        initialize : function(){},
+        
         /**
-         * initialize
+         *fetch方法获取数据的url。
+         *注意这个方法的意思和backbone是有区别的
          *
-         */
-        initialize: function(){},
-
-        /**
-         * toJSON
-         *
-         */
-        toJSON: function(options) {
-          return Chassis.clone(this.attributes);
+         * @method url
+         * @return 
+         **/
+        url : function(){
+            
         },
         
         /**
-         * url
+         *从模型获取当前属性值，比如：csser.get("title")
          *
-         */
-        url: function() {},
-
-        /**
-         * get
-         *
-         */
-        get: function(attr) {
-            return this.attributes[attr];
+         * @method get
+         * @return 
+         **/
+        get : function(key) {
+            return this.attributes[ key ];
         },
         
         /**
-         * has
+         *属性值为非 null 或非 undefined 时返回 true
          *
-         */
-        has: function(attr) {
-            return this.get(attr) != null;
+         * @method has
+         * @return 
+         **/
+        has : function( key ){
+            return this.get( key ) != null;
         },
         
         /**
-         * set
+         *向模型设置一个或多个散列属性。 如果任何一个属性改变了模型的状态，在不传入 {silent: true} 选项参数的情况下，会触发 "change" 事件。 
          *
-         */
-        set: function(key, val, options) {
+         * @method set
+         * @return 
+         **/
+        set : function(key, val, options) {
             var self = this,
                 attr, 
                 attrs, 
@@ -71,8 +69,9 @@
                 silent, 
                 changing, 
                 prev, 
-                current;
-        
+                current,
+                validateResult;
+                
             if (key == null) {
                 return this;
             }
@@ -86,256 +85,201 @@
 
             options || (options = {});
             
-            ///TODO validate
-
-            unset           = options.unset;
-            silent          = options.silent;
-            changes         = [];
-            changing        = this._changing;
-            this._changing  = true;
-
-            if (!changing) {
-                this._previousAttributes = _.clone(this.attributes);
-                this.changed = {};
+            //变更之前先做校验
+            validateResult = this.validate.call(this,attrs);
+            
+            if(validateResult !== true){
+                this.trigger('error',validateResult);
+                return;
             }
-            current = this.attributes, prev = this._previousAttributes;
-
-            // For each `set` attribute, update or delete the current value.
-            Chassis.each(attrs,function(aItem,aKey){
-                val = aItem;
-                
-                ///TODO�ݲ��Ƚ�
-                //�����ǰ��ֵ��Ҫ���õ�ֵ��ͬ
-                if (!_.isEqual(current[aKey], val)) {
-                    changes.push(aKey);
-                }
-                //���֮ǰ��ֵ��Ҫ���õ�ֵ��ͬ
-                if (!_.isEqual(prev[aKey], val)) {
-                    this.changed[aKey] = val;
-                } else {
-                    delete this.changed[aKey];
-                }
-                
-                unset ? delete current[aKey] : current[aKey] = val;
+            
+            this._previousAttributes = Chassis.clone( this.attributes );
+            
+            if (this.idAttribute in attrs) {
+                this.id = attrs[this.idAttribute];
+            }
+            
+            Chassis.each(attrs,function(item,key){
+                options.unset ?
+                    delete self.attributes[ key ] :
+                    self.attributes[ key ] = item;
+                    
             });
-
-
-            //�����Ҫ����change
-            if (!silent) {
-                if (changes.length) {
-                    this._pending = true;
-                }
-                Chassis.each(changes,function(cItem,cKey){
-                    self.trigger('change:' + cItem, this, current[cItem], options);
-                });
-                
-            }
-
-            // You might be wondering why there's a `while` loop here. Changes can
-            // be recursively nested within `"change"` events.
-            if (changing) return this;
-            if (!silent) {
-                while (this._pending) {
-                    this._pending = false;
-                    this.trigger('change', this, options);
-                }
-            }
-            this._pending = false;
-            this._changing = false;
-            return this;
+            
+            self.trigger('change',self);
         },
         
         /**
-         * unset
+         *从内部属性散列表中删除指定属性。 如果未设置 silent 选项，会触发 "change" 事件。
          *
-         */
-        unset: function(attr, options) {
+         * @method clear
+         * @return 
+         **/
+        unset : function( attr, options ) {
             return this.set(attr, void 0, Chassis.mixin({}, options, {unset: true}));
         },
         
         /**
-         * clear
+         *从模型中删除所有属性。 如果未设置 silent 选项，会触发 "change" 事件。
          *
-         */
-        clear: function(options) {
+         * @method clear
+         * @return 
+         **/
+        clear : function( options ) {
             var attrs = {};
-            
             Chassis.each(this.attributes,function(item,key){
                 attrs[key] = void 0;
             });
             
-            return this.set(attrs, Chassis.mixin({}, options, {unset: true}));
+            return this.unset(attrs,options);
         },
-
+        
         /**
-         * changedAttributes
+         *返回模型 attributes 副本的 JSON 字符串化形式。 它可用于模型的持久化、序列化，或者传递到视图前的扩充。
          *
-         */
-        changedAttributes: function(diff) {
-            var val, 
-                changed = false,
-                old;
-                
-            if (!diff) {
-                return this.hasChanged() ? _.clone(this.changed) : false;
-            }
+         * @method toJSON
+         * @return 
+         **/
+        toJSON : function() {
+            return Chassis.clone(this.attributes);
+        },
+        
+        /**
+         *返回与模型属性一致的新的实例。
+         *
+         * @method clone
+         * @return 
+         **/
+        clone : function() {
+            return new this.constructor(this.attributes);
+        },
+        
+        /**
+         *与 get 类似, 但返回模型属性值的 HTML 转义后的版本。 如果将数据从模型插入 HTML，使用 escape 取数据可以避免 XSS 攻击.
+         *
+         * @method escape
+         * @return 
+         **/
+        escape : function( attr ) {
+            return Chassis.escape(this.get(attr));
+        },
+        
+        /**
+         *在 "change" 事件发生的过程中，本方法可被用于获取已改变属性的旧值。
+         *
+         * @method previous
+         * @return 
+         **/
+        previous : function( attr ) {
+            return (attr == null || !this._previousAttributes) ?
+                    null : this._previousAttributes[attr];
+        },
+        
+        /**
+         *返回模型的上一个属性散列的副本。一般用于获取模型的不同版本之间的区别，或者当发生错误时回滚模型状态。
+         *
+         * @method previousAttributes
+         * @return 
+         **/
+        previousAttributes : function() {
+            return Chassis.clone(this._previousAttributes);
+        },
+        
+        /**
+         *模型是否已经保存到服务器。 如果模型尚无 id，则被视为新的。
+         *
+         * @method isNew
+         * @return 
+         **/
+        isNew : function() {
+            return this.id == null;
+        },
+        
+        /**
+         *手动获取数据
+         *
+         * @method fetch
+         * @return 
+         **/
+        fetch : function( options ) {
+            var self = this;
             
-            old = this._changing ? this._previousAttributes : this.attributes;
-            for (var attr in diff) {
-                if (_.isEqual(old[attr], (val = diff[attr]))) {
-                    continue;
+            
+            options = options ? Chassis.clone(options) : {};
+            
+            $.ajax({
+                url : self.url(),
+                data : (options.data || {}),
+                dataType : 'json',
+                success : function(resp){
+                    resp = self.parse(resp,options);
+                    
+                    options.success = options.success || function(){};
+                    options.success.call(self);
+                    self.set( resp, options );
+                },
+                error : function(){
+                    self.trigger('error');
                 }
-                
-                (changed || (changed = {}))[attr] = val;
-            }
-            return changed;
-        },
-
-        /**
-         * previous
-         *
-         */
-        previous: function(attr) {
-            if (attr == null || !this._previousAttributes) {
-                return null;
-            }
-            
-            return this._previousAttributes[attr];
-        },
-
-        /**
-         * previousAttributes
-         *
-         */
-        previousAttributes: function() {
-            return _.clone(this._previousAttributes);
-        },
-
-        /**
-         * fetch
-         *
-         */
-        fetch: function(options) {
-          options = options ? _.clone(options) : {};
-          if (options.parse === void 0) options.parse = true;
-          var model = this;
-          var success = options.success;
-          options.success = function(resp) {
-            if (!model.set(model.parse(resp, options), options)) return false;
-            if (success) success(model, resp, options);
-            model.trigger('sync', model, resp, options);
-          };
-          wrapError(this, options);
-          return this.sync('read', this, options);
-        },
-
-        /**
-         * save
-         *
-         */
-        save: function(key, val, options) {
-          var attrs, method, xhr, attributes = this.attributes;
-
-          // Handle both `"key", value` and `{key: value}` -style arguments.
-          if (key == null || typeof key === 'object') {
-            attrs = key;
-            options = val;
-          } else {
-            (attrs = {})[key] = val;
-          }
-
-          options = _.extend({validate: true}, options);
-
-          // If we're not waiting and attributes exist, save acts as
-          // `set(attr).save(null, opts)` with validation. Otherwise, check if
-          // the model will be valid when the attributes, if any, are set.
-          if (attrs && !options.wait) {
-            if (!this.set(attrs, options)) return false;
-          } else {
-            if (!this._validate(attrs, options)) return false;
-          }
-
-          // Set temporary attributes if `{wait: true}`.
-          if (attrs && options.wait) {
-            this.attributes = _.extend({}, attributes, attrs);
-          }
-
-          // After a successful server-side save, the client is (optionally)
-          // updated with the server-side state.
-          if (options.parse === void 0) options.parse = true;
-          var model = this;
-          var success = options.success;
-          options.success = function(resp) {
-            // Ensure attributes are restored during synchronous saves.
-            model.attributes = attributes;
-            var serverAttrs = model.parse(resp, options);
-            if (options.wait) serverAttrs = _.extend(attrs || {}, serverAttrs);
-            if (_.isObject(serverAttrs) && !model.set(serverAttrs, options)) {
-              return false;
-            }
-            if (success) success(model, resp, options);
-            model.trigger('sync', model, resp, options);
-          };
-          wrapError(this, options);
-
-          method = this.isNew() ? 'create' : (options.patch ? 'patch' : 'update');
-          if (method === 'patch') options.attrs = attrs;
-          xhr = this.sync(method, this, options);
-
-          // Restore attributes.
-          if (attrs && options.wait) this.attributes = attributes;
-
-          return xhr;
+            });
         },
         
         /**
-         * destroy
+         *自定义数据解析，建议用自定义的逻辑重载它
          *
-         */
-        destroy: function(options) {
-          options = options ? _.clone(options) : {};
-          var model = this;
-          var success = options.success;
-
-          var destroy = function() {
-            model.trigger('destroy', model, model.collection, options);
-          };
-
-          options.success = function(resp) {
-            if (options.wait || model.isNew()) destroy();
-            if (success) success(model, resp, options);
-            if (!model.isNew()) model.trigger('sync', model, resp, options);
-          };
-
-          if (this.isNew()) {
-            options.success();
-            return false;
-          }
-          wrapError(this, options);
-
-          var xhr = this.sync('delete', this, options);
-          if (!options.wait) destroy();
-          return xhr;
-        },
-        
-        /**
-         * TODO-sync
-         *
-         */
-        sync: function() {
-            return Chassis.sync.apply(this, arguments);
-        },
-
-        /**
-         * parse
-         *
-         */
+         * @method parse
+         * @return 
+         **/
         parse: function(resp, options) {
             return resp;
+        },
+        
+        /**
+         *自定义校验，建议用自定义的逻辑重载它
+         *
+         * @method validate
+         * @return 
+         **/
+        validate : function(){
+            return true;
+        },
+        
+        /**
+         *手动触发 "change" 事件。
+         *
+         * @method change
+         * @return 
+         **/
+        change : function(){
+            this.trigger('change');
         }
+        
+        
+        
+        
+        
+        //对服务端做模型操作基本没用，故不做实现
+        /*
+        ,save : function(){}
+        ,destroy : function(){}
+        */
+        
+        
+        //可以全局指定，没什么实际意义
+        /*
+        ,urlRoot : function(){}
+        */
+        
+        //数据变更暂不实现(除非实现数据双向绑定)
+        /*
+        ,hasChanged : function(){}
+        ,changedAttributes : function(){}
+        */
+        
+        
+        
+        
+    });
+    
 
-  });
-  
-  Chassis.Model.extend = Chassis.extend;
-
-  
+    Model.extend = Chassis.extend;

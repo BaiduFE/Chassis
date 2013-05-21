@@ -1,10 +1,9 @@
 $(document).ready(function() {
 
   var proxy = Chassis.Model.extend();
- 
- 
 
-    module("Chassis.Model");
+
+  module("Chassis.Model");
 
   test("initialize", 1, function() {
     var Model = Chassis.Model.extend({
@@ -80,6 +79,92 @@ $(document).ready(function() {
     model.set('a',2);
     equal(model.previous('a'), 1);
     equal(model.previousAttributes()['a'], 1);
+  });
+  
+  test("fetch success", 1, function() {
+    var Model = Chassis.Model.extend({
+        url : function(){
+            return '/test/data/data.json';
+        }
+    });
+    var model = new Model({a:1});
+    
+    model.on('change',function(){
+        ok(true);
+        start();
+    });
+    model.fetch();
+    
+    stop();
+  });
+  
+  test("parse fetch data", 1, function() {
+    var Model = Chassis.Model.extend({
+        url : function(){
+            return '/test/data/data.json';
+        },
+        
+        parse : function(resp){
+            return {
+                'rewrite' : 1
+            }
+        }
+    });
+    var model = new Model({a:1});
+    
+    model.on('change',function(){
+        equal(model.get('rewrite'),1);
+        start();
+    });
+    model.fetch();
+    
+    stop();
+  });
+  
+  test("validate data", 1, function() {
+    var Model = Chassis.Model.extend({
+        url : function(){
+            return '/test/data/data.json';
+        },
+        
+        parse : function(resp){
+            return {
+                'rewrite' : 1
+            }
+        },
+        
+        validate : function(attrs){
+            return 'something is wrong!';
+        }
+    });
+    var model = new Model({a:1});
+    
+    model.on('error',function(msg){
+        equal(msg,'something is wrong!');
+        start();
+    });
+    model.fetch();
+    
+    stop();
+  });
+  
+  test("fetch error", 1, function() {
+    var Model = Chassis.Model.extend({
+        url : function(){
+            return '/test/data/notfound';
+        }
+    });
+    var model = new Model({a:1});
+    
+    model.on('error',function(){
+        ok(true);
+        start();
+    });
+    model.fetch();
+    
+    stop();
+    
+    
   });
   
     /*

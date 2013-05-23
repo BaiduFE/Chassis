@@ -2,8 +2,18 @@
  * @fileOverview 语言增强
  */
 
+/**
+ * mixin
+ * @method mixin
+ * @static
+ * @param  {object} target	待mixin目标对象
+ * @param  {object} source	待mixin源对象
+ * @return {object}
+ */
+Chassis.mixin = $.extend;
 
-Chassis.mixin = function( target, source /*[, source]*/) {
+/*
+function( target, source ) {
 
 	// 如果只有一个参数则视target为source，target为this;
 	if( arguments.length === 1 ) {
@@ -25,7 +35,16 @@ Chassis.mixin = function( target, source /*[, source]*/) {
 
 	return target;
 };
+*/
 
+/**
+ * 实现类继承
+ * @method extend
+ * @static
+ * @param  {object} protoProps	原型属性或方法
+ * @param  {object} staticProps 类属性或方法
+ * @return {function}
+ */
 Chassis.extend = function( protoProps, staticProps ) {
 	var parent = this,
 		child;
@@ -59,3 +78,21 @@ Chassis.extend = function( protoProps, staticProps ) {
 	return child;
 	
 };
+
+/**
+ * 生成标识ID
+ * @method uniqueId
+ * @static
+ * @param {string} prefix ID前缀
+ * @return {string}
+ */
+Chassis.uniqueId = ( function() {
+	var idCounter = 0;
+	return function( prefix ){
+		var id = ++idCounter + '';
+    	return prefix ? prefix + id : id;
+	};
+} )();
+
+Chassis.isFunction = $.isFunction;
+Chassis.bind = $.proxy;

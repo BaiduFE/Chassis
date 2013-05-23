@@ -54,7 +54,7 @@ Chassis.mixin(History.prototype, Events, {
     },
     
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Backbone.history.start() 开始监控 hashchange 事件并分配路由。
+     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
      * (注意这是一个会被重写的基类)
      *
      * @public
@@ -82,7 +82,7 @@ Chassis.mixin(History.prototype, Events, {
     },
 
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Backbone.history.start() 开始监控 hashchange 事件并分配路由。
+     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
      * (注意这个是Backbone没有的，除非单个应用同时使用hash和pushstate才用到这个)
      *
      * @public

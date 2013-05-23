@@ -6,7 +6,7 @@
 History.Pushstate = History.extend({
     
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Backbone.history.start() 开始监控 hashchange 事件并分配路由。
+     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
      *
      * @overwrite
      * @public

@@ -21,16 +21,24 @@ if( typeof exports !== 'undefined' ) {
  * 版本号
  * @property VERSION
  * @static
- * @type String
+ * @type string
  */
 Chassis.VERSION = '0.1.0';
+
+/**
+ * 页面切换动画命名空间
+ * @property FX
+ * @static
+ * @type string
+ */
+Chassis.FX = {};
 
 /**
  * $
  * @property $
  * @type jQuery|Zepto|ender
  */
-Chassis.$ = root.jQuery || root.Zepto || root.ender;
+var $ = Chassis.$ = root.jQuery || root.Zepto || root.ender;
 
 
 /**

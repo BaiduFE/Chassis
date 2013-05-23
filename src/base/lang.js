@@ -2,8 +2,7 @@
  * @fileOverview 语言增强
  */
 
-var 
-    proto = Array.prototype,
+var proto = Array.prototype,
     nativeForEach = proto.forEach,
     breaker = {},
     toString = proto.toString,
@@ -140,7 +139,6 @@ Chassis.isObject = function( obj ) {
 
 Chassis.isFunction = $.isFunction;
 
-
 Chassis.clone = function(obj) {
     if ( !Chassis.isObject( obj )) {
         return obj;
@@ -171,7 +169,7 @@ Chassis.escape = function( str ){
 
 };
 
-Chassis.bind = $.proxy;
+Chassis.proxy = $.proxy;
 
 Chassis.object = function(list, values) {
     var result = {};
@@ -189,3 +187,7 @@ Chassis.object = function(list, values) {
 
     return result;
 };
+
+$.support = Chassis.mixin( $.support || {}, {
+    has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
+});

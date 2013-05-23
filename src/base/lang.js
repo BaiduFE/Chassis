@@ -4,57 +4,52 @@
 
     var nativeForEach = Array.prototype.forEach,
         breaker = {},
-        idCounter = 0,
         toString = Array.prototype.toString,
         nativeIsArray = Array.isArray;
 
-    Chassis.mixin = function( target, source /*[, source]*/) {
+    Chassis.mixin = $.extend;
 
-        // 如果只有一个参数则视target为source，target为this;
-        if( arguments.length === 1 ) {
-            source = [ target ];
-            target = this;
-        } else {
-            source = [].slice.call( arguments, 1 );
-        }
+/**
+ * 实现类继承
+ * @method extend
+ * @static
+ * @param  {object} protoProps	原型属性或方法
+ * @param  {object} staticProps 类属性或方法
+ * @return {function}
+ */
+Chassis.extend = function( protoProps, staticProps ) {
+	var parent = this,
+		child;
 
-        for( var i = 0, len = source.length; i < len; i++ ) {
-            var src = source[ i ];
+	// 构造函数
+	if( protoProps && 'constructor' in protoProps ) {
+		child = protoProps.constructor;
+	} else {
+		child = function() {
+			return parent.apply( this, arguments );
+		};
+	}
 
-            if( src ) {
-                for( var prop in src ) {
-                    target[ prop ] = src[ prop ];
-                }
-            }
-        }
+	// 静态方法
+	Chassis.mixin( child, parent, staticProps );
 
-        return target;
-    };
+	// 原型链处理
+	var Proxy = function() {
+		this.constructor = child;
+	};
 
-    Chassis.extend = function(protoProps, staticProps) {
-        var parent = this;
-        var child;
+	Proxy.prototype = parent.prototype;
+	child.prototype = new Proxy;
 
-        if (protoProps && Chassis.has(protoProps, 'constructor')) {
-          child = protoProps.constructor;
-        } else {
-          child = function(){ return parent.apply(this, arguments); };
-        }
+	if( protoProps ) {
+		Chassis.mixin( child.prototype, protoProps );
+	}
 
-        Chassis.mixin(child, parent, staticProps);
+	child.__super__ = parent.prototype;
 
-
-        var Surrogate = function(){ this.constructor = child; };
-        Surrogate.prototype = parent.prototype;
-        child.prototype = new Surrogate;
-
-        if (protoProps) Chassis.mixin(child.prototype, protoProps);
-
-
-        child.__super__ = parent.prototype;
-
-        return child;
-    };
+	return child;
+	
+};
 
 
 
@@ -123,10 +118,14 @@
 
 
     
-    Chassis.uniqueId = function(prefix) {
-        var id = '' + (++idCounter);
-        return prefix ? prefix + id : id;
-    };
+Chassis.uniqueId = ( function() {
+	var idCounter = 0;
+	return function( prefix ){
+		var id = ++idCounter + '';
+    	return prefix ? prefix + id : id;
+	};
+} )();
+
     
 
     Chassis.isArray = nativeIsArray || function(obj) {
@@ -137,9 +136,7 @@
         return obj === Object(obj);
     };
     
-    Chassis.isFunction = function(obj) {
-        return typeof obj === 'function';
-    };
+    Chassis.isFunction = $.isFunction;
     
   
     Chassis.clone = function(obj) {
@@ -170,3 +167,5 @@
             str;
     
     };
+    
+    Chassis.bind = $.proxy;

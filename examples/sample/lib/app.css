@@ -1,0 +1,59 @@
+html {overflow-y:scroll;}
+body {margin:0; padding:45px 0 0; font:12px/1.5 \5b8b\4f53,Arial,sans-serif;background:#ffffff;}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,blockquote,p{padding:0; margin:0;}
+table,td,tr,th{font-size:12px;}
+ol,ul {list-style:none;}
+li{list-style-type:none;}
+img{vertical-align:top;border:0;}
+h1,h2,h3,h4,h5,h6{font-size:inherit; font-weight:normal;}
+address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
+
+#wrapper {
+    width:960px;
+    margin:0 auto;
+}
+#example {
+    min-height:320px;
+    border:1px solid #CCC;
+    padding:5px;
+    color:#666;
+}
+    #example h3 {
+        background:#FEFEFE;
+        line-height:32px;
+        font-weight:700;
+    }
+    
+    #example .goback  a {
+        color:#ff3200;
+    }
+    #example li {
+        line-height:26px;
+        font-size:14px;
+        
+    }
+    
+        #example li a {
+            color:#2d64b3;
+            text-decoration:none;
+
+        }
+        #example li a:hover {
+            color:#ff3200;
+            text-decoration:underline;
+        }
+
+#navbar li {
+    display:inline-block;
+    width:45px;
+}
+
+    #navbar li a {
+        display:block;
+        color:#ff3200;
+        text-decoration:none;
+        font-size:14px;
+        font-weight:700;
+        text-align:center;
+        background:;
+    }

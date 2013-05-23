@@ -22,7 +22,7 @@ Chassis.extend = function( protoProps, staticProps ) {
 		child;
 
 	// 构造函数
-	if( protoProps && 'constructor' in protoProps ) {
+	if( protoProps && protoProps.hasOwnProperty( 'constructor' ) ) {
 		child = protoProps.constructor;
 	} else {
 		child = function() {

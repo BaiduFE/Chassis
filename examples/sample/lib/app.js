@@ -25,7 +25,7 @@ var HomeView = function( Request ) {
         },
         
         url : function(){
-            return 'albums.php';
+            return 'lib/albums.php';
         },
         
         parse : function(resp){
@@ -53,7 +53,7 @@ var InfoView = function( Request ) {
         },
         
         url : function(){
-            return 'info.php';
+            return 'lib/info.php';
         },
         
         parse : function(resp){

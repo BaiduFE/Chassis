@@ -172,3 +172,20 @@ Chassis.escape = function( str ){
 };
 
 Chassis.bind = $.proxy;
+
+Chassis.object = function(list, values) {
+    var result = {};
+    if (list == null) {
+        return {};
+    }
+    
+    Chassis.each(list,function(item, key){
+        if (values) {
+            result[item] = values[ key ];
+        } else {
+            result[item[0]] = item[1];
+        }
+    });
+
+    return result;
+};

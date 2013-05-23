@@ -6,7 +6,7 @@ var Model = Chassis.Model = function(attributes, options) {
     options || (options = {});
     
     this.attributes = {};
-    this.cid = _.uniqueId('c');
+    this.cid = Chassis.uniqueId('c');
     
     
     attrs = Chassis.mixin({},this.defaults || {},attrs);

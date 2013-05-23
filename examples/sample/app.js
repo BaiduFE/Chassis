@@ -19,7 +19,31 @@ var Router = Chassis.Router.extend({
 });
 
 var HomeView = function( Request ) {
-    $('#example').html('home!');
+    var Model = Chassis.Model.extend({
+        initialize: function(attributes, options) {
+
+        },
+        
+        url : function(){
+            return 'albums.php';
+        },
+        
+        parse : function(resp){
+            return resp.plaze_album_list.RM.album_list;
+        }
+    });
+
+    var model = new Model();
+
+    model.on('change',function(){
+        $('#example').html(baidu.template($('#albumlist').html() ,this.toJSON()));
+    });
+
+    model.on('error',function(){
+        $('#example').html('something is wrong');
+    });
+    
+    model.fetch();
 };
 
 var InfoView = function( Request ) {
@@ -29,18 +53,18 @@ var InfoView = function( Request ) {
         },
         
         url : function(){
-            return 'data.php';
+            return 'info.php';
         },
         
         parse : function(resp){
-            return resp.data;
+            return resp;
         }
     });
 
     var model = new Model();
 
     model.on('change',function(){
-        $('#example').html(this.get('one'));
+        $('#example').html(baidu.template($('#albuminfo').html() ,this.toJSON()));
     });
 
     model.on('error',function(){

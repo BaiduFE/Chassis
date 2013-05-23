@@ -16,7 +16,32 @@ address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
     min-height:320px;
     border:1px solid #CCC;
     padding:5px;
+    color:#666;
 }
+    #example h3 {
+        background:#FEFEFE;
+        line-height:32px;
+        font-weight:700;
+    }
+    
+    #example .goback  a {
+        color:#ff3200;
+    }
+    #example li {
+        line-height:26px;
+        font-size:14px;
+        
+    }
+    
+        #example li a {
+            color:#2d64b3;
+            text-decoration:none;
+
+        }
+        #example li a:hover {
+            color:#ff3200;
+            text-decoration:underline;
+        }
 
 #navbar li {
     display:inline-block;

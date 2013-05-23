@@ -19,29 +19,38 @@ Chassis.mixin = $.extend;
  * @param  {object} staticProps 类属性或方法
  * @return {function}
  */
-Chassis.extend = function(protoProps, staticProps) {
-    var parent = this;
-    var child;
+Chassis.extend = function( protoProps, staticProps ) {
+	var parent = this,
+		child;
 
-    if (protoProps && Chassis.has(protoProps, 'constructor')) {
-      child = protoProps.constructor;
-    } else {
-      child = function(){ return parent.apply(this, arguments); };
-    }
+	// 构造函数
+	if( protoProps && protoProps.hasOwnProperty( 'constructor' ) ) {
+		child = protoProps.constructor;
+	} else {
+		child = function() {
+			return parent.apply( this, arguments );
+		};
+	}
 
-    Chassis.mixin(child, parent, staticProps);
+	// 静态方法
+	Chassis.mixin( child, parent, staticProps );
 
+	// 原型链处理
+	var Proxy = function() {
+		this.constructor = child;
+	};
 
-    var Surrogate = function(){ this.constructor = child; };
-    Surrogate.prototype = parent.prototype;
-    child.prototype = new Surrogate;
+	Proxy.prototype = parent.prototype;
+	child.prototype = new Proxy;
 
-    if (protoProps) Chassis.mixin(child.prototype, protoProps);
+	if( protoProps ) {
+		Chassis.mixin( child.prototype, protoProps );
+	}
 
+	child.__super__ = parent.prototype;
 
-    child.__super__ = parent.prototype;
+	return child;
 
-    return child;
 };
 
 

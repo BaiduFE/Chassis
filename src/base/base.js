@@ -7,7 +7,7 @@
  * @class __Chassis__
  */
 var root = this,
-	exportName = 'Rocket',
+	exportName = '__Chassis__',
 	_Chassis = root[ exportName ],
 	Chassis;
 

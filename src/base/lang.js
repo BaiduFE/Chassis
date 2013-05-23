@@ -2,9 +2,11 @@
  * @fileOverview 语言增强
  */
 
-var nativeForEach = Array.prototype.forEach,
+var 
+    proto = Array.prototype,
+    nativeForEach = proto.forEach,
     breaker = {},
-    toString = Array.prototype.toString,
+    toString = proto.toString,
     nativeIsArray = Array.isArray;
 
 Chassis.mixin = $.extend;
@@ -13,41 +15,41 @@ Chassis.mixin = $.extend;
  * 实现类继承
  * @method extend
  * @static
- * @param  {object} protoProps	原型属性或方法
+ * @param  {object} protoProps  原型属性或方法
  * @param  {object} staticProps 类属性或方法
  * @return {function}
  */
 Chassis.extend = function( protoProps, staticProps ) {
-	var parent = this,
-		child;
+    var parent = this,
+        child;
 
-	// 构造函数
-	if( protoProps && protoProps.hasOwnProperty( 'constructor' ) ) {
-		child = protoProps.constructor;
-	} else {
-		child = function() {
-			return parent.apply( this, arguments );
-		};
-	}
+    // 构造函数
+    if( protoProps && protoProps.hasOwnProperty( 'constructor' ) ) {
+        child = protoProps.constructor;
+    } else {
+        child = function() {
+            return parent.apply( this, arguments );
+        };
+    }
 
-	// 静态方法
-	Chassis.mixin( child, parent, staticProps );
+    // 静态方法
+    Chassis.mixin( child, parent, staticProps );
 
-	// 原型链处理
-	var Proxy = function() {
-		this.constructor = child;
-	};
+    // 原型链处理
+    var Proxy = function() {
+        this.constructor = child;
+    };
 
-	Proxy.prototype = parent.prototype;
-	child.prototype = new Proxy;
+    Proxy.prototype = parent.prototype;
+    child.prototype = new Proxy;
 
-	if( protoProps ) {
-		Chassis.mixin( child.prototype, protoProps );
-	}
+    if( protoProps ) {
+        Chassis.mixin( child.prototype, protoProps );
+    }
 
-	child.__super__ = parent.prototype;
+    child.__super__ = parent.prototype;
 
-	return child;
+    return child;
 
 };
 
@@ -118,12 +120,12 @@ Chassis.keys = function( obj ) {
 };
     
 Chassis.uniqueId = ( function() {
-	var idCounter = 0;
+    var idCounter = 0;
 
-	return function( prefix ){
-		var id = ++idCounter + '';
-    	return prefix ? prefix + id : id;
-	};
+    return function( prefix ){
+        var id = ++idCounter + '';
+        return prefix ? prefix + id : id;
+    };
 } )();
 
     

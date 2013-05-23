@@ -1,5 +1,5 @@
 /**
- * @fileOverview ÃüÃû¿Õ¼ä³õÊ¼»¯
+ * @fileOverview å‘½åç©ºé—´åˆå§‹åŒ–
  */
 
 var root = this,
@@ -23,7 +23,7 @@ Chassis.noConflict = function() {
 };
 
     /**
-     * @fileOverview ÓïÑÔÔöÇ¿
+     * @fileOverview è¯­è¨€å¢å¼º
      */
 
     var nativeForEach = Array.prototype.forEach,
@@ -34,7 +34,7 @@ Chassis.noConflict = function() {
 
     Chassis.mixin = function( target, source /*[, source]*/) {
 
-        // Èç¹ûÖ»ÓĞÒ»¸ö²ÎÊıÔòÊÓtargetÎªsource£¬targetÎªthis;
+        // å¦‚æœåªæœ‰ä¸€ä¸ªå‚æ•°åˆ™è§†targetä¸ºsourceï¼Œtargetä¸ºthis;
         if( arguments.length === 1 ) {
             source = [ target ];
             target = this;
@@ -80,8 +80,6 @@ Chassis.noConflict = function() {
         return child;
     };
 
-
-
     Chassis.each = Chassis.forEach = function(obj, iterator, context) {
         if (obj == null) {
             return;
@@ -105,8 +103,7 @@ Chassis.noConflict = function() {
             }
         }
     };
-      
-      
+    
     Chassis._once = function(func){
         var ran = false, 
             memo,
@@ -143,7 +140,24 @@ Chassis.noConflict = function() {
         
         return keys;
     };
-
+    
+    Chassis.object = function(list, values) {
+        var result = {};
+        
+        if (list == null) {
+            return result;
+        }
+        
+        Chassis.each(list,function(item,key){
+            if (values) {
+                result[item] = values[key];
+            } else {
+                result[item[0]] = item[1];
+            }
+        });
+        
+        return result;
+    };
 
 
     
@@ -196,7 +210,7 @@ Chassis.noConflict = function() {
     };
   
     /**
-     * Chassis EventsÄ£¿é
+     * Chassis Eventsæ¨¡å—
      *
      * @module Events
      *
@@ -502,8 +516,8 @@ Chassis.noConflict = function() {
         initialize : function(){},
         
         /**
-         *fetch·½·¨»ñÈ¡Êı¾İµÄurl¡£
-         *×¢ÒâÕâ¸ö·½·¨µÄÒâË¼ºÍbackboneÊÇÓĞÇø±ğµÄ
+         *fetchæ–¹æ³•è·å–æ•°æ®çš„urlã€‚
+         *æ³¨æ„è¿™ä¸ªæ–¹æ³•çš„æ„æ€å’Œbackboneæ˜¯æœ‰åŒºåˆ«çš„
          *
          * @method url
          * @return 
@@ -513,7 +527,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *´ÓÄ£ĞÍ»ñÈ¡µ±Ç°ÊôĞÔÖµ£¬±ÈÈç£ºcsser.get("title")
+         *ä»æ¨¡å‹è·å–å½“å‰å±æ€§å€¼ï¼Œæ¯”å¦‚ï¼šcsser.get("title")
          *
          * @method get
          * @return 
@@ -523,7 +537,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *ÊôĞÔÖµÎª·Ç null »ò·Ç undefined Ê±·µ»Ø true
+         *å±æ€§å€¼ä¸ºé null æˆ–é undefined æ—¶è¿”å› true
          *
          * @method has
          * @return 
@@ -533,7 +547,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *ÏòÄ£ĞÍÉèÖÃÒ»¸ö»ò¶à¸öÉ¢ÁĞÊôĞÔ¡£ Èç¹ûÈÎºÎÒ»¸öÊôĞÔ¸Ä±äÁËÄ£ĞÍµÄ×´Ì¬£¬ÔÚ²»´«Èë {silent: true} Ñ¡Ïî²ÎÊıµÄÇé¿öÏÂ£¬»á´¥·¢ "change" ÊÂ¼ş¡£ 
+         *å‘æ¨¡å‹è®¾ç½®ä¸€ä¸ªæˆ–å¤šä¸ªæ•£åˆ—å±æ€§ã€‚ å¦‚æœä»»ä½•ä¸€ä¸ªå±æ€§æ”¹å˜äº†æ¨¡å‹çš„çŠ¶æ€ï¼Œåœ¨ä¸ä¼ å…¥ {silent: true} é€‰é¡¹å‚æ•°çš„æƒ…å†µä¸‹ï¼Œä¼šè§¦å‘ "change" äº‹ä»¶ã€‚ 
          *
          * @method set
          * @return 
@@ -563,7 +577,7 @@ Chassis.noConflict = function() {
 
             options || (options = {});
             
-            //±ä¸üÖ®Ç°ÏÈ×öĞ£Ñé
+            //å˜æ›´ä¹‹å‰å…ˆåšæ ¡éªŒ
             validateResult = this.validate.call(this,attrs);
             
             if(validateResult !== true){
@@ -588,7 +602,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *´ÓÄÚ²¿ÊôĞÔÉ¢ÁĞ±íÖĞÉ¾³ıÖ¸¶¨ÊôĞÔ¡£ Èç¹ûÎ´ÉèÖÃ silent Ñ¡Ïî£¬»á´¥·¢ "change" ÊÂ¼ş¡£
+         *ä»å†…éƒ¨å±æ€§æ•£åˆ—è¡¨ä¸­åˆ é™¤æŒ‡å®šå±æ€§ã€‚ å¦‚æœæœªè®¾ç½® silent é€‰é¡¹ï¼Œä¼šè§¦å‘ "change" äº‹ä»¶ã€‚
          *
          * @method clear
          * @return 
@@ -598,7 +612,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *´ÓÄ£ĞÍÖĞÉ¾³ıËùÓĞÊôĞÔ¡£ Èç¹ûÎ´ÉèÖÃ silent Ñ¡Ïî£¬»á´¥·¢ "change" ÊÂ¼ş¡£
+         *ä»æ¨¡å‹ä¸­åˆ é™¤æ‰€æœ‰å±æ€§ã€‚ å¦‚æœæœªè®¾ç½® silent é€‰é¡¹ï¼Œä¼šè§¦å‘ "change" äº‹ä»¶ã€‚
          *
          * @method clear
          * @return 
@@ -613,7 +627,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *·µ»ØÄ£ĞÍ attributes ¸±±¾µÄ JSON ×Ö·û´®»¯ĞÎÊ½¡£ Ëü¿ÉÓÃÓÚÄ£ĞÍµÄ³Ö¾Ã»¯¡¢ĞòÁĞ»¯£¬»òÕß´«µİµ½ÊÓÍ¼Ç°µÄÀ©³ä¡£
+         *è¿”å›æ¨¡å‹ attributes å‰¯æœ¬çš„ JSON å­—ç¬¦ä¸²åŒ–å½¢å¼ã€‚ å®ƒå¯ç”¨äºæ¨¡å‹çš„æŒä¹…åŒ–ã€åºåˆ—åŒ–ï¼Œæˆ–è€…ä¼ é€’åˆ°è§†å›¾å‰çš„æ‰©å……ã€‚
          *
          * @method toJSON
          * @return 
@@ -623,7 +637,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *·µ»ØÓëÄ£ĞÍÊôĞÔÒ»ÖÂµÄĞÂµÄÊµÀı¡£
+         *è¿”å›ä¸æ¨¡å‹å±æ€§ä¸€è‡´çš„æ–°çš„å®ä¾‹ã€‚
          *
          * @method clone
          * @return 
@@ -633,7 +647,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *Óë get ÀàËÆ, µ«·µ»ØÄ£ĞÍÊôĞÔÖµµÄ HTML ×ªÒåºóµÄ°æ±¾¡£ Èç¹û½«Êı¾İ´ÓÄ£ĞÍ²åÈë HTML£¬Ê¹ÓÃ escape È¡Êı¾İ¿ÉÒÔ±ÜÃâ XSS ¹¥»÷.
+         *ä¸ get ç±»ä¼¼, ä½†è¿”å›æ¨¡å‹å±æ€§å€¼çš„ HTML è½¬ä¹‰åçš„ç‰ˆæœ¬ã€‚ å¦‚æœå°†æ•°æ®ä»æ¨¡å‹æ’å…¥ HTMLï¼Œä½¿ç”¨ escape å–æ•°æ®å¯ä»¥é¿å… XSS æ”»å‡».
          *
          * @method escape
          * @return 
@@ -643,7 +657,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *ÔÚ "change" ÊÂ¼ş·¢ÉúµÄ¹ı³ÌÖĞ£¬±¾·½·¨¿É±»ÓÃÓÚ»ñÈ¡ÒÑ¸Ä±äÊôĞÔµÄ¾ÉÖµ¡£
+         *åœ¨ "change" äº‹ä»¶å‘ç”Ÿçš„è¿‡ç¨‹ä¸­ï¼Œæœ¬æ–¹æ³•å¯è¢«ç”¨äºè·å–å·²æ”¹å˜å±æ€§çš„æ—§å€¼ã€‚
          *
          * @method previous
          * @return 
@@ -654,7 +668,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *·µ»ØÄ£ĞÍµÄÉÏÒ»¸öÊôĞÔÉ¢ÁĞµÄ¸±±¾¡£Ò»°ãÓÃÓÚ»ñÈ¡Ä£ĞÍµÄ²»Í¬°æ±¾Ö®¼äµÄÇø±ğ£¬»òÕßµ±·¢Éú´íÎóÊ±»Ø¹öÄ£ĞÍ×´Ì¬¡£
+         *è¿”å›æ¨¡å‹çš„ä¸Šä¸€ä¸ªå±æ€§æ•£åˆ—çš„å‰¯æœ¬ã€‚ä¸€èˆ¬ç”¨äºè·å–æ¨¡å‹çš„ä¸åŒç‰ˆæœ¬ä¹‹é—´çš„åŒºåˆ«ï¼Œæˆ–è€…å½“å‘ç”Ÿé”™è¯¯æ—¶å›æ»šæ¨¡å‹çŠ¶æ€ã€‚
          *
          * @method previousAttributes
          * @return 
@@ -664,7 +678,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *Ä£ĞÍÊÇ·ñÒÑ¾­±£´æµ½·şÎñÆ÷¡£ Èç¹ûÄ£ĞÍÉĞÎŞ id£¬Ôò±»ÊÓÎªĞÂµÄ¡£
+         *æ¨¡å‹æ˜¯å¦å·²ç»ä¿å­˜åˆ°æœåŠ¡å™¨ã€‚ å¦‚æœæ¨¡å‹å°šæ—  idï¼Œåˆ™è¢«è§†ä¸ºæ–°çš„ã€‚
          *
          * @method isNew
          * @return 
@@ -674,7 +688,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *ÊÖ¶¯»ñÈ¡Êı¾İ
+         *æ‰‹åŠ¨è·å–æ•°æ®
          *
          * @method fetch
          * @return 
@@ -703,7 +717,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *×Ô¶¨ÒåÊı¾İ½âÎö£¬½¨ÒéÓÃ×Ô¶¨ÒåµÄÂß¼­ÖØÔØËü
+         *è‡ªå®šä¹‰æ•°æ®è§£æï¼Œå»ºè®®ç”¨è‡ªå®šä¹‰çš„é€»è¾‘é‡è½½å®ƒ
          *
          * @method parse
          * @return 
@@ -713,7 +727,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *×Ô¶¨ÒåĞ£Ñé£¬½¨ÒéÓÃ×Ô¶¨ÒåµÄÂß¼­ÖØÔØËü
+         *è‡ªå®šä¹‰æ ¡éªŒï¼Œå»ºè®®ç”¨è‡ªå®šä¹‰çš„é€»è¾‘é‡è½½å®ƒ
          *
          * @method validate
          * @return 
@@ -723,7 +737,7 @@ Chassis.noConflict = function() {
         },
         
         /**
-         *ÊÖ¶¯´¥·¢ "change" ÊÂ¼ş¡£
+         *æ‰‹åŠ¨è§¦å‘ "change" äº‹ä»¶ã€‚
          *
          * @method change
          * @return 
@@ -736,19 +750,19 @@ Chassis.noConflict = function() {
         
         
         
-        //¶Ô·şÎñ¶Ë×öÄ£ĞÍ²Ù×÷»ù±¾Ã»ÓÃ£¬¹Ê²»×öÊµÏÖ
+        //å¯¹æœåŠ¡ç«¯åšæ¨¡å‹æ“ä½œåŸºæœ¬æ²¡ç”¨ï¼Œæ•…ä¸åšå®ç°
         /*
         ,save : function(){}
         ,destroy : function(){}
         */
         
         
-        //¿ÉÒÔÈ«¾ÖÖ¸¶¨£¬Ã»Ê²Ã´Êµ¼ÊÒâÒå
+        //å¯ä»¥å…¨å±€æŒ‡å®šï¼Œæ²¡ä»€ä¹ˆå®é™…æ„ä¹‰
         /*
         ,urlRoot : function(){}
         */
         
-        //Êı¾İ±ä¸üÔİ²»ÊµÏÖ(³ı·ÇÊµÏÖÊı¾İË«Ïò°ó¶¨)
+        //æ•°æ®å˜æ›´æš‚ä¸å®ç°(é™¤éå®ç°æ•°æ®åŒå‘ç»‘å®š)
         /*
         ,hasChanged : function(){}
         ,changedAttributes : function(){}
@@ -761,5 +775,309 @@ Chassis.noConflict = function() {
     
 
     Model.extend = Chassis.extend;
+    
+    var Router = Chassis.Router = function( options ) {
+        
+        options || (options = {});
+        
+        if( options.routes ) {
+            this.routes = options.routes;
+        }
+        
+        this._bindRoutes();
+        
+        this.initialize.apply(this, arguments);
+        
+        
+    };
+    
+    Chassis.mixin(Router.prototype, Events, {
+        
+        initialize : function() {},
+        
+        route : function(route, name) {
+            var self = this,
+                callback = self[ name ],
+                routeRe = self._routeToRegExp(route),
+                keys = routeRe.exec(route).slice(1);
+            
+            Chassis.each(keys,function(item,key){
+                keys[ key ] = item.substring(1);
+            });
+            
+            Chassis.history.route(routeRe,function( fragment ){
+            
+                var vals,Request;
+                
+                vals = routeRe.exec( fragment ).slice(1);
+                Request = Chassis.object(keys,vals);
+                
+                self.Request = Request;
+
+                callback.call(self);
+            
+            });
+
+        },
+        
+        _bindRoutes : function() {
+            var self = this;
+            
+            Chassis.each(self.routes,function(item,key) {
+                self.route(key,item);
+            });
+            
+            return self;
+        },
+        
+        _routeToRegExp : function(route){
+            var optionalParam = /\((.*?)\)/g,
+                namedParam    = /(\(\?)?:\w+/g,
+                splatParam    = /\*\w+/g,
+                escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+                
+            route = route.replace(escapeRegExp, '\\$&')
+                   .replace(optionalParam, '(?:$1)?')
+                   .replace(namedParam, function(match, optional){
+                     return optional ? match : '([^\/]+)';
+                   })
+                   .replace(splatParam, '(.*?)');
+            return new RegExp('^' + route + '$');
+        },
+        
+        navigate : function(fragment, options){
+            return Chassis.history.navigate(fragment, options);
+        }
+        
+    });
+    
+    Router.extend = Chassis.extend;
+    
+    /////////////////////////////////
+    /**
+     * @fileOverview history åŸºç±»
+     */
+
+    var History = Chassis.History = function( handler ) {
+        this.handler = handler || [];
+    };
+    
+    Chassis.mixin(History.prototype, Events, {
+        
+        
+        route : function(routeRe, callback){
+            this.handler.push({
+                reg : routeRe,
+                callback : callback
+            });
+        },
+        
+        /**
+         * ä¼šè¢«é‡å†™
+         *
+         */
+        navigate : function(fragment, options, replace) {
+            return this;
+        },
+        
+        _triggerHandle : function( fragment ){
+            var self = this;
+            Chassis.each(self.handler,function(item, key){
+                if(!item.reg.test( fragment )){
+                    return;
+                }
+
+                item.callback.call(self, fragment);
+            });
+        },
+        
+        /**
+         * ä¼šè¢«é‡å†™
+         *
+         */
+        start : function( options ){
+            var handler = Chassis.clone( this.handler ),
+                type = 'Hash';
+            
+            options || (options = {});
+            
+            this.destroy();
+            
+            if(options.pushState){
+                type = 'Pushstate';
+            }
+            
+            if(!History[ type ]){
+                throw new Error('History.' + type +' is not found');
+                return;
+            }
+            Chassis.history = new History[ type ](handler);
+            return Chassis.history.start(options);
+        },
+        
+        _getHash : function(){
+            var match = window.location.href.match(/#(.*)$/);
+            return match ? match[1] : '';
+        },
+        
+        /**
+         * ä¼šè¢«é‡å†™
+         *
+         */
+        _setHash : function( fragment ){
+            return this;
+        },
+        
+        destroy : function(){
+            this.pushState = false;
+            this.root = '/';
+            this.handler = [];
+            this.cacheOptions = null;
+            $(window).off('hashchange');
+            $(window).off('popstate');
+            History.start = false;
+            
+            //é”€æ¯åé‡æ–°æŒ‡å‘åŸå§‹çš„Historyï¼Œæ–¹ä¾¿é‡æ–°è°ƒç”¨
+            Chassis.history = new History();
+        }
+    });
+    
+    
+    History.extend = Chassis.extend;
+    
+    History.Hash = History.extend( {
+    /**
+     *
+     *silent
+     *root
+     *pushState
+     */
+    start : function( options ){
+        var self = this;
+        if(History.start){
+            return;
+        }
+        
+        History.start = true;
+        
+        options || ( options = {});
+        
+        
+        //å¼€å§‹ç›‘å¬hashchange
+        if( ('onhashchange' in window) && ((typeof document.documentMode==='undefined') || document.documentMode==8)) {
+            $(window).on('hashchange',function(e){
+                self.navigate(self._getHash(),{trigger:true},true);
+            });
+            
+            //å¤„ç†å½“å‰hash
+            !options.silent && self.navigate(self._getHash(),{trigger:true},true);   
+        }
+    },
+    navigate : function(fragment, options, replace) {
+        var self = this;
+        
+        options || ( options = {} );
+
+        //å¦‚æœä¸æ˜¯æ¥è‡ªonchangeç›‘æ§çš„äº‹ä»¶
+        if( !self.pushState && !replace ){
+            //ç¼“å­˜å½“å‰çš„é…ç½®
+            self.cacheOptions = options;
+            self._setHash( fragment );
+            
+            return; //å› ä¸ºåé¢ä¼šè‡ªåŠ¨è§¦å‘window.onhashchangeäº‹ä»¶
+        }
+        
+        
+        //ä»éonchangeç›‘æ§çš„optionsé‡Œè·å–é…ç½®
+        if( !self.pushState && !replace ){
+            options = self.cacheOptions ? Chassis.clone(self.cacheOptions) : options;
+            
+        }
+        self.cacheOptions = null;
+        
+        options.trigger && self._triggerHandle.call(self, fragment);
+
+    },
+    
+    _setHash : function( fragment ){
+        
+
+        if(this._getHash() != fragment){
+            window.location.hash = '#' + fragment;
+                            
+        }
+
+        return this;
+    }
+} );
+
+/**
+ * @fileOverview ä½¿ç”¨pushstateå®ç°çš„history
+ * @requires Router.History
+ */
+
+History.Pushstate = History.extend({
+    /**
+     *
+     *silent
+     *root
+     *pushState
+     */
+    start : function( options ){
+        var self = this;
+        
+        
+        
+        if(History.start){
+            return;
+        }
+        
+        History.start = true;
+        
+        options || ( options = {});
+        
+        if(options.pushState){
+            self.pushState = true;
+            if(options.root){
+                self.root = options.root;
+            }
+            
+            //å½“æµè§ˆå™¨å‰è¿›åé€€æ—¶è§¦å‘
+            $(window).on('popstate',function(){
+                var fragment = window.location.href.split(/\//).slice(3).join('/').substring( self.root.length );
+                
+                self._triggerHandle.call(self, fragment);
+            });
+            
+            return;
+        }
+
+    },
+    navigate : function(fragment, options, replace) {
+        var self = this;
+        
+        options || ( options = {} );
+        
+        if(self.pushState){
+            self._setHash( fragment );
+        }
+        
+        self.cacheOptions = null;
+        
+        options.trigger && self._triggerHandle.call(self, fragment);
+
+    },
+    _setHash : function( fragment ){
+        
+        if(this.pushState){
+            fragment = fragment || this.root;
+            history.pushState({}, document.title, fragment);
+            return this;
+        }
+    }
+});
+
+History.Pushstate.extend = Chassis.extend;
+Chassis.history = new History();
 
   

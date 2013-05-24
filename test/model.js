@@ -5,9 +5,9 @@ $(document).ready(function() {
 
   module("Chassis.Model");
 
-  test("initialize", 1, function() {
+  test("init", 1, function() {
     var Model = Chassis.Model.extend({
-      initialize: function() {
+      init: function() {
         this.one = 1;
         
       }
@@ -18,9 +18,9 @@ $(document).ready(function() {
     equal(model.one, 1);
   });
    
-  test("initialize with attributes and options", 1, function() {
+  test("init with attributes and options", 1, function() {
     var Model = Chassis.Model.extend({
-      initialize: function(attributes, options) {
+      init: function(attributes, options) {
         this.one = options.one;
       }
     });

@@ -16,7 +16,7 @@ var router = new Router;
 /*HOME*/
 var HomeModel = Chassis.Model.extend({
 
-    initialize: function(attributes, options) {
+    init: function(attributes, options) {
 
     },
     
@@ -62,7 +62,7 @@ Chassis.PageView.home = Chassis.PageView.extend({
 /*INFO*/
 var InfoModel = Chassis.Model.extend({
 
-    initialize: function(attributes, options) {
+    init: function(attributes, options) {
 
     },
     

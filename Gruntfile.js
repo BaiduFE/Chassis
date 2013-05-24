@@ -77,6 +77,16 @@ module.exports = function(grunt) {
 
     jsbint: {
       all: [ 'src/**/*.js' ]
+    },
+
+    qunit: {
+      all: {
+        options: {
+          urls: [
+            'http://www.chassis.com/test/index.html'
+          ]
+        }
+      }
     }
 
   });
@@ -90,7 +100,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-jsbint');
 
+  grunt.loadNpmTasks('grunt-contrib-qunit');
+
   // Default task(s).
-  grunt.registerTask( 'default', [ 'concat', 'uglify', 'jsbint' ] );
+  grunt.registerTask( 'default', [ 'concat', 'uglify', 'qunit', 'jsbint' ] );
 
 };

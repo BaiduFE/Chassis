@@ -1,3 +1,4 @@
+ /*jshint camelcase:false*/
  /**
  * @fileOverview 语言增强
  */
@@ -20,10 +21,11 @@ Chassis.mixin = $.extend;
  */
 Chassis.extend = function( protoProps, staticProps ) {
     var parent = this,
+        Proxy,
         child;
 
     // 构造函数
-    if( protoProps && protoProps.hasOwnProperty( 'constructor' ) ) {
+    if ( protoProps && protoProps.hasOwnProperty( 'constructor' ) ) {
         child = protoProps.constructor;
     } else {
         child = function() {
@@ -35,14 +37,14 @@ Chassis.extend = function( protoProps, staticProps ) {
     Chassis.mixin( child, parent, staticProps );
 
     // 原型链处理
-    var Proxy = function() {
+    Proxy = function() {
         this.constructor = child;
     };
 
     Proxy.prototype = parent.prototype;
     child.prototype = new Proxy();
 
-    if( protoProps ) {
+    if ( protoProps ) {
         Chassis.mixin( child.prototype, protoProps );
     }
 
@@ -54,24 +56,31 @@ Chassis.extend = function( protoProps, staticProps ) {
 
 
 
-Chassis.each = Chassis.forEach = function(obj, iterator, context) {
+Chassis.each = Chassis.forEach = function( obj, iterator, context ) {
+
+    var i,
+        l,
+        key;
+
     if ( obj === null ) {
         return;
     }
+
     
     if ( nativeForEach && obj.forEach === nativeForEach ) {
         obj.forEach( iterator, context );
 
     } else if ( obj.length === +obj.length ) {
-        for ( var i = 0, l = obj.length; i < l; i++ ) {
+        for ( i = 0, l = obj.length ; i < l; i++ ) {
             if ( iterator.call( context, obj[ i ], i, obj ) === breaker ) {
                 return;
             }
         }
     } else {
-        for ( var key in obj ) {
-            if ( Chassis.has( obj, key )) {
-                if ( iterator.call( context, obj[ key ], key, obj ) === breaker ) {
+        for ( key in obj ) {
+            if ( Chassis.has( obj, key ) ) {
+                if ( iterator.call( context, obj[ key ], key, obj ) ===
+                        breaker ) {
                     return;
                 }
             }
@@ -81,25 +90,25 @@ Chassis.each = Chassis.forEach = function(obj, iterator, context) {
       
       
 Chassis._once = function( func ) {
-    var ran = false, 
-        memo,
-        self = this;
+    var me = this,
+        ran = false, 
+        memo;
 
     return function() {
         
-        if (ran) {
+        if ( ran ) {
             return memo;
         }
         
         ran = true;
-        memo = func.apply(self, arguments);
+        memo = func.apply( me, arguments );
         func = null;
         return memo;
     };
 };
 
 Chassis.has = function( obj, key ) {
-    return hasOwnProperty.call(obj, key);
+    return hasOwnProperty.call( obj, key );
 };
 
 Chassis.keys = function( obj ) {
@@ -109,28 +118,28 @@ Chassis.keys = function( obj ) {
         throw new TypeError( 'Invalid object' );
     }
     
-    Chassis.each( obj,function( item,key ) {
-        if ( Chassis.has( obj, key )) {
+    Chassis.each( obj, function( item, key ) {
+        if ( Chassis.has( obj, key ) ) {
             keys[ keys.length ] = key;
         }
-    });
+    } );
     
     return keys;
 };
     
-Chassis.uniqueId = ( function() {
+Chassis.uniqueId = (function() {
     var idCounter = 0;
 
-    return function( prefix ){
+    return function( prefix ) {
         var id = ++idCounter + '';
         return prefix ? prefix + id : id;
     };
-} )();
+})();
 
     
 
-Chassis.isArray = nativeIsArray || function(obj) {
-    return toString.call(obj) == '[object Array]';
+Chassis.isArray = nativeIsArray || function( obj ) {
+    return toString.call( obj ) === '[object Array]';
 };
 
 Chassis.isObject = function( obj ) {
@@ -139,8 +148,8 @@ Chassis.isObject = function( obj ) {
 
 Chassis.isFunction = $.isFunction;
 
-Chassis.clone = function(obj) {
-    if ( !Chassis.isObject( obj )) {
+Chassis.clone = function( obj ) {
+    if ( !Chassis.isObject( obj ) ) {
         return obj;
     }
     return Chassis.isArray( obj ) ? obj.slice() : Chassis.mixin( {}, obj );
@@ -149,7 +158,7 @@ Chassis.clone = function(obj) {
 Chassis.result = function( object, property ) {
     var value;
 
-    if (object === null) {
+    if ( object === null ) {
         return null;
     }
     
@@ -157,37 +166,38 @@ Chassis.result = function( object, property ) {
     return Chassis.isFunction( value ) ? value.call( object ) : value;
 };
 
-Chassis.escape = function( str ){
+Chassis.escape = function( str ) {
     return str ?
-        str.replace( /\&/g,'&amp;' )
-            .replace( /</g,'&lt;' )
-            .replace( /\>/g,'&gt;' )
-            .replace( /\"/g,'&quot;' )
-            .replace( /\'/g,'&#x27' )
-            .replace( /\//g,'&#x2F' ):
+        str.replace( /\&/g, '&amp;' )
+            .replace( /</g, '&lt;' )
+            .replace( /\>/g, '&gt;' )
+            .replace( /\"/g, '&quot;' )
+            .replace( /\'/g, '&#x27' )
+            .replace( /\//g, '&#x2F' ):
         str;
 
 };
 
 Chassis.proxy = $.proxy;
 
-Chassis.object = function(list, values) {
+Chassis.object = function( list, values ) {
     var result = {};
-    if (list === null) {
+
+    if ( list === null ) {
         return {};
     }
     
-    Chassis.each(list,function(item, key){
-        if (values) {
-            result[item] = values[ key ];
+    Chassis.each( list, function( item, key ) {
+        if ( values ) {
+            result[ item ] = values[ key ];
         } else {
-            result[item[0]] = item[1];
+            result[ item[ 0 ] ] = item[ 1 ];
         }
-    });
+    } );
 
     return result;
 };
 
 $.support = Chassis.mixin( $.support || {}, {
     has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
-});
+} );

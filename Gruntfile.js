@@ -76,7 +76,10 @@ module.exports = function(grunt) {
     },
 
     jsbint: {
-      all: [ 'src/**/*.js' ]
+      all: [ 'src/**/*.js' ],
+      options: {
+        jshintrc: '.jshintrc',
+      }
     },
 
     qunit: {
@@ -91,7 +94,7 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks( 'grunt-contrib-concat' );
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks( 'grunt-contrib-uglify' );
@@ -103,6 +106,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
 
   // Default task(s).
-  grunt.registerTask( 'default', [ 'concat', 'uglify', 'qunit', 'jsbint' ] );
+  grunt.registerTask( 'default', [ 'jsbint', 'concat', 'uglify', 'qunit' ] );
 
 };

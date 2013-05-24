@@ -11,7 +11,7 @@ var root = this,
 	_Chassis = root[ exportName ],
 	Chassis;
 
-if( typeof exports !== 'undefined' ) {
+if ( typeof exports !== 'undefined' ) {
 	Chassis = exports;
 } else {
 	Chassis = root[ exportName ] = {};
@@ -38,7 +38,7 @@ Chassis.FX = {};
  * @property $
  * @type jQuery|Zepto|ender
  */
-var $ = Chassis.$ = root.jQuery || root.Zepto || root.ender;
+Chassis.$ = root.jQuery || root.Zepto || root.ender;
 
 
 /**

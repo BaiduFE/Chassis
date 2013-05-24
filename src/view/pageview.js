@@ -38,8 +38,7 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
 
     restorePos: function( opts ){
         var me = this,
-            cls = me._logicString 
-                = me._getLogicString( opts );
+            cls = me._logicString = me._getLogicString( opts );
 
         // @note: iOS4需要延时
         setTimeout( function(){

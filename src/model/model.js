@@ -3,7 +3,11 @@ var Model = Chassis.Model = function(attributes, options) {
         attrs;
     
     attrs = attributes || {};
-    options || (options = {});
+    
+    if( !options ) {
+        options = {};
+    }
+
     
     this.attributes = {};
     this.cid = Chassis.uniqueId('c');
@@ -51,7 +55,7 @@ Chassis.mixin(Model.prototype, Events, {
      * @return 
      **/
     has : function( key ){
-        return this.get( key ) != null;
+        return this.get( key ) !== null;
     },
     
     /**
@@ -72,7 +76,7 @@ Chassis.mixin(Model.prototype, Events, {
             current,
             validateResult;
             
-        if (key == null) {
+        if (key === null) {
             return this;
         }
 
@@ -82,8 +86,11 @@ Chassis.mixin(Model.prototype, Events, {
         } else {
             (attrs = {})[key] = val;
         }
+        
+        if( !options ) {
+            options = {};
+        }
 
-        options || (options = {});
         
         //变更之前先做校验
         validateResult = this.validate.call(this,attrs);
@@ -100,9 +107,12 @@ Chassis.mixin(Model.prototype, Events, {
         }
         
         Chassis.each(attrs,function(item,key){
-            options.unset ?
-                delete self.attributes[ key ] :
+            if( options.unset ) {
+                delete self.attributes[ key ];
+            }else{
                 self.attributes[ key ] = item;
+            }
+            
                 
         });
         
@@ -171,7 +181,7 @@ Chassis.mixin(Model.prototype, Events, {
      * @return 
      **/
     previous : function( attr ) {
-        return (attr == null || !this._previousAttributes) ?
+        return (attr === null || !this._previousAttributes) ?
                 null : this._previousAttributes[attr];
     },
     
@@ -192,7 +202,7 @@ Chassis.mixin(Model.prototype, Events, {
      * @return 
      **/
     isNew : function() {
-        return this.id == null;
+        return this.id === null;
     },
     
     /**

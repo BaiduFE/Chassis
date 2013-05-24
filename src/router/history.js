@@ -65,7 +65,9 @@ Chassis.mixin(History.prototype, Events, {
         var handler = Chassis.clone( this.handler ),
             type = 'Hash';
         
-        options || (options = {});
+        if( !options ) {
+            options = {};
+        }
         
         this.destroy();
         
@@ -75,7 +77,6 @@ Chassis.mixin(History.prototype, Events, {
         
         if(!History[ type ]){
             throw new Error('History.' + type +' is not found');
-            return;
         }
         Chassis.history = new History[ type ](handler);
         return Chassis.history.start(options);

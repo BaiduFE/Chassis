@@ -22,7 +22,9 @@ History.Pushstate = History.extend({
         
         History.start = true;
         
-        options || ( options = {});
+        if( !options ) {
+            options = {};
+        }
         
         if(options.pushState){
             self.pushState = true;
@@ -53,7 +55,9 @@ History.Pushstate = History.extend({
     navigate : function(fragment, options, replace) {
         var self = this;
         
-        options || ( options = {} );
+        if( !options ) {
+            options = {};
+        }
         
         if(self.pushState){
             self._setPushState( fragment );
@@ -61,7 +65,10 @@ History.Pushstate = History.extend({
         
         self.cacheOptions = null;
         
-        options.trigger && self._triggerHandle.call(self, fragment);
+        if( options.trigger ) {
+            self._triggerHandle.call(self, fragment);
+        }
+        
 
     },
     

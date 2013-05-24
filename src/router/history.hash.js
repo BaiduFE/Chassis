@@ -15,17 +15,24 @@ History.Hash = History.extend( {
         
         History.start = true;
         
-        options || ( options = {});
+        if( !options ) {
+            options = {};
+        }
+        
+        
         
         
         //开始监听hashchange
-        if( ('onhashchange' in window) && ((typeof document.documentMode==='undefined') || document.documentMode==8)) {
+        if( ('onhashchange' in window) && ((typeof document.documentMode==='undefined') || document.documentMode===8)) {
             $(window).on('hashchange',function(e){
                 self.navigate(self._getHash(),{trigger:true},true);
             });
             
             //处理当前hash
-            !options.silent && self.navigate(self._getHash(),{trigger:true},true);   
+            if( !options.silent ){
+                self.navigate(self._getHash(),{trigger:true},true); 
+            }
+            
         }
     },
     
@@ -40,7 +47,9 @@ History.Hash = History.extend( {
     navigate : function(fragment, options, replace) {
         var self = this;
         
-        options || ( options = {} );
+        if( !options ) {
+            options = {};
+        }
 
         //如果不是来自onchange监控的事件
         if( !self.pushState && !replace ){
@@ -54,12 +63,16 @@ History.Hash = History.extend( {
         
         //从非onchange监控的options里获取配置
         if( !self.pushState && !replace ){
-            options = self.cacheOptions ? Chassis.clone(self.cacheOptions) : options;
-            
+            if( self.cacheOptions ){
+                options = Chassis.clone(self.cacheOptions);
+            }
         }
         self.cacheOptions = null;
         
-        options.trigger && self._triggerHandle.call(self, fragment);
+        if( options.trigger ) {
+            self._triggerHandle.call(self, fragment);
+        }
+        
 
     },
     

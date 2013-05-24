@@ -5,7 +5,9 @@
 
 var Router = Chassis.Router = function( options ) {
     
-    options || ( options = {} );
+    if( !options ) {
+        options = {};
+    }
     
     /**
      * @property {array|object} routes 路由规则
@@ -23,9 +25,9 @@ var Router = Chassis.Router = function( options ) {
      *      需要返回false。
      *
      *      2. 数组配置，例如：
-     *      {
+     *      [
      *          'info/:id'
-     *      }
+     *      ]
      *      这种配置方式会使用默认的路由行为：路由目标为`__Chassis__.PageView.info`;
      *      使用这种配置方式时如果路由action为空时会默认路由到`__Chassis__.PageView.index`,
      *      可以通过`options.index`来重新设置;
@@ -171,10 +173,18 @@ Chassis.mixin( Router.prototype, Events, {
         }
 
         // 记忆位置
-        me.enablePositionRestore && from && ( from.savePos() );
+        if( me.enablePositionRestore && from ) {
+            from.savePos();
+        }
+        
+        if( from ){
+            from.trigger( 'beforepageout', e );
+        }
+        
+        if( to ) {
+            to.trigger( 'beforepagein', e );
+        }
 
-        from && from.trigger( 'beforepageout', e );
-        to && to.trigger( 'beforepagein', e );
 
         /*
         Chassis.each( 
@@ -199,7 +209,10 @@ Chassis.mixin( Router.prototype, Events, {
                  */
 
                 // 恢复位置
-                me.enablePositionRestore && to && ( to.restorePos( params ));
+                if( me.enablePositionRestore && to ) {
+                    to.restorePos( params );
+                }
+                
 
                 /*
                 $.each(from == to ? [from] : [from, to], function(key, item){
@@ -212,8 +225,20 @@ Chassis.mixin( Router.prototype, Events, {
                         });
                 });
                 */
-                from && from.trigger( 'afterpageout', e ) && from.$el.hide();
-                to && to.trigger( 'afterpagein', e );
+                
+                if( from ) {
+                    
+                    if( from.trigger( 'afterpageout', e ) ) {
+                        from.$el.hide();
+                    }
+                   
+                    
+                }
+                
+                if( to ) {
+                    to.trigger( 'afterpagein', e );
+                }
+
             }
         );
 
@@ -264,8 +289,7 @@ Chassis.mixin( Router.prototype, Events, {
             transition;
 
         // key不分顺序，需要试探两种顺序的配置
-        transition = me.pageTransition[ fromAction + '-' + toAction ]
-            || me.pageTransition[ toAction + '-' + fromAction ];
+        transition = me.pageTransition[ fromAction + '-' + toAction ] || me.pageTransition[ toAction + '-' + fromAction ];
 
         var fx = Chassis.FX[ transition ];
 
@@ -282,11 +306,56 @@ Chassis.mixin( Router.prototype, Events, {
     _bindRoutes : function() {
         var self = this;
         
+        //对routes支持数组的处理
+        self._routeArray.call(self);
+        
         Chassis.each(self.routes,function(item,key) {
             self.route(key,item);
         });
         
         return self;
+    },
+    
+    /**
+     * 当routes为Array时解析为Object
+     *
+     * @private
+     * @method _routeArray
+     * @return 
+     **/
+    _routeArray : function() {
+        var self = this,
+            _routes = {},
+            hasPageOrder = !!self.pageOrder.length;
+        
+        if( !Chassis.isArray(self.routes) ) {
+            return self;
+        }
+        
+        
+        Chassis.each( self.routes, function( item, key ) {
+            var first = item.split(/\//g)[0],
+                name = 'first';
+
+            if( first.substring(0,1) === '*') {
+                name = 'all';
+            }
+            
+            if(first === ''){
+                name = self._index;
+            }
+            
+            _routes[ item ] = name;
+            
+            if( !hasPageOrder ){
+                self.pageOrder.push( name );
+            }
+        });
+        
+        self.routes = Chassis.clone( _routes );
+        
+        return self;
+       
     },
     
     /**
@@ -338,8 +407,7 @@ Chassis.mixin( Router.prototype, Events, {
         this._decodeRequest( request );
         
         if( !view ){
-            view = me.views[ action ] 
-                = new Chassis.PageView[ action ]( request, action ); 
+            view = me.views[ action ]  = new Chassis.PageView[ action ]( request, action ); 
         } 
         
         // 切换视图控制器

@@ -18,14 +18,14 @@ var Model = Chassis.Model = function(attributes, options) {
     
     
     
-    this.initialize.apply(this,arguments);
+    this.init.apply(this,arguments);
 };
 
 Chassis.mixin(Model.prototype, Events, {
     
     idAttribute : 'id',
     
-    initialize : function(){},
+    init : function(){},
     
     /**
      *fetch方法获取数据的url。

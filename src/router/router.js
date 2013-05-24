@@ -48,7 +48,7 @@ var Router = Chassis.Router = function( options ) {
     
     this._bindRoutes();
     
-    this.initialize.apply( this, arguments );
+    this.init.apply( this, arguments );
 };
 
 Chassis.mixin( Router.prototype, Events, {
@@ -57,10 +57,10 @@ Chassis.mixin( Router.prototype, Events, {
      * 实例化一个路由对象
      *
      * @public
-     * @method initialize
+     * @method init
      * @return 
      **/
-    initialize : function() {},
+    init : function() {},
     
     /**
      * 为路由对象手动创建路由，route 参数可以是 路由字符串 或 正则表达式。 
@@ -335,7 +335,7 @@ Chassis.mixin( Router.prototype, Events, {
         
         Chassis.each( self.routes, function( item, key ) {
             var first = item.split(/\//g)[0],
-                name = 'first';
+                name = first;
 
             if( first.substring(0,1) === '*') {
                 name = 'all';

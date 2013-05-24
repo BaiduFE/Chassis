@@ -1,42 +1,36 @@
 $(document).ready(function() {
     
-    var location;
-    
-    
-    module("Chassis.Router",{
-        setup : function(){
-            location = window.location.href.split(/\//).slice(3).join('/');
-        }
-    });
+   
+  module("Chassis.Router");
 
   
-  test("initialize for hashchange", 1, function() {
+  test("init for hashchange", 1, function() {
     var Router,router;
     stop();
     
-    Chassis.PageView.homeCallback = Chassis.PageView.extend({
-        initialize : function(){
-            Chassis.history.navigate( '',{trigger:false} );
+    Chassis.PageView.index = Chassis.PageView.extend({
         
-            Chassis.history.destroy();
-            
+        init : function(){
+            delete Chassis.PageView.index;
             ok(true);
-            
-            start();
+            window.setTimeout(function(){
+                Chassis.history.navigate( '',{trigger:false} );
+                Chassis.history.destroy();
+                start();
+            },1000);
+
         }
     });
     
     Router = Chassis.Router.extend({
-        routes : {
-            'index/:id/:dt' : 'homeCallback'
-        }
+        routes : ['index/:id']
     });
     
     router = new Router();
 
     Chassis.history.start();
     
-    Chassis.history.navigate( 'index/2/3',{trigger:true} );
+    Chassis.history.navigate( 'index/2',{trigger:true} );
     
     
   });
@@ -46,22 +40,20 @@ $(document).ready(function() {
     var Router,router;
     stop();
     
-    Chassis.PageView.homeCallback = Chassis.PageView.extend({
-        initialize : function(){
-            Chassis.history.navigate( '',{trigger:false} );
-        
-            Chassis.history.destroy();
-            
+    Chassis.PageView.index = Chassis.PageView.extend({
+        init : function(){
             ok(true);
-            
-            start();
+            window.setTimeout(function(){
+                Chassis.history.navigate( '',{trigger:false} );
+                Chassis.history.destroy();
+                start();
+            },1000);
+
         }
     });
     
     Router = Chassis.Router.extend({
-        routes : {
-            'index/:id/:dt' : 'homeCallback'
-        }
+         routes : ['index/:id']
     });
     
     router = new Router();
@@ -71,7 +63,7 @@ $(document).ready(function() {
         root : '/test/'
     });
     
-    Chassis.history.navigate( 'index/2/3',{trigger:true} );  
+    Chassis.history.navigate( 'index/2',{trigger:true} );  
     
   });
   

@@ -40,7 +40,7 @@ Chassis.extend = function( protoProps, staticProps ) {
     };
 
     Proxy.prototype = parent.prototype;
-    child.prototype = new Proxy;
+    child.prototype = new Proxy();
 
     if( protoProps ) {
         Chassis.mixin( child.prototype, protoProps );
@@ -55,7 +55,7 @@ Chassis.extend = function( protoProps, staticProps ) {
 
 
 Chassis.each = Chassis.forEach = function(obj, iterator, context) {
-    if ( obj == null ) {
+    if ( obj === null ) {
         return;
     }
     
@@ -149,7 +149,7 @@ Chassis.clone = function(obj) {
 Chassis.result = function( object, property ) {
     var value;
 
-    if (object == null) {
+    if (object === null) {
         return null;
     }
     
@@ -160,7 +160,7 @@ Chassis.result = function( object, property ) {
 Chassis.escape = function( str ){
     return str ?
         str.replace( /\&/g,'&amp;' )
-            .replace( /\</g,'&lt;' )
+            .replace( /</g,'&lt;' )
             .replace( /\>/g,'&gt;' )
             .replace( /\"/g,'&quot;' )
             .replace( /\'/g,'&#x27' )
@@ -173,7 +173,7 @@ Chassis.proxy = $.proxy;
 
 Chassis.object = function(list, values) {
     var result = {};
-    if (list == null) {
+    if (list === null) {
         return {};
     }
     

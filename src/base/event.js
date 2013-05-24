@@ -20,8 +20,11 @@ var Events = Chassis.Events = {
         if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {
             return this;
         }
-      
-        this._events || (this._events = {});
+        
+        if( !this._events ){
+            this._events = {};
+        }
+        
         events = this._events[name] || (this._events[name] = []);
         events.push({callback: callback, context: context, ctx: context || this});
         
@@ -86,7 +89,8 @@ var Events = Chassis.Events = {
         
         Chassis.each(names,function(nItem,nKey){
             name = nItem;
-            if (events = self._events[name]) {
+            events = self._events[name];
+            if (events) {
                 self._events[name] = retain = [];
                 if (callback || context) {
                     Chassis.each(events,function(eItem,eKey){

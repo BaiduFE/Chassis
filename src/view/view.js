@@ -160,13 +160,14 @@ Chassis.mixin( View.prototype, Events, {
 				eventName = match[ 1 ],
 				selector = match[ 2 ];
 
-			method = Chassis.bind( method, this );
-			eventName += '.delegateEvents' + this.cid;
+			method = Chassis.proxy( method, this );
+
+			var fullEventName = eventName + '.delegateEvents' + this.cid;
 
 			switch( selector ) {
 				case 'window':
 				case 'document':
-					Chassis.$( window[ selector ] ).on( eventName, method );
+					Chassis.$( window[ selector ] ).on( fullEventName, method );
 					break;
 				case 'view':
 					this.on( eventName, method );
@@ -175,10 +176,10 @@ Chassis.mixin( View.prototype, Events, {
 					this.model.on( eventName, method );
 					break;
 				case '':
-					this.$el.on( eventName, method );
+					this.$el.on( fullEventName, method );
 					break;
 				default:
-					this.$el.on( eventName, selector, method );
+					this.$el.on( fullEventName, selector, method );
 			}
 		}
 
@@ -260,6 +261,10 @@ Chassis.mixin( View.prototype, Events, {
     onAfterPageIn: noop,
 
     _onBeforePageIn: function( params ) {
+
+        console.log( 'beforepagein' );
+        console.log( params );
+
     	this.onBeforePageIn( params );
 
     	/**
@@ -270,10 +275,15 @@ Chassis.mixin( View.prototype, Events, {
 	     * 		params.to: 即将显示的视图
 	     * 		params.params: 路由参数
     	 */
-    	this.trigger( 'beforepagein', params );
+        // pageview是事件触发起点因此无需再次触发
+    	!this.root && this.trigger( 'beforepagein', params );
     },
 
     _onAfterPageIn: function( params ) {
+
+        console.log( 'afterpagein' ); 
+        console.log( params );
+
     	this.onAfterPageIn( params );
 
     	/**
@@ -284,7 +294,8 @@ Chassis.mixin( View.prototype, Events, {
 	     * 		params.to: 当前显示的视图
 	     * 		params.params: 路由参数
     	 */
-    	this.trigger( 'afterpagein', params );
+        // pageview是事件触发起点因此无需再次触发
+    	!this.root && this.trigger( 'afterpagein', params );
     },
 
  	/**
@@ -294,15 +305,15 @@ Chassis.mixin( View.prototype, Events, {
  	 */
     _initialize: function( opts ){
 
-    	this.root = this.getRoot();
+    	this.root = this._getRoot();
     	this.children = {};
 
     	// 子类初始化
     	this.init( opts );
 
     	// 自动监听常用事件
-    	this.listenTo( this.root, 'beforepagein', this._onBeforePageIn );
-    	this.listenTo( this.root, 'afterpagein', this._onAfterPageIn );
+    	this.listenTo( this.root || this, 'beforepagein', this._onBeforePageIn );
+    	this.listenTo( this.root || this, 'afterpagein', this._onAfterPageIn );
     },
 
     _getRoot: function( ) {
@@ -321,8 +332,12 @@ Chassis.mixin( View.prototype, Events, {
 		this.options = opts;
 
 		for( var i = 0, len = viewOptions.length; i < len; i++ ) {
-			var opt = viewOptions[ i ];
-			this[ opt ] = this.options[ opt ];
+			var opt = viewOptions[ i ],
+                val = this.options[ opt ];
+
+            if( val ) {
+                this[ opt ] = val;
+            }
 		}
 	},
 

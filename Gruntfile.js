@@ -31,6 +31,7 @@ module.exports = function(grunt) {
           'src/view/pageview.js',
           'src/view/subpagemanager.js',
           'src/view/globalview.js',
+          'src/view/view.fx.slider.js',
           'src/view/view.loading.js'
         ],
         dest: 'build/<%= pkg.name %>.js'
@@ -62,7 +63,17 @@ module.exports = function(grunt) {
         src: 'dist/<%= pkg.name %>.js',
         dest: 'dist/<%= pkg.name %>.min.js'
       }
-    }
+    },
+
+    watch: {
+      scripts: {
+        files: [ 'src/**/*.js' ],
+        tasks: [ 'default' ],
+        options: {
+          nospawn: true,
+        },
+      },
+    },
 
   });
 
@@ -70,6 +81,8 @@ module.exports = function(grunt) {
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks( 'grunt-contrib-uglify' );
+
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
   grunt.registerTask( 'default', [ 'concat', 'uglify' ] );

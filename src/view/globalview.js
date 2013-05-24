@@ -18,7 +18,7 @@ var GlobalView = Chassis.GlobalView = View.GlobalView = View.extend({
 		this.router = router;
 		this.listenTo( router, 'routechange', this._onRouteChange );
 
-		GlobalView.__super__.prototype._initialize.call( this, opts );
+		GlobalView.__super__._initialize.call( this, opts );
 	},
 
     /** 

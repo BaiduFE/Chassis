@@ -8,17 +8,17 @@
  * @constructor
  * @namespace View
  * @param  {object} opts
- * 		opts.owner {view} 子页面所属视图
- * 		[opts.max] {int} 子页面并存上限，超过此上限将回收
- * 		opts.kclass {view} 子页面实例对应的视图类
- * 		[opts.transition] {string|function} 子页面切换效果，如果是字符串则会从
- * 			`Chassis.FX[transition]`中调用切换方法；如果是函数则直接调用改函数来处理切换。
- * 			对于自定义页面切换函数将接收以下参数：
- * 				fromEl: 待切出视图元素；
- * 				toEl: 待切入视图元素；
- * 				dirFn: 切换方向(0-无方向，1-向左，2-向右)；
- * 				transitionEnd: 切换完成后的回调，必须在自定义函数中调用；
- * 		[opts.dirFn] {function} 自定义切换方向(-1-默认，0-无方向，1-向左，2-向右)；
+ * opts.owner {view} 子页面所属视图
+ * [opts.max] {int} 子页面并存上限，超过此上限将回收
+ * opts.kclass {view} 子页面实例对应的视图类
+ * [opts.transition] {string|function} 子页面切换效果，如果是字符串则会从
+ * `Chassis.FX[transition]`中调用切换方法；如果是函数则直接调用改函数来处理切换。
+ * 对于自定义页面切换函数将接收以下参数：
+ * fromEl: 待切出视图元素；
+ * toEl: 待切入视图元素；
+ * dirFn: 切换方向(0-无方向，1-向左，2-向右)；
+ * transitionEnd: 切换完成后的回调，必须在自定义函数中调用；
+ * [opts.dirFn] {function} 自定义切换方向(-1-默认，0-无方向，1-向左，2-向右)；
  */
 var SPM = View.SubPageMgr = function( opts ) {
 	Chassis.mixin( this, {
@@ -30,7 +30,7 @@ var SPM = View.SubPageMgr = function( opts ) {
 	}, opts );
 
 	this._init();
-}
+};
 
 Chassis.mixin( SPM.prototype, Events, {
 
@@ -58,7 +58,7 @@ Chassis.mixin( SPM.prototype, Events, {
 	 * @param  {string} val
 	 * @return {subview}
 	 * @example
-	 * 		spm.getBy( 'featureString', ft );
+	 * spm.getBy( 'featureString', ft );
 	 */
 	getBy: function( key, val ) {
 
@@ -86,30 +86,30 @@ Chassis.mixin( SPM.prototype, Events, {
 	 * @param  {view} from subpage
 	 * @param  {view} to subpage
 	 * @param  {object} params
-	 * 		params.from page
-	 * 		params.to page
-	 * 		params.params 页面切换参数
+	 * params.from page
+	 * params.to page
+	 * params.params 页面切换参数
 	 *
 	 * @description 处理逻辑
 	 *
-	 * 		1. 页面内部切换（即params.from === params.to，但是参数不同）
-	 * 			a. 根据params生成识别串并在SPM中查找目标子页面
-	 * 			b. 如果未找到则自动创建目标子页面并加入SPM
-	 * 			c. 重新设置current
-	 * 			d. 调用switch切换
-	 * 				d1. 显示目标子页面DOM元素
-	 * 				d2. 调用动画切换
-	 *				d3. 隐藏切出子页面DOM元素
+	 * 1. 页面内部切换（即params.from === params.to，但是参数不同）
+	 *  a. 根据params生成识别串并在SPM中查找目标子页面
+	 *  b. 如果未找到则自动创建目标子页面并加入SPM
+	 *  c. 重新设置current
+	 *  d. 调用switch切换
+	 *   d1. 显示目标子页面DOM元素
+	 *   d2. 调用动画切换
+	 *   d3. 隐藏切出子页面DOM元素
 	 * 
-	 * 		2. 页面间切换（即params.from !== params.to)
-	 * 			a. 根据params生成识别串并在SPM中查找目标子页面
-	 * 			b. 如果未找到则自动创建目标子页面并加入SPM
-	 * 			c. 重新设置current
-	 * 			d. 调用switch切换
-	 * 				d1. 如果待切出子页面不为空（首次进入params.to时为空）则直接隐藏DOM
-	 * 				d2. 显示目标子页面DOM元素
+	 * 2. 页面间切换（即params.from !== params.to)
+	 *  a. 根据params生成识别串并在SPM中查找目标子页面
+	 *  b. 如果未找到则自动创建目标子页面并加入SPM
+	 *  c. 重新设置current
+	 *  d. 调用switch切换
+	 *   d1. 如果待切出子页面不为空（首次进入params.to时为空）则直接隐藏DOM
+	 *   d2. 显示目标子页面DOM元素
 	 */
-	switch: function( from, to, params ) {
+	_switch: function( from, to, params ) {
 		var dir = -1,
 			fromPage = params.from,
 			toPage = params.to,
@@ -293,7 +293,7 @@ Chassis.mixin( SPM.prototype, Events, {
 			target = subpage;
 		}
 
-		this.switch( this.current, target, e );
+		this._switch( this.current, target, e );
 	},
 
 	_setCurrent: function( subview ) {

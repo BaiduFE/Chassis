@@ -33,13 +33,13 @@ var GlobalView = Chassis.GlobalView = View.GlobalView = View.extend({
             pageviews = params.pageviews;
     
 
-    	/**
-    	 * 路由事件
-    	 * @event routechange
-    	 * @param {pageview} params.from 起始页面视图
-    	 * @param {pageview} params.to 目标页面视图
-    	 * @param {object} params.pageviews 页面视图列表，以action为索引
-    	 */
+        /**
+         * 路由事件
+         * @event routechange
+         * @param {pageview} params.from 起始页面视图
+         * @param {pageview} params.to 目标页面视图
+         * @param {object} params.pageviews 页面视图列表，以action为索引
+         */
         this.trigger('routechange', Chassis.extend( {}, params ));
     },
 
@@ -57,7 +57,11 @@ var GlobalView = Chassis.GlobalView = View.GlobalView = View.extend({
 
         Chassis.$.each( actions, function( index, item ) {
             pageView = me.router.views[ item ];
-            pageView && ( pageView.trigger( eventName, params ));
+
+            if( pageView ) {
+                pageView.trigger( eventName, params );
+            }
+            
         });
     },
 

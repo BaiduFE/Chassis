@@ -31,7 +31,7 @@ Chassis.VERSION = '0.1.0';
  * @static
  * @type string
  */
-Chassis.FX = {};
+Chassis.FX = {}; 
 
 /**
  * $

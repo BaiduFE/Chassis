@@ -13,20 +13,22 @@ $(document).ready(function() {
   test("initialize for hashchange", 1, function() {
     var Router,router;
     stop();
+    
+    Chassis.PageView.homeCallback = Chassis.PageView.extend({
+        initialize : function(){
+            Chassis.history.navigate( '',{trigger:false} );
+        
+            Chassis.history.destroy();
+            
+            ok(true);
+            
+            start();
+        }
+    });
+    
     Router = Chassis.Router.extend({
         routes : {
             'index/:id/:dt' : 'homeCallback'
-        },
-        
-        homeCallback : function(){
-
-            Chassis.history.navigate( '',{trigger:false} );
-            
-            Chassis.history.destroy();
-            
-            equal(this.Request.id, 2);
-            
-            start();
         }
     });
     
@@ -43,20 +45,22 @@ $(document).ready(function() {
   test("use pushState and root", 1, function() {
     var Router,router;
     stop();
+    
+    Chassis.PageView.homeCallback = Chassis.PageView.extend({
+        initialize : function(){
+            Chassis.history.navigate( '',{trigger:false} );
+        
+            Chassis.history.destroy();
+            
+            ok(true);
+            
+            start();
+        }
+    });
+    
     Router = Chassis.Router.extend({
         routes : {
             'index/:id/:dt' : 'homeCallback'
-        },
-        
-        homeCallback : function(){
-            
-            equal(this.Request.id, 2);
-            
-            Chassis.history.navigate( '',{trigger:false} );
-            
-            //Chassis.history.destroy();
-            
-            start();
         }
     });
     

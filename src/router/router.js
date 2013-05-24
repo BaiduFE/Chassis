@@ -23,9 +23,9 @@ var Router = Chassis.Router = function( options ) {
      *      需要返回false。
      *
      *      2. 数组配置，例如：
-     *      {
+     *      [
      *          'info/:id'
-     *      }
+     *      ]
      *      这种配置方式会使用默认的路由行为：路由目标为`__Chassis__.PageView.info`;
      *      使用这种配置方式时如果路由action为空时会默认路由到`__Chassis__.PageView.index`,
      *      可以通过`options.index`来重新设置;
@@ -282,11 +282,56 @@ Chassis.mixin( Router.prototype, Events, {
     _bindRoutes : function() {
         var self = this;
         
+        //对routes支持数组的处理
+        self._routeArray.call(self);
+        
         Chassis.each(self.routes,function(item,key) {
             self.route(key,item);
         });
         
         return self;
+    },
+    
+    /**
+     * 当routes为Array时解析为Object
+     *
+     * @private
+     * @method _routeArray
+     * @return 
+     **/
+    _routeArray : function() {
+        var self = this,
+            _routes = {},
+            hasPageOrder = !!self.pageOrder.length;
+        
+        if( !Chassis.isArray(self.routes) ) {
+            return self;
+        }
+        
+        
+        Chassis.each( self.routes, function( item, key ) {
+            var first = item.split(/\//g)[0],
+                name = 'first';
+
+            if( first.substring(0,1) == '*') {
+                name = 'all';
+            }
+            
+            if(first == ''){
+                name = self._index;
+            }
+            
+            _routes[ item ] = name;
+            
+            if( !hasPageOrder ){
+                self.pageOrder.push( name );
+            }
+        });
+        
+        self.routes = Chassis.clone( _routes );
+        
+        return self;
+       
     },
     
     /**

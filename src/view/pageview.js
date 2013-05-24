@@ -11,7 +11,7 @@
  * @param {object} opts
  * @param {string} action
  */
-var PageView = Chassis.PageView = View.PageView = Chassis.extend({
+var PageView = Chassis.PageView = View.PageView = View.extend({
 
 	_initialize: function( opts, action ) {
 
@@ -20,7 +20,7 @@ var PageView = Chassis.PageView = View.PageView = Chassis.extend({
 		this._tops = {};
 		this._logicString = this._getLogicString( opts );
 
-		PageView.__super__.prototype._initialize.call( this, opts );
+		PageView.__super__._initialize.call( this, opts );
 	},
 
 	isActive: function() {

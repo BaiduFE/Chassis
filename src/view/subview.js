@@ -39,7 +39,7 @@ var SubView = Chassis.SubView = View.SubView = View.extend({
 
 		this.parent = parent;
 
-		SubView.__super__.prototype._initialize.call( this, opts );
+		SubView.__super__._initialize.call( this, opts );
 	}
 
 });

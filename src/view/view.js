@@ -161,7 +161,7 @@ Chassis.mixin( View.prototype, Events, {
 				selector = match[ 2 ];
 
 			method = Chassis.proxy( method, this );
-            
+
 			var fullEventName = eventName + '.delegateEvents' + this.cid;
 
 			switch( selector ) {
@@ -261,6 +261,10 @@ Chassis.mixin( View.prototype, Events, {
     onAfterPageIn: noop,
 
     _onBeforePageIn: function( params ) {
+
+        console.log( 'beforepagein' );
+        console.log( params );
+
     	this.onBeforePageIn( params );
 
     	/**
@@ -276,6 +280,10 @@ Chassis.mixin( View.prototype, Events, {
     },
 
     _onAfterPageIn: function( params ) {
+
+        console.log( 'afterpagein' ); 
+        console.log( params );
+
     	this.onAfterPageIn( params );
 
     	/**

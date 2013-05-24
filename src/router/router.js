@@ -145,6 +145,9 @@ Chassis.mixin( Router.prototype, Events, {
      */
     switchPage: function( from, to, params ) {
 
+        console.log( 'switchPage from ' + ( from ? from.action : null ) + 
+                ' to ' + to.action );
+
         var me = this,
             e = {
                 from: from,
@@ -209,7 +212,7 @@ Chassis.mixin( Router.prototype, Events, {
                         });
                 });
                 */
-                from && from.trigger( 'afterpageout', e );
+                from && from.trigger( 'afterpageout', e ) && from.$el.hide();
                 to && to.trigger( 'afterpagein', e );
             }
         );

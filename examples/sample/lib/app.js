@@ -4,8 +4,11 @@ var Router = Chassis.Router.extend({
     routes : {
         '' : 'home',
         'info/:id'  : 'info'
-    }/*,
+    },
+
+    pageOrder: [ 'home', 'info' ]
     
+    /*
     home : function(){
         new HomeView( this.Request );
     },
@@ -159,6 +162,8 @@ Chassis.PageView.info = Chassis.PageView.extend({
     },
 
     onBeforePageIn: function( e ) {
+        this.$el.html( '' );
+
         this.model.fetch({
             data : {
                 id : e.params.id

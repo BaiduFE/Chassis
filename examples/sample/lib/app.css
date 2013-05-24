@@ -9,36 +9,42 @@ h1,h2,h3,h4,h5,h6{font-size:inherit; font-weight:normal;}
 address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
 
 #wrapper {
-    width:960px;
+    width:80%;
     margin:0 auto;
+    position: relative;
 }
-#example {
+
+
+.example {
     min-height:320px;
-    border:1px solid #CCC;
+    border: 1px solid #CCC;
     padding:5px;
     color:#666;
+    width: 100%;
 }
-    #example h3 {
+    .example h3 {
         background:#FEFEFE;
         line-height:32px;
         font-weight:700;
     }
     
-    #example .goback  a {
+    .example .goback  a {
         color:#ff3200;
     }
-    #example li {
+
+    .example li {
         line-height:26px;
         font-size:14px;
         
     }
     
-        #example li a {
+        .example li a {
             color:#2d64b3;
             text-decoration:none;
 
         }
-        #example li a:hover {
+
+        .example li a:hover {
             color:#ff3200;
             text-decoration:underline;
         }
@@ -57,3 +63,8 @@ address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
         text-align:center;
         background:;
     }
+
+#list,#info{
+    position: absolute;
+    display: none;
+}

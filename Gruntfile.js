@@ -75,6 +75,10 @@ module.exports = function(grunt) {
       },
     },
 
+    jsbint: {
+      all: [ 'src/**/*.js' ]
+    }
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -84,7 +88,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-watch');
 
+  grunt.loadNpmTasks('grunt-jsbint');
+
   // Default task(s).
-  grunt.registerTask( 'default', [ 'concat', 'uglify' ] );
+  grunt.registerTask( 'default', [ 'concat', 'uglify', 'jsbint' ] );
 
 };

@@ -75,7 +75,6 @@ Chassis.mixin( View.prototype, Events, {
 
         // 解除事件绑定
         this.undelegateEvents();
-        this.stopListening();
 
         // 移除DOM
         this.$el.remove();
@@ -134,7 +133,7 @@ Chassis.mixin( View.prototype, Events, {
      *          'orientationchange window': 'refresh',
      *          'click document': 'close',
      *          'beforepagein view': 'onBeforePageIn',
-     *          'set model': 'render'
+     *          'change model': 'render'
      *      }
      */
     delegateEvents: function( events ) {
@@ -170,10 +169,12 @@ Chassis.mixin( View.prototype, Events, {
 					Chassis.$( window[ selector ] ).on( fullEventName, method );
 					break;
 				case 'view':
-					this.on( eventName, method );
+					this.listenTo( this, eventName, method );
 					break;
 				case 'model':
-					this.model.on( eventName, method );
+                    if( this.model ) {
+                        this.listenTo( this.model, eventName, method );
+                    }
 					break;
 				case '':
 					this.$el.on( fullEventName, method );
@@ -192,10 +193,12 @@ Chassis.mixin( View.prototype, Events, {
     undelegateEvents: function() {
         var eventName = '.delegateEvents' + this.cid;
         this.$el.off( eventName );
-        this.off( eventName );
-        this.model.off( eventName );
+
         Chassis.$( window ).off( eventName );
         Chassis.$( document ).off( eventName );
+
+        this.stopListening();
+
         return this;
     },
 
@@ -262,8 +265,8 @@ Chassis.mixin( View.prototype, Events, {
 
     _onBeforePageIn: function( params ) {
 
-        console.log( 'beforepagein' );
-        console.log( params );
+        // console.log( 'beforepagein' );
+        // console.log( params );
 
         this.onBeforePageIn( params );
 
@@ -284,8 +287,8 @@ Chassis.mixin( View.prototype, Events, {
 
     _onAfterPageIn: function( params ) {
 
-        console.log( 'afterpagein' ); 
-        console.log( params );
+        // console.log( 'afterpagein' ); 
+        // console.log( params );
 
         this.onAfterPageIn( params );
 
@@ -348,14 +351,15 @@ Chassis.mixin( View.prototype, Events, {
 
 	_ensureElement: function() {
 		if ( !this.el ) {
-			var attrs = this.attributes || {};
+            // attributes有可能来自原型属性因此需要复制
+			var attrs = Chassis.mixin( {}, this.attributes || {} );
 
 			if( this.id ) {
 				attrs.id = this.id;
 			}
 
 			if( this.className ) {
-				attrs.className = this.className;
+				attrs['class'] = this.className;
 			}
 
 			var $el = Chassis.$( '<' + this.tagName + '>' ).attr( attrs );

@@ -10,13 +10,13 @@
 var Loading = View.Loading = ( function() {
 
 	function isExistedDom( el ) {
-		return !!Chassis.$( el )[0].parentNode;
+		return !!Chassis.$( el )[ 0 ].parentNode;
 	}
 
 	function setup( el ) {
 		var $el = this.$el = Chassis.$( el ).hide();
 
-		if( !isExistedDom( $el ) ) {
+		if ( !isExistedDom( $el ) ) {
 			Chassis.$( 'body' ).append( $el );
 		}
 	}
@@ -77,7 +77,7 @@ var Loading = View.Loading = ( function() {
 
 				Loading.Global.hide();
 
-				if( view ) {
+				if ( view ) {
 					view.$el.append( this.$el );
 				}
 
@@ -96,4 +96,4 @@ var Loading = View.Loading = ( function() {
 			}
 		}
 	};
-} )();
+})();

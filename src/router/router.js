@@ -32,7 +32,7 @@ var Router = Chassis.Router = function( options ) {
      *      使用这种配置方式时如果路由action为空时会默认路由到`__Chassis__.PageView.index`,
      *      可以通过`options.index`来重新设置;
      */
-    if( options.routes ) {
+    if ( options.routes ) {
         this.routes = options.routes;
     }
 
@@ -70,27 +70,27 @@ Chassis.mixin( Router.prototype, Events, {
      * @method route
      * @return 
      **/
-    route : function(route, name) {
+    route : function( route, name ) {
 
         var self = this,
             callback = this._getHandler( name ),
-            routeRe = self._routeToRegExp(route),
-            keys = routeRe.exec(route).slice(1);
+            routeRe = self._routeToRegExp( route ),
+            keys = routeRe.exec( route ).slice( 1 );
         
-        Chassis.each(keys,function(item,key){
-            keys[ key ] = item.substring(1);
+        Chassis.each( keys,function( item, key ){
+            keys[ key ] = item.substring( 1 );
         });
         
-        Chassis.history.route(routeRe,function( fragment ){
+        Chassis.history.route( routeRe,function( fragment ){
         
             var vals,Request;
             
-            vals = routeRe.exec( fragment ).slice(1);
-            Request = Chassis.object(keys,vals);
+            vals = routeRe.exec( fragment ).slice( 1 );
+            Request = Chassis.object( keys,vals );
             
             self.Request = Request;
 
-            callback.call(self);
+            callback.call( self );
         
         });
 
@@ -103,8 +103,8 @@ Chassis.mixin( Router.prototype, Events, {
      * @method navigate
      * @return 
      **/
-    navigate : function(fragment, options){
-        return Chassis.history.navigate(fragment, options);
+    navigate : function( fragment, options ) {
+        return Chassis.history.navigate( fragment, options );
     },
 
     /** 
@@ -147,9 +147,6 @@ Chassis.mixin( Router.prototype, Events, {
      */
     switchPage: function( from, to, params ) {
 
-        console.log( 'switchPage from ' + ( from ? from.action : null ) + 
-                ' to ' + to.action );
-
         var me = this,
             e = {
                 from: from,
@@ -166,22 +163,22 @@ Chassis.mixin( Router.prototype, Events, {
         /**
          * 计算页面切换方向：0-无方向，1-向左，2-向右
          */
-        if( fromAction !== toAction ) {
+        if ( fromAction !== toAction ) {
             if( -1 != fromIndex && -1 != toIndex ) {
                 dir = fromIndex > toIndex ? 2 : 1;
             }
         }
 
         // 记忆位置
-        if( me.enablePositionRestore && from ) {
+        if ( me.enablePositionRestore && from ) {
             from.savePos();
         }
         
-        if( from ){
+        if ( from ){
             from.trigger( 'beforepageout', e );
         }
         
-        if( to ) {
+        if ( to ) {
             to.trigger( 'beforepagein', e );
         }
 
@@ -209,7 +206,7 @@ Chassis.mixin( Router.prototype, Events, {
                  */
 
                 // 恢复位置
-                if( me.enablePositionRestore && to ) {
+                if ( me.enablePositionRestore && to ) {
                     to.restorePos( params );
                 }
                 
@@ -226,16 +223,16 @@ Chassis.mixin( Router.prototype, Events, {
                 });
                 */
                 
-                if( from ) {
+                if ( from ) {
                     
-                    if( from.trigger( 'afterpageout', e ) ) {
+                    if ( from.trigger( 'afterpageout', e ) ) {
                         from.$el.hide();
                     }
                    
                     
                 }
                 
-                if( to ) {
+                if ( to ) {
                     to.trigger( 'afterpagein', e );
                 }
 
@@ -281,7 +278,7 @@ Chassis.mixin( Router.prototype, Events, {
      */
     _selectTransition: function( fromAction, toAction ){
 
-        if( !fromAction || !toAction ) {
+        if ( !fromAction || !toAction ) {
             return;
         }
 
@@ -289,7 +286,8 @@ Chassis.mixin( Router.prototype, Events, {
             transition;
 
         // key不分顺序，需要试探两种顺序的配置
-        transition = me.pageTransition[ fromAction + '-' + toAction ] || me.pageTransition[ toAction + '-' + fromAction ];
+        transition = me.pageTransition[ fromAction + '-' + toAction ] ||
+                me.pageTransition[ toAction + '-' + fromAction ];
 
         var fx = Chassis.FX[ transition ];
 
@@ -307,10 +305,10 @@ Chassis.mixin( Router.prototype, Events, {
         var self = this;
         
         //对routes支持数组的处理
-        self._routeArray.call(self);
+        self._routeArray.call( self );
         
-        Chassis.each(self.routes,function(item,key) {
-            self.route(key,item);
+        Chassis.each( self.routes,function( item, key ) {
+            self.route( key, item );
         });
         
         return self;
@@ -334,20 +332,20 @@ Chassis.mixin( Router.prototype, Events, {
         
         
         Chassis.each( self.routes, function( item, key ) {
-            var first = item.split(/\//g)[0],
+            var first = item.split( /\//g )[ 0 ],
                 name = first;
 
-            if( first.substring(0,1) === '*') {
+            if ( first.substring( 0,1 ) === '*' ) {
                 name = 'all';
             }
             
-            if(first === ''){
+            if ( first === '' ) {
                 name = self._index;
             }
             
             _routes[ item ] = name;
             
-            if( !hasPageOrder ){
+            if ( !hasPageOrder ) {
                 self.pageOrder.push( name );
             }
         });
@@ -365,20 +363,20 @@ Chassis.mixin( Router.prototype, Events, {
      * @method _routeToRegExp
      * @return 
      **/
-    _routeToRegExp : function(route){
+    _routeToRegExp : function( route ) {
 
         var optionalParam = /\((.*?)\)/g,
             namedParam    = /(\(\?)?:\w+/g,
             splatParam    = /\*\w+/g,
             escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
             
-        route = route.replace(escapeRegExp, '\\$&')
-               .replace(optionalParam, '(?:$1)?')
-               .replace(namedParam, function(match, optional){
+        route = route.replace( escapeRegExp, '\\$&' )
+               .replace( optionalParam, '(?:$1)?' )
+               .replace( namedParam, function( match, optional ) {
                  return optional ? match : '([^\/]+)';
                })
-               .replace(splatParam, '(.*?)');
-        return new RegExp('^' + route + '$');
+               .replace( splatParam, '(.*?)' );
+        return new RegExp( '^' + route + '$' );
     },
 
     _getHandler: function( action ) {
@@ -407,7 +405,8 @@ Chassis.mixin( Router.prototype, Events, {
         this._decodeRequest( request );
         
         if( !view ){
-            view = me.views[ action ]  = new Chassis.PageView[ action ]( request, action ); 
+            view = me.views[ action ]  =
+                    new Chassis.PageView[ action ]( request, action ); 
         } 
         
         // 切换视图控制器
@@ -428,7 +427,7 @@ Chassis.mixin( Router.prototype, Events, {
 
     _decodeRequest: function( request ) {
 
-        if( !request ) {
+        if ( !request ) {
             return;
         }
 

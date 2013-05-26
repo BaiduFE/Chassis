@@ -6,7 +6,7 @@ var History = Chassis.History = function( handler ) {
     this.handler = handler || [];
 };
 
-Chassis.mixin(History.prototype, Events, {
+Chassis.mixin( History.prototype, Events, {
     
     /**
      * 为路由对象手动创建路由，route 参数可以是 路由字符串 或 正则表达式。 
@@ -16,7 +16,7 @@ Chassis.mixin(History.prototype, Events, {
      * @method route
      * @return 
      **/
-    route : function(routeRe, callback){
+    route: function( routeRe, callback ) {
         this.handler.push({
             reg : routeRe,
             callback : callback
@@ -31,7 +31,7 @@ Chassis.mixin(History.prototype, Events, {
      * @method navigate
      * @return 
      **/
-    navigate : function(fragment, options, replace) {
+    navigate: function( /*fragment, options, replace*/ ) {
         return this;
     },
     
@@ -42,14 +42,15 @@ Chassis.mixin(History.prototype, Events, {
      * @method _triggerHandle
      * @return 
      **/
-    _triggerHandle : function( fragment ){
+    _triggerHandle: function( fragment ){
         var self = this;
-        Chassis.each(self.handler,function(item, key){
-            if(!item.reg.test( fragment )){
+
+        Chassis.each( self.handler, function( item, key ) {
+            if ( !item.reg.test( fragment ) ) {
                 return;
             }
 
-            item.callback.call(self, fragment);
+            item.callback.call( self, fragment );
         });
     },
     
@@ -61,25 +62,25 @@ Chassis.mixin(History.prototype, Events, {
      * @method start
      * @return 
      **/
-    start : function( options ){
+    start: function( options ){
         var handler = Chassis.clone( this.handler ),
             type = 'Hash';
         
-        if( !options ) {
+        if ( !options ) {
             options = {};
         }
         
         this.destroy();
         
-        if(options.pushState){
+        if ( options.pushState ) {
             type = 'Pushstate';
         }
         
-        if(!History[ type ]){
-            throw new Error('History.' + type +' is not found');
+        if( !History[ type ] ) {
+            throw new Error( 'History.' + type +' is not found' );
         }
-        Chassis.history = new History[ type ](handler);
-        return Chassis.history.start(options);
+        Chassis.history = new History[ type ]( handler );
+        return Chassis.history.start( options );
     },
 
     /**
@@ -90,13 +91,13 @@ Chassis.mixin(History.prototype, Events, {
      * @method destroy
      * @return 
      **/
-    destroy : function(){
+    destroy: function(){
         this.pushState = false;
         this.root = '/';
         this.handler = [];
         this.cacheOptions = null;
-        $(window).off('hashchange');
-        $(window).off('popstate');
+        $( window ).off( 'hashchange' );
+        $( window ).off( 'popstate' );
         History.start = false;
         
         //销毁后重新指向原始的History，方便重新调用

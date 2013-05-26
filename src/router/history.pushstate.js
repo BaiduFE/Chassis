@@ -13,31 +13,34 @@ History.Pushstate = History.extend({
      * @method start
      * @return 
      **/
-    start : function( options ){
+    start : function( options ) {
         var self = this;
 
-        if(History.start){
+        if ( History.start ) {
             return;
         }
         
         History.start = true;
         
-        if( !options ) {
+        if ( !options ) {
             options = {};
         }
         
-        if(options.pushState){
+        if ( options.pushState ) {
+
             self.pushState = true;
-            if(options.root){
+
+            if ( options.root ) {
                 self.root = options.root;
             }
             
-            //当浏览器前进后退时触发
-            $(window).on('popstate',function(){
-                var fragment = window.location.href.split(/\//).slice(3).join('/').substring( self.root.length );
+            // 当浏览器前进后退时触发
+            $( window ).on( 'popstate', function() {
+                var fragment = window.location.href.split( /\// ).slice( 3 )
+                        .join( '/' ).substring( self.root.length );
                 
-                self._triggerHandle.call(self, fragment);
-            });
+                self._triggerHandle.call( self, fragment );
+            } );
             
             return;
         }
@@ -52,24 +55,22 @@ History.Pushstate = History.extend({
      * @method navigate
      * @return 
      **/
-    navigate : function(fragment, options, replace) {
+    navigate : function( fragment, options/*, replace*/ ) {
         var self = this;
         
-        if( !options ) {
+        if ( !options ) {
             options = {};
         }
         
-        if(self.pushState){
+        if ( self.pushState ) {
             self._setPushState( fragment );
         }
         
         self.cacheOptions = null;
         
-        if( options.trigger ) {
-            self._triggerHandle.call(self, fragment);
+        if ( options.trigger ) {
+            self._triggerHandle.call( self, fragment );
         }
-        
-
     },
     
     /**
@@ -79,11 +80,11 @@ History.Pushstate = History.extend({
      * @method _setPushState
      * @return 
      **/
-    _setPushState : function( fragment ){
+    _setPushState : function( fragment ) {
         
-        if(this.pushState){
+        if ( this.pushState ) {
             fragment = fragment || this.root;
-            history.pushState({}, document.title, fragment);
+            history.pushState( {}, document.title, fragment );
             return this;
         }
     }

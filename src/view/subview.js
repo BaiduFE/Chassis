@@ -1,3 +1,5 @@
+/*jshint camelcase:false*/
+
 /**
  * @fileOverview 子视图
  */

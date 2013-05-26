@@ -2,10 +2,10 @@ $(document).ready(function() {
 
   var view;
 
-  module("Backbone.View", {
+  module('Chassis.View', {
 
     setup: function() {
-      view = new Backbone.View({
+      view = new Chassis.View({
         id        : 'test-view',
         className : 'test-view',
         other     : 'non-special-option'
@@ -14,21 +14,23 @@ $(document).ready(function() {
 
   });
 
-  test("constructor", 3, function() {
+  test('constructor', 3, function() {
     equal(view.el.id, 'test-view');
     equal(view.el.className, 'test-view');
-    equal(view.el.other, void 0);
+    equal(view.el.other, undefined);
   });
 
-  test("jQuery", 1, function() {
-    var view = new Backbone.View;
+  
+  test('view.$', 1, function() {
+    var view = new Chassis.View;
     view.setElement('<p><a><b>test</b></a></p>');
     strictEqual(view.$('a b').html(), 'test');
   });
 
-  test("initialize", 1, function() {
-    var View = Backbone.View.extend({
-      initialize: function() {
+  
+  test('init', 1, function() {
+    var View = Chassis.View.extend({
+      init: function() {
         this.one = 1;
       }
     });
@@ -36,10 +38,11 @@ $(document).ready(function() {
     strictEqual(new View().one, 1);
   });
 
-  test("delegateEvents", 6, function() {
+  
+  test('delegateEvents', 10, function() {
     var counter1 = 0, counter2 = 0;
 
-    var view = new Backbone.View({el: '<p><a id="test"></a></p>'});
+    var view = new Chassis.View({el: '<p><a id="test"></a></p>'});
     view.increment = function(){ counter1++; };
     view.$el.on('click', function(){ counter2++; });
 
@@ -58,10 +61,34 @@ $(document).ready(function() {
     view.$('#test').trigger('click');
     equal(counter1, 3);
     equal(counter2, 3);
+
+    events = {
+      'click document': 'increment',
+      'orientationchange window': 'increment',
+      'change model': 'increment',
+      'beforepagein view': 'increment'
+    };
+
+    view.model = new Chassis.Model();
+
+    view.delegateEvents(events);
+
+    $(document).trigger('click');
+    equal(counter1, 4);
+
+    $(window).trigger('orientationchange');
+    equal(counter1, 5);
+
+    view.model.trigger('change');
+    equal(counter1, 6);
+
+    view.trigger('beforepagein');
+    equal(counter1, 7);
+
   });
 
-  test("delegateEvents allows functions for callbacks", 3, function() {
-    var view = new Backbone.View({el: '<p></p>'});
+  test('delegateEvents allows functions for callbacks', 3, function() {
+    var view = new Chassis.View({el: '<p></p>'});
     view.counter = 0;
 
     var events = {
@@ -82,17 +109,18 @@ $(document).ready(function() {
     equal(view.counter, 3);
   });
 
-
-  test("delegateEvents ignore undefined methods", 0, function() {
-    var view = new Backbone.View({el: '<p></p>'});
+  /*
+  test('delegateEvents ignore undefined methods', 0, function() {
+    var view = new Chassis.View({el: '<p></p>'});
     view.delegateEvents({'click': 'undefinedMethod'});
     view.$el.trigger('click');
   });
+  */
 
-  test("undelegateEvents", 6, function() {
+  test('undelegateEvents', 14, function() {
     var counter1 = 0, counter2 = 0;
 
-    var view = new Backbone.View({el: '<p><a id="test"></a></p>'});
+    var view = new Chassis.View({el: '<p><a id="test"></a></p>'});
     view.increment = function(){ counter1++; };
     view.$el.on('click', function(){ counter2++; });
 
@@ -112,35 +140,74 @@ $(document).ready(function() {
     view.$('#test').trigger('click');
     equal(counter1, 2);
     equal(counter2, 3);
+
+    events = {
+      'click document': 'increment',
+      'orientationchange window': 'increment',
+      'change model': 'increment',
+      'beforepagein view': 'increment'
+    };
+
+    view.model = new Chassis.Model();
+
+    view.delegateEvents(events);
+
+    $(document).trigger('click');
+    equal(counter1, 3);
+
+    $(window).trigger('orientationchange');
+    equal(counter1, 4);
+
+    view.model.trigger('change');
+    equal(counter1, 5);
+
+    view.trigger('beforepagein');
+    equal(counter1, 6);
+
+    view.undelegateEvents();
+
+    $(document).trigger('click');
+    equal(counter1, 6);
+
+    $(window).trigger('orientationchange');
+    equal(counter1, 6);
+
+    view.model.trigger('change');
+    equal(counter1, 6);
+
+    view.trigger('beforepagein');
+    equal(counter1, 6);
+
   });
 
-  test("_ensureElement with DOM node el", 1, function() {
-    var View = Backbone.View.extend({
+  test('_ensureElement with DOM node el', 1, function() {
+    var View = Chassis.View.extend({
       el: document.body
     });
 
     equal(new View().el, document.body);
   });
 
-  test("_ensureElement with string el", 3, function() {
-    var View = Backbone.View.extend({
-      el: "body"
+  test('_ensureElement with string el', 3, function() {
+    var View = Chassis.View.extend({
+      el: 'body'
     });
     strictEqual(new View().el, document.body);
 
-    View = Backbone.View.extend({
-      el: "#testElement > h1"
+    View = Chassis.View.extend({
+      el: '#testElement > h1'
     });
-    strictEqual(new View().el, $("#testElement > h1").get(0));
+    strictEqual(new View().el, $('#testElement > h1').get(0));
 
-    View = Backbone.View.extend({
-      el: "#nonexistent"
+    View = Chassis.View.extend({
+      el: '#nonexistent'
     });
     ok(!new View().el);
   });
 
-  test("with className and id functions", 2, function() {
-    var View = Backbone.View.extend({
+  /*
+  test('with className and id functions', 2, function() {
+    var View = Chassis.View.extend({
       className: function() {
         return 'className';
       },
@@ -152,9 +219,10 @@ $(document).ready(function() {
     strictEqual(new View().el.className, 'className');
     strictEqual(new View().el.id, 'id');
   });
+  */
 
-  test("with attributes", 2, function() {
-    var View = Backbone.View.extend({
+  test('with attributes', 2, function() {
+    var View = Chassis.View.extend({
       attributes: {
         id: 'id',
         'class': 'class'
@@ -165,8 +233,9 @@ $(document).ready(function() {
     strictEqual(new View().el.id, 'id');
   });
 
-  test("with attributes as a function", 1, function() {
-    var View = Backbone.View.extend({
+  /*
+  test('with attributes as a function', 1, function() {
+    var View = Chassis.View.extend({
       attributes: function() {
         return {'class': 'dynamic'};
       }
@@ -174,12 +243,13 @@ $(document).ready(function() {
 
     strictEqual(new View().el.className, 'dynamic');
   });
+  */
 
-  test("multiple views per element", 3, function() {
+  test('multiple views per element', 3, function() {
     var count = 0;
     var $el = $('<p></p>');
 
-    var View = Backbone.View.extend({
+    var View = Chassis.View.extend({
       el: $el,
       events: {
         click: function() {
@@ -189,25 +259,26 @@ $(document).ready(function() {
     });
 
     var view1 = new View;
-    $el.trigger("click");
+    $el.trigger('click');
     equal(1, count);
 
     var view2 = new View;
-    $el.trigger("click");
+    $el.trigger('click');
     equal(3, count);
 
     view1.delegateEvents();
-    $el.trigger("click");
+    $el.trigger('click');
     equal(5, count);
   });
 
-  test("custom events, with namespaces", 2, function() {
+  /*
+  test('custom events, with namespaces', 2, function() {
     var count = 0;
 
-    var View = Backbone.View.extend({
+    var View = Chassis.View.extend({
       el: $('body'),
       events: function() {
-        return {"fake$event.namespaced": "run"};
+        return {'fake$event.namespaced': 'run'};
       },
       run: function() {
         count++;
@@ -222,22 +293,24 @@ $(document).ready(function() {
     $('body').trigger('fake$event');
     equal(count, 2);
   });
+  */
 
-  test("#1048 - setElement uses provided object.", 2, function() {
+
+  test('setElement uses provided object.', 2, function() {
     var $el = $('body');
 
-    var view = new Backbone.View({el: $el});
+    var view = new Chassis.View({el: $el});
     ok(view.$el === $el);
 
     view.setElement($el = $($el));
     ok(view.$el === $el);
   });
 
-  test("#986 - Undelegate before changing element.", 1, function() {
+  test('Undelegate before changing element.', 1, function() {
     var button1 = $('<button></button>');
     var button2 = $('<button></button>');
 
-    var View = Backbone.View.extend({
+    var View = Chassis.View.extend({
       events: {
         click: function(e) {
           ok(view.el === e.target);
@@ -252,8 +325,9 @@ $(document).ready(function() {
     button2.trigger('click');
   });
 
-  test("#1172 - Clone attributes object", 2, function() {
-    var View = Backbone.View.extend({
+  test('Clone attributes object', 2, function() {
+    var View = Chassis.View.extend({
+      // 原型属性
       attributes: {foo: 'bar'}
     });
 
@@ -264,8 +338,9 @@ $(document).ready(function() {
     ok(!view2.el.id);
   });
 
-  test("#1228 - tagName can be provided as a function", 1, function() {
-    var View = Backbone.View.extend({
+  /*
+  test('#1228 - tagName can be provided as a function', 1, function() {
+    var View = Chassis.View.extend({
       tagName: function() {
         return 'p';
       }
@@ -273,40 +348,40 @@ $(document).ready(function() {
 
     ok(new View().$el.is('p'));
   });
+  */
 
-  test("views stopListening", 0, function() {
-    var View = Backbone.View.extend({
-      initialize: function() {
+  test('views stopListening', 0, function() {
+    var View = Chassis.View.extend({
+      init: function() {
         this.listenTo(this.model, 'all x', function(){ ok(false); }, this);
-        this.listenTo(this.collection, 'all x', function(){ ok(false); }, this);
       }
     });
 
     var view = new View({
-      model: new Backbone.Model,
-      collection: new Backbone.Collection
+      model: new Chassis.Model
     });
 
     view.stopListening();
     view.model.trigger('x');
-    view.collection.trigger('x');
   });
 
-  test("Provide function for el.", 1, function() {
-    var View = Backbone.View.extend({
+  /*
+  test('Provide function for el.', 1, function() {
+    var View = Chassis.View.extend({
       el: function() {
-        return "<p><a></a></p>";
+        return '<p><a></a></p>';
       }
     });
 
     var view = new View;
     ok(view.$el.is('p:has(a)'));
   });
+  */
 
-  test("events passed in options", 2, function() {
+  test('events passed in options', 2, function() {
     var counter = 0;
 
-    var View = Backbone.View.extend({
+    var View = Chassis.View.extend({
       el: '<p><a id="test"></a></p>',
       increment: function() {
         counter++;
@@ -314,9 +389,7 @@ $(document).ready(function() {
     });
 
     var view = new View({events:{'click #test':'increment'}});
-    var view2 = new View({events:function(){
-      return {'click #test':'increment'};
-    }});
+    var view2 = new View({events:{'click #test':'increment'}});
 
     view.$('#test').trigger('click');
     view2.$('#test').trigger('click');
@@ -325,6 +398,84 @@ $(document).ready(function() {
     view.$('#test').trigger('click');
     view2.$('#test').trigger('click');
     equal(counter, 4);
+  });
+
+  test('page change events', 2, function() {
+
+    var View = Chassis.View.extend({
+      onBeforePageIn: function(){
+        ok(true);
+      },
+      onAfterPageIn: function(){
+        ok(true);
+      }
+    });
+
+    var view1 = new View();
+    view1.trigger('beforepagein');
+    view1.trigger('afterpagein');
+  });
+
+  test('destroy function and event', 2, function() {
+
+    var View = Chassis.View.extend({
+      el: '<p><a id="test"></a></p>',
+      onDestroy: function(){
+        ok(true);
+      }
+    });
+
+    var view1 = new View({
+      events: {
+        'click #test': function(){
+          counter++;
+        }
+      }
+    });
+
+    view1.destroy();
+
+    ok(!this.$el);
+  });
+
+  test('hierarchical views', 6, function() {
+
+    var View = Chassis.View.extend();
+
+    var top = new View({
+      el: '<div></div>',
+      id: 'top'
+    });
+
+    var sub1 = new View({
+      el: '<div></div>',
+      id: 'sub1'
+    });
+
+    var sub2 = new View({
+      el: '<div></div>',
+      id: 'sub2'
+    });
+
+    var sub3 = new View({
+      el: '<div></div>',
+      id: 'sub3'
+    });
+
+    top.append( sub1 );
+    top.prepend( sub2 );
+    top.setup(sub3);
+
+    equal( sub1.parent, top );
+    equal( sub2.parent, top );
+    equal( sub3.parent, top );
+
+    var divs = top.$('div');
+
+    strictEqual( sub1.el, divs[1] );
+    strictEqual( sub2.el, divs[0] );
+    ok(!top.$('#sub3').length);
+    
   });
 
 });

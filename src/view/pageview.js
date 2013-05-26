@@ -1,3 +1,5 @@
+/*jshint camelcase:false*/
+
 /**
  * @fileOverview 页面视图控制器
  */

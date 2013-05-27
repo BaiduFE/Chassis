@@ -140,7 +140,7 @@ Chassis.mixin( Model.prototype, Events, {
      * @return 
      **/
     unset : function( attr, options ) {
-        return this.set( attr, void 0,
+        return this.set( attr, Chassis.Undefined,
                 Chassis.mixin( {}, options, { unset: true } ) );
     },
     
@@ -154,7 +154,7 @@ Chassis.mixin( Model.prototype, Events, {
     clear : function( options ) {
         var attrs = {};
         Chassis.each( this.attributes, function( item, key ) {
-            attrs[ key ] = void 0;
+            attrs[ key ] = Chassis.Undefined;
         } );
         
         return this.unset( attrs, options );

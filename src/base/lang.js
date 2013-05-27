@@ -7,7 +7,8 @@ var proto = Array.prototype,
     nativeForEach = proto.forEach,
     breaker = {},
     toString = proto.toString,
-    nativeIsArray = Array.isArray;
+    nativeIsArray = Array.isArray,
+    Undefined;
 
 Chassis.mixin = $.extend;
 
@@ -201,3 +202,5 @@ Chassis.object = function( list, values ) {
 $.support = Chassis.mixin( $.support || {}, {
     has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
 } );
+
+Chassis.Undefined;

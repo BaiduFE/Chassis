@@ -45,7 +45,7 @@ Chassis.mixin( History.prototype, Events, {
      * @param {string} fragment
      * @return 
      **/
-    _triggerHandle: function( fragment ){
+    _triggerHandle : function( fragment ) {
         var self = this;
 
         Chassis.each( self.handler, function( item, key ) {
@@ -54,7 +54,7 @@ Chassis.mixin( History.prototype, Events, {
             }
 
             item.callback.call( self, fragment );
-        });
+        } );
     },
     
     /**
@@ -66,7 +66,7 @@ Chassis.mixin( History.prototype, Events, {
      * @param {object} options
      * @return 
      **/
-    start: function( options ){
+    start : function( options ) {
         var handler = Chassis.clone( this.handler ),
             type = 'Hash';
         
@@ -80,8 +80,8 @@ Chassis.mixin( History.prototype, Events, {
             type = 'Pushstate';
         }
         
-        if( !History[ type ] ) {
-            throw new Error( 'History.' + type +' is not found' );
+        if ( !History[ type ] ) {
+            throw new Error( 'History.' + type + ' is not found' );
         }
         Chassis.history = new History[ type ]( handler );
         return Chassis.history.start( options );
@@ -95,7 +95,7 @@ Chassis.mixin( History.prototype, Events, {
      * @method destroy
      * @return 
      **/
-    destroy: function(){
+    destroy : function() {
         this.pushState = false;
         this.root = '/';
         this.handler = [];
@@ -104,10 +104,10 @@ Chassis.mixin( History.prototype, Events, {
         $( window ).off( 'popstate' );
         History.start = false;
         
-        //销毁后重新指向原始的History，方便重新调用
+        // 销毁后重新指向原始的History，方便重新调用
         Chassis.history = new History();
     }
-});
+} );
 
 
 History.extend = Chassis.extend;

@@ -1,3 +1,5 @@
+/*jshint camelcase:false*/
+
 /**
  * @fileOverview 子页面管理
  */
@@ -23,8 +25,11 @@
 var SPM = View.SubPageMgr = function( opts ) {
 	Chassis.mixin( this, {
 		max: 3,
+
 		/*owner,*/
+
 		/*klass,*/
+		
 		/*dirFn,*/
 		transition: 'slide'
 	}, opts );
@@ -42,7 +47,7 @@ Chassis.mixin( SPM.prototype, Events, {
 
 		var pages = this.pagesMap;
 
-		if( !pages[ subview.cid ] ) {
+		if ( !pages[ subview.cid ] ) {
 			subview.__order__ = this._order++;
 			pages[ subview.cid ] = subview;
 
@@ -62,17 +67,19 @@ Chassis.mixin( SPM.prototype, Events, {
 	 */
 	getBy: function( key, val ) {
 
-		var pages = this.pagesMap;
+		var pages = this.pagesMap,
+			subview,
+			cid;
 
-		if( key === 'cid' ) {
+		if ( key === 'cid' ) {
 			return pages[ key ];
 		}
 
-		for( var cid in pages ) {
-			if( pages.hasOwnProperty( cid ) ) {
-				var subview = pages[ cid ];
+		for ( cid in pages ) {
+			if ( pages.hasOwnProperty( cid ) && pages.hasOwnProperty( cid ) ) {
+				subview = pages[ cid ];
 
-				if( subview[ key ] === val ) {
+				if ( subview[ key ] === val ) {
 					return;
 				}
 			}
@@ -121,13 +128,13 @@ Chassis.mixin( SPM.prototype, Events, {
 		to.$el.show();
 
 		// pageview内部子页面切换
-		if( fromPage === toPage ) {
+		if ( fromPage === toPage ) {
 
-			if( this.dirFn ) {
+			if ( this.dirFn ) {
 				dir = this.dirFn( from, to );
 			}
 
-			if( dir < 0 ) {
+			if ( dir < 0 ) {
 				dir = this._calcDir.apply( this, arguments );
 			}
 
@@ -147,7 +154,7 @@ Chassis.mixin( SPM.prototype, Events, {
 
 		// 从其他pageview切换到当前pageview: 子页面显示无需动画效果，直接显示即可
 		} else {
-			if( from ) {
+			if ( from ) {
 				from.$el.hide();
 			}
 
@@ -168,10 +175,10 @@ Chassis.mixin( SPM.prototype, Events, {
 		var list = this.pagesList,
 			page;
 
-		while( list.length > this.max ) {
+		while ( list.length > this.max ) {
 			page = list.shift();
 
-			if( page === this.current ) {
+			if ( page === this.current ) {
 				list.push( page );
 			} else {
 				delete this.pagesMap[ page.cid ];
@@ -236,13 +243,13 @@ Chassis.mixin( SPM.prototype, Events, {
 
 		var fxFn;
 
-		if( Chassis.isFunction( this.transition ) ) {
+		if ( Chassis.isFunction( this.transition ) ) {
 			fxFn = this.transition;
 		} else {
 			fxFn = Chassis.FX[ this.transition ].animate;
 		}
 
-		if( !fxFn ) {
+		if ( !fxFn ) {
 			return;
 		}
 
@@ -269,7 +276,9 @@ Chassis.mixin( SPM.prototype, Events, {
 			stamp = this.owner.getStamp( params );
 
 		// 跨页面切换到子页面时，当前子页面若不是目标子页面，须提前隐藏，保证切换效果
-		if(  from !== to && this.current && stamp !== this.current.stamp ) {
+		if (  from !== to &&
+				this.current &&
+				stamp !== this.current.stamp ) {
 			this.current.$el.hide();
 		}
 	},
@@ -279,13 +288,14 @@ Chassis.mixin( SPM.prototype, Events, {
 		var params = e.params,
 			owner = this.owner,
 			stamp = owner.getStamp( params ),
-			target = this.getBy( 'stamp', stamp );
+			target = this.getBy( 'stamp', stamp ),
+			subpage;
 
 		// 如果子页面不存在则自动创建
-		if( !target ) {
+		if ( !target ) {
 
 			// TODO: 某些数据可能不允许自动生成subview
-			var subpage = new this.kclass( params || {}, owner );
+			subpage = new this.kclass( params || {}, owner );
 
 			owner.append( subpage );
 			this.register( subpage );
@@ -297,13 +307,13 @@ Chassis.mixin( SPM.prototype, Events, {
 	},
 
 	_setCurrent: function( subview ) {
-		if( subview !== this.current ) {
+		if ( subview !== this.current ) {
 			this.previous = this.current;
 			this.current = this.previous;
 		}
 	}
-	/*,
-	TODO
+
+	/* TODO
 
 	/**
 	 * 从子页面管理器中移除指定页面

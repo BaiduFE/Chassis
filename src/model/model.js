@@ -110,7 +110,7 @@ Chassis.mixin( Model.prototype, Events, {
         me._previousAttributes = Chassis.clone( me.attributes );
         
         if ( me.idAttribute in attrs ) {
-            me.id = attrs[ me.idAttribute ];
+            me[ me.idAttribute ] = attrs[ me.idAttribute ];
         }
         
         Chassis.each( attrs, function( item, key ) {

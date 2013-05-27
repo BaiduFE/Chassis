@@ -77,11 +77,8 @@ History.Hash = History.extend({
         
         
         // 从非onchange监控的options里获取配置
-        if ( replace ) {
-
-            if ( me.cacheOptions ) {
-                options = Chassis.clone( me.cacheOptions );
-            }
+        if ( replace && me.cacheOptions ) {
+            options = Chassis.clone( me.cacheOptions );
         }
         me.cacheOptions = null;
         

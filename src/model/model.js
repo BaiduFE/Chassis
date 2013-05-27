@@ -3,26 +3,23 @@
  */
 
 var Model = Chassis.Model = function( attributes, options ) {
-    var defaults,
-        attrs;
-    
-    attrs = attributes || {};
-    
+    var me = this,
+        attrs = attributes || {},
+        defaults;
+
     if ( !options ) {
         options = {};
     }
 
     
-    this.attributes = {};
-    this.cid = Chassis.uniqueId( 'c' );
+    me.attributes = {};
+    me.cid = Chassis.uniqueId( 'c' );
     
     
-    attrs = Chassis.mixin( {}, this.defaults || {}, attrs );
-    this.set( attrs, options );
-    
-    
-    
-    this.init.apply( this, arguments );
+    attrs = Chassis.mixin( {}, me.defaults || {}, attrs );
+    me.set( attrs, options );
+
+    me.init.apply( me, arguments );
 };
 
 Chassis.mixin( Model.prototype, Events, {
@@ -38,9 +35,7 @@ Chassis.mixin( Model.prototype, Events, {
      * @method url
      * @return 
      **/
-    url : function() {
-        
-    },
+    url : function() {},
     
     /**
      * 从模型获取当前属性值，比如：csser.get("title")
@@ -89,7 +84,7 @@ Chassis.mixin( Model.prototype, Events, {
             validateResult;
             
         if ( key === null ) {
-            return this;
+            return me;
         }
 
         if ( typeof key === 'object' ) {
@@ -105,17 +100,17 @@ Chassis.mixin( Model.prototype, Events, {
 
         
         // 变更之前先做校验
-        validateResult = this.validate.call( this, attrs );
+        validateResult = me.validate.call( me, attrs );
         
         if ( validateResult !== true ) {
-            this.trigger( 'error', validateResult );
+            me.trigger( 'error', validateResult );
             return;
         }
         
-        this._previousAttributes = Chassis.clone( this.attributes );
+        me._previousAttributes = Chassis.clone( me.attributes );
         
-        if ( this.idAttribute in attrs ) {
-            this.id = attrs[ this.idAttribute ];
+        if ( me.idAttribute in attrs ) {
+            me.id = attrs[ me.idAttribute ];
         }
         
         Chassis.each( attrs, function( item, key ) {
@@ -123,9 +118,7 @@ Chassis.mixin( Model.prototype, Events, {
                 delete me.attributes[ key ];
             } else {
                 me.attributes[ key ] = item;
-            }
-            
-                
+            }   
         } );
         
         me.trigger( 'change', me );
@@ -233,25 +226,30 @@ Chassis.mixin( Model.prototype, Events, {
      * @return 
      **/
     fetch : function( options ) {
-        var me = this;
+        var me = this,
+            _opt;
         
         options = options ? Chassis.clone( options ) : {};
         
-        $.ajax({
+        options = Chassis.mixin( {}, {
+            success : function() {}
+        }, options );
+        
+        _opt = Chassis.mixin( {}, options, {
             url : me.url(),
-            data : (options.data || {}),
-            dataType : 'json',
             success : function( resp ) {
                 resp = me.parse( resp, options );
-                
-                options.success = options.success || function() {};
+
                 options.success.call( me );
                 me.set( resp, options );
             },
             error : function() {
                 me.trigger( 'error' );
             }
-        });
+        } );
+        
+        
+        me.sync( _opt );
     },
     
     /**
@@ -284,6 +282,10 @@ Chassis.mixin( Model.prototype, Events, {
      **/
     change : function() {
         this.trigger( 'change' );
+    },
+    
+    sync : function( options ) {
+        return Chassis.$.ajax.call( this, options );
     }
     
     

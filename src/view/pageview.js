@@ -26,7 +26,8 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
 	},
 
 	isActive: function() {
-		return this.$el.css( 'display' ) === 'block';
+        var display = this.$el.css( 'display' );
+		return  display != 'none' && display != '';
 	},
 
 	_getLogicString: function( opts ) {

@@ -36,7 +36,7 @@ History.Hash = History.extend({
             } );
             
             // 处理当前hash
-            if ( !options.silent ) {
+            if ( options.trigger ) {
                 me.navigate( me._getHash(), { trigger: true }, true ); 
             }
             
@@ -77,7 +77,7 @@ History.Hash = History.extend({
         
         
         // 从非onchange监控的options里获取配置
-        if ( !replace ) {
+        if ( replace ) {
 
             if ( me.cacheOptions ) {
                 options = Chassis.clone( me.cacheOptions );

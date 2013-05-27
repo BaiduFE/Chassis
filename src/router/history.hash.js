@@ -10,10 +10,10 @@ History.Hash = History.extend({
      * @overwrite
      * @public
      * @method start
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    start : function( options ) {
+    start : function( opts ) {
         var me = this;
 
         if ( History.start ) {
@@ -22,8 +22,8 @@ History.Hash = History.extend({
         
         History.start = true;
         
-        if ( !options ) {
-            options = {};
+        if ( !opts ) {
+            opts = {};
         }
         
         // 开始监听hashchange
@@ -36,7 +36,7 @@ History.Hash = History.extend({
             } );
             
             // 处理当前hash
-            if ( options.trigger ) {
+            if ( opts.trigger ) {
                 me.navigate( me._getHash(), { trigger: true }, true ); 
             }
             
@@ -53,22 +53,22 @@ History.Hash = History.extend({
      * @public
      * @method navigate
      * @param {string} fragment
-     * @param {object} options
+     * @param {object} opts
      * @param {boolean} replace
      * @return 
      **/
-    navigate : function( fragment, options, replace ) {
+    navigate : function( fragment, opts, replace ) {
         var me = this;
         
-        if ( !options ) {
-            options = {};
+        if ( !opts ) {
+            opts = {};
         }
 
         // 如果不是来自onchange监控的事件
         if ( !replace ) {
 
             // 缓存当前的配置
-            me.cacheOptions = options;
+            me.cacheOptions = opts;
             me._setHash( fragment );
             
             // 因为后面会自动触发window.onhashchange事件
@@ -78,11 +78,11 @@ History.Hash = History.extend({
         
         // 从非onchange监控的options里获取配置
         if ( replace && me.cacheOptions ) {
-            options = Chassis.clone( me.cacheOptions );
+            opts = Chassis.clone( me.cacheOptions );
         }
         me.cacheOptions = null;
         
-        if ( options.trigger ) {
+        if ( opts.trigger ) {
             me._triggerHandle.call( me, fragment );
         }
         

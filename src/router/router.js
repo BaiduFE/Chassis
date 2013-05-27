@@ -3,10 +3,10 @@
  * @requires Router.History
  */
 
-var Router = Chassis.Router = function( options ) {
+var Router = Chassis.Router = function( opts ) {
     
-    if ( !options ) {
-        options = {};
+    if ( !opts ) {
+        opts = {};
     }
     
     /**
@@ -30,14 +30,14 @@ var Router = Chassis.Router = function( options ) {
      *      ]
      *      这种配置方式会使用默认的路由行为：路由目标为`__Chassis__.PageView.info`;
      *      使用这种配置方式时如果路由action为空时会默认路由到`__Chassis__.PageView.index`,
-     *      可以通过`options.index`来重新设置;
+     *      可以通过`opts.index`来重新设置;
      */
-    if ( options.routes ) {
-        this.routes = options.routes;
+    if ( opts.routes ) {
+        this.routes = opts.routes;
     }
 
     // 默认的路由action
-    this._index = options.index || 'index';
+    this._index = opts.index || 'index';
 
     // 保存的视图列表，对应不同页面
     this.views = {};
@@ -105,11 +105,11 @@ Chassis.mixin( Router.prototype, Events, {
      * @private
      * @method navigate
      * @param {string} fragment
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    navigate : function( fragment, options ) {
-        return Chassis.history.navigate( fragment, options );
+    navigate : function( fragment, opts ) {
+        return Chassis.history.navigate( fragment, opts );
     },
 
     /** 

@@ -11,10 +11,10 @@ History.Pushstate = History.extend({
      * @overwrite
      * @public
      * @method start
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    start : function( options ) {
+    start : function( opts ) {
         var me = this;
 
         if ( History.start ) {
@@ -23,13 +23,13 @@ History.Pushstate = History.extend({
         
         History.start = true;
         
-        if ( !options ) {
-            options = {};
+        if ( !opts ) {
+            opts = {};
         }
         
         
-        if ( options.root ) {
-            me.root = options.root;
+        if ( opts.root ) {
+            me.root = opts.root;
         }
         
         // 当浏览器前进后退时触发
@@ -38,7 +38,7 @@ History.Pushstate = History.extend({
         } );
         
         // 处理当前pushState
-        if ( options.trigger ) {
+        if ( opts.trigger ) {
             me._triggerHandle.call( me, me._getFragment() );
         }
         
@@ -54,14 +54,14 @@ History.Pushstate = History.extend({
      * @public
      * @method navigate
      * @param {string} fragment
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    navigate : function( fragment, options/*, replace*/ ) {
+    navigate : function( fragment, opts/*, replace*/ ) {
         var me = this;
         
-        if ( !options ) {
-            options = {};
+        if ( !opts ) {
+            opts = {};
         }
         
         
@@ -70,7 +70,7 @@ History.Pushstate = History.extend({
         
         me.cacheOptions = null;
         
-        if ( options.trigger ) {
+        if ( opts.trigger ) {
             me._triggerHandle.call( me, fragment );
         }
     },

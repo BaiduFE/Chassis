@@ -5,12 +5,12 @@
  */
 
 // View构造函数中的opts参数中需要添加到View实例中的属性列表
-var viewOptions = ['model', 'el', 'id', 'attributes', 'className',
-		'tagName', 'events'];
+var viewOptions = [ 'model', 'el', 'id', 'attributes', 'className',
+		'tagName', 'events' ];
 
 var rDelegateEventSplitter = /^(\S+)\s*(.*)$/;
 
-var noop = function(){};
+var noop = function() {};
 
 /**
  * 视图类
@@ -57,6 +57,9 @@ Chassis.mixin( View.prototype, Events, {
      */
     destroy: function() {
 
+        var cld = this.children,
+            cid;
+
         this.onDestroy();
 
         /**
@@ -65,12 +68,12 @@ Chassis.mixin( View.prototype, Events, {
          */
         this.trigger( 'beforedestroy', this );
 
-        var cld = this.children;
-
         // 销毁子视图
-        for( var cid in cld ) {
-            cld[ cid ].destroy();
-            delete cld[ cid ];
+        for ( cid in cld ) {
+            if ( cld.hasOwnProperty( cid ) ) {
+                cld[ cid ].destroy();
+                delete cld[ cid ];
+            }
         }
 
         // 解除事件绑定
@@ -83,11 +86,11 @@ Chassis.mixin( View.prototype, Events, {
         this.$el = this.el = null;
 
         // 如果是子视图则从父视图中删除
-        if( this.parent ) {
+        if ( this.parent ) {
             delete this.parent.children[ this.cid ];
         }
 
-        //TODO subpages清除
+        // TODO subpages清除
         /**
          * View销毁后触发事件
          * @event afterdestroy
@@ -104,14 +107,14 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {boolean} delegate 是否需要重新绑定事件
      */
     setElement: function( el, delegate ) {
-        if( this.$el ) {
+        if ( this.$el ) {
             this.undelegateEvents();
         }
 
         this.$el = el instanceof Chassis.$ ? el : Chassis.$( el );
-        this.el = this.$el[0];
+        this.el = this.$el[ 0 ];
 
-        if (delegate !== false) {
+        if ( delegate !== false ) {
             this.delegateEvents();
         }
 
@@ -137,54 +140,66 @@ Chassis.mixin( View.prototype, Events, {
      *      }
      */
     delegateEvents: function( events ) {
-		if( !( events || ( events = this.events ) ) ) {
-			return this;
-		}
 
-		this.undelegateEvents();
+        var key,
+            method,
+            match,
+            eventName,
+            selector,
+            fullEventName;
 
-		for( var key in events ) {
-			var method = events[ key ];
+        if ( !(events || (events = this.events)) ) {
+            return this;
+        }
 
-			if( !Chassis.isFunction( method ) ) {
-				method = this[ events[ key ] ];
-			}
+        this.undelegateEvents();
 
-			if( !method ) {
-				throw new Error(
-						'Method "' + events[ key ] + '" does not exist' );
-			}
+        for ( key in events ) {
 
-			var match = key.match( rDelegateEventSplitter ),
-				eventName = match[ 1 ],
-				selector = match[ 2 ];
+            if ( events.hasOwnProperty( key ) ) {
+                method = events[ key ];
 
-			method = Chassis.proxy( method, this );
+                if ( !Chassis.isFunction( method ) ) {
+                    method = this[ events[ key ] ];
+                }
 
-			var fullEventName = eventName + '.delegateEvents' + this.cid;
+                if ( !method ) {
+                    throw new Error(
+                        'Method "' + events[ key ] + '" does not exist' );
+                }
 
-			switch( selector ) {
-				case 'window':
-				case 'document':
-					Chassis.$( window[ selector ] ).on( fullEventName, method );
-					break;
-				case 'view':
-					this.listenTo( this, eventName, method );
-					break;
-				case 'model':
-                    if( this.model ) {
-                        this.listenTo( this.model, eventName, method );
-                    }
-					break;
-				case '':
-					this.$el.on( fullEventName, method );
-					break;
-				default:
-					this.$el.on( fullEventName, selector, method );
-			}
-		}
+                match = key.match( rDelegateEventSplitter );
+                eventName = match[ 1 ];
+                selector = match[ 2 ];
 
-		return this;
+                method = Chassis.proxy( method, this );
+
+                fullEventName = eventName + '.delegateEvents' + this.cid;
+
+                switch ( selector ) {
+                    case 'window':
+                    case 'document':
+                        Chassis.$(window[ selector ])
+                                .on( fullEventName, method );
+                        break;
+                    case 'view':
+                        this.listenTo( this, eventName, method );
+                        break;
+                    case 'model':
+                        if ( this.model ) {
+                            this.listenTo( this.model, eventName, method );
+                        }
+                        break;
+                    case '':
+                        this.$el.on( fullEventName, method );
+                        break;
+                    default:
+                        this.$el.on( fullEventName, selector, method );
+                }
+            }
+        }
+
+        return this;
     },
 
     /**
@@ -279,7 +294,7 @@ Chassis.mixin( View.prototype, Events, {
          *      params.params: 路由参数
          */
         // pageview是事件触发起点因此无需再次触发
-        if( !this.root ) {
+        if ( !this.root ) {
             this.trigger( 'beforepagein', params );
         }
         
@@ -301,7 +316,7 @@ Chassis.mixin( View.prototype, Events, {
          *      params.params: 路由参数
          */
         // pageview是事件触发起点因此无需再次触发
-        if( !this.root ) {
+        if ( !this.root ) {
             this.trigger( 'afterpagein', params );
         }
     },
@@ -311,7 +326,8 @@ Chassis.mixin( View.prototype, Events, {
      * @method initialize
      * @param {object} opts
      */
-    _initialize: function( opts ){
+    _initialize: function( opts ) {
+        var listenTarget = this.root || this;
 
         this.root = this._getRoot();
         this.children = {};
@@ -320,14 +336,14 @@ Chassis.mixin( View.prototype, Events, {
         this.init( opts );
 
         // 自动监听常用事件
-        this.listenTo( this.root || this, 'beforepagein', this._onBeforePageIn );
-        this.listenTo( this.root || this, 'afterpagein', this._onAfterPageIn );
+        this.listenTo( listenTarget, 'beforepagein', this._onBeforePageIn );
+        this.listenTo( listenTarget, 'afterpagein', this._onAfterPageIn );
     },
 
-    _getRoot: function( ) {
+    _getRoot: function() {
         var pointer = this;
 
-        while( pointer.parent ) {
+        while ( pointer.parent ) {
             pointer = pointer.parent;
         }
 
@@ -335,50 +351,62 @@ Chassis.mixin( View.prototype, Events, {
     },
 
 	_configure: function( opts ) {
+
+        var len = viewOptions.length,
+            i = 0,
+            opt,
+            val;
+
         opts = opts || {};
 
         this.options = opts;
 
-        for( var i = 0, len = viewOptions.length; i < len; i++ ) {
-            var opt = viewOptions[ i ],
-                val = this.options[ opt ];
+        for ( ; i < len; i++ ) {
 
-            if( val ) {
+            opt = viewOptions[ i ];
+            val = this.options[ opt ];
+
+            if ( val ) {
                 this[ opt ] = val;
             }
         }
 	},
 
 	_ensureElement: function() {
+
+        var attrs,
+            $el;
+
         // 如果未指定DOM元素则自动创建并设置id/className
 		if ( !this.el ) {
-            // attributes有可能来自原型属性因此需要复制
-			var attrs = Chassis.mixin( {}, this.attributes || {} );
 
-			if( this.id ) {
+            // attributes有可能来自原型属性因此需要复制
+			attrs = Chassis.mixin( {}, this.attributes || {} );
+
+			if ( this.id ) {
 				attrs.id = this.id;
 			}
 
-			if( this.className ) {
-				attrs['class'] = this.className;
+			if ( this.className ) {
+				attrs[ 'class' ] = this.className;
 			}
 
-			var $el = Chassis.$( '<' + this.tagName + '>' ).attr( attrs );
+			$el = Chassis.$( '<' + this.tagName + '>' ).attr( attrs );
 			this.setElement( $el, false );
 
         // 如果已经指定DOM元素则不会设置id/className
 		} else {
-			this.setElement( this.el, false);
+			this.setElement( this.el, false );
 		}
 	},
 
 	_addSubview: function( view, action ) {
 
-		if( view instanceof Chassis.View ) {
+		if ( view instanceof Chassis.View ) {
 			this.children[ view.cid ] = view;
 			view.parent = this;
 
-			switch( action ) {
+			switch ( action ) {
 
 				// 不进行DOM处理
 				case 'SETUP': 
@@ -394,7 +422,7 @@ Chassis.mixin( View.prototype, Events, {
 			view.$el.hide();
 
 		} else {
-			throw new Error("view is not an instance of Chassis.View.");
+			throw new Error( 'view is not an instance of Chassis.View.' );
 		}
 	}
 } );

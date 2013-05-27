@@ -7,7 +7,7 @@
  * @class Loading
  * @namespace View
  */
-var Loading = View.Loading = ( function() {
+var Loading = View.Loading = (function() {
 
 	function isExistedDom( el ) {
 		return !!Chassis.$( el )[ 0 ].parentNode;

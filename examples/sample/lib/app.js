@@ -1,12 +1,10 @@
 //创建Router
 var Router = Chassis.Router.extend({
     
-    routes : {
-        '' : 'home',
-        'info/:id'  : 'info'
-    },
-
-    pageOrder: [ 'home', 'info' ]
+    routes : [
+        '', 
+        'info/:id'
+    ]
 
     
 });
@@ -14,7 +12,7 @@ var Router = Chassis.Router.extend({
 var router = new Router;
 
 /*HOME*/
-var HomeModel = Chassis.Model.extend({
+var IndexModel = Chassis.Model.extend({
 
     init: function(attributes, options) {
 
@@ -29,7 +27,7 @@ var HomeModel = Chassis.Model.extend({
     }
 });
 
-Chassis.PageView.home = Chassis.PageView.extend({
+Chassis.PageView.index = Chassis.PageView.extend({
 
     el: '#list',
 
@@ -39,7 +37,7 @@ Chassis.PageView.home = Chassis.PageView.extend({
     },
 
     init: function( opts ) {
-        this.model = new HomeModel;
+        this.model = new IndexModel;
     },
 
     onBeforePageIn: function() {

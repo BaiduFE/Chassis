@@ -11,6 +11,7 @@ History.Pushstate = History.extend({
      * @overwrite
      * @public
      * @method start
+     * @param {object} options
      * @return 
      **/
     start : function( options ) {
@@ -53,6 +54,8 @@ History.Pushstate = History.extend({
      * @overwrite
      * @public
      * @method navigate
+     * @param {string} fragment
+     * @param {object} options
      * @return 
      **/
     navigate : function( fragment, options/*, replace*/ ) {
@@ -78,6 +81,7 @@ History.Pushstate = History.extend({
      *
      * @private
      * @method _setPushState
+     * @param {string} fragment
      * @return 
      **/
     _setPushState : function( fragment ) {

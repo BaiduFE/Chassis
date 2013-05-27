@@ -68,6 +68,8 @@ Chassis.mixin( Router.prototype, Events, {
      *
      * @public
      * @method route
+     * @param {string} route
+     * @param {string} name
      * @return 
      **/
     route : function( route, name ) {
@@ -101,6 +103,8 @@ Chassis.mixin( Router.prototype, Events, {
      *
      * @private
      * @method navigate
+     * @param {string} fragment
+     * @param {object} options
      * @return 
      **/
     navigate : function( fragment, options ) {
@@ -361,6 +365,7 @@ Chassis.mixin( Router.prototype, Events, {
      *
      * @private
      * @method _routeToRegExp
+     * @param {string} route
      * @return 
      **/
     _routeToRegExp : function( route ) {

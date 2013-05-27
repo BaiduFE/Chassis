@@ -13,6 +13,9 @@ var Events = Chassis.Events = {
     /**
      * on
      *
+     * @param {string} name
+     * @param {function} callback
+     * @param {object} context
      * @example
      * var obj = _.extend({},Chassis.Events);
      * obj.on("a b c",callback);
@@ -43,6 +46,9 @@ var Events = Chassis.Events = {
     /**
      * once
      *
+     * @param {string} name
+     * @param {function} callback
+     * @param {object} context
      * @example
      * var obj = _.extend({},Chassis.Events);
      * obj.once("a b c",callback);
@@ -71,6 +77,9 @@ var Events = Chassis.Events = {
     /**
      * off
      *
+     * @param {string} name
+     * @param {function} callback
+     * @param {object} context
      * @example
      * var obj = _.extend({},Chassis.Events);
      * obj.off("a b c",callback);
@@ -129,6 +138,7 @@ var Events = Chassis.Events = {
     /**
      * trigger
      *
+     * @param {string} name
      * @example
      * var obj = _.extend({},Chassis.Events);
      * obj.trigger("a b c");
@@ -165,6 +175,9 @@ var Events = Chassis.Events = {
     /**
      * stopListening
      *
+     * @param {string} name
+     * @param {function} callback
+     * @param {object} context
      * @example
      * var obj = _.extend({},Chassis.Events);
      * obj.stopListening("a b c",callback);

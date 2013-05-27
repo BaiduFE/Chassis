@@ -14,6 +14,8 @@ Chassis.mixin( History.prototype, Events, {
      *
      * @public
      * @method route
+     * @param {object} routeRe
+     * @param {Function} callback
      * @return 
      **/
     route: function( routeRe, callback ) {
@@ -40,6 +42,7 @@ Chassis.mixin( History.prototype, Events, {
      *
      * @private
      * @method _triggerHandle
+     * @param {string} fragment
      * @return 
      **/
     _triggerHandle: function( fragment ){
@@ -60,6 +63,7 @@ Chassis.mixin( History.prototype, Events, {
      *
      * @public
      * @method start
+     * @param {object} options
      * @return 
      **/
     start: function( options ){
@@ -107,8 +111,5 @@ Chassis.mixin( History.prototype, Events, {
 
 
 History.extend = Chassis.extend;
-
-///require history.pushstate
-///require history.hash
 
 Chassis.history = new History();

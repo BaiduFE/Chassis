@@ -10,6 +10,7 @@ History.Hash = History.extend({
      * @overwrite
      * @public
      * @method start
+     * @param {object} options
      * @return 
      **/
     start : function( options ) {
@@ -48,6 +49,9 @@ History.Hash = History.extend({
      * @overwrite
      * @public
      * @method navigate
+     * @param {string} fragment
+     * @param {object} options
+     * @param {boolean} replace
      * @return 
      **/
     navigate : function( fragment, options, replace ) {
@@ -90,6 +94,7 @@ History.Hash = History.extend({
      *
      * @private
      * @method _setHash
+     * @param {string} fragment
      * @return 
      **/
     _setHash : function( fragment ) {

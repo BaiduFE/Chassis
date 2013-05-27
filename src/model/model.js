@@ -46,6 +46,7 @@ Chassis.mixin( Model.prototype, Events, {
      * 从模型获取当前属性值，比如：csser.get("title")
      *
      * @method get
+     * @param {string} key
      * @return 
      **/
     get : function( key ) {
@@ -56,6 +57,7 @@ Chassis.mixin( Model.prototype, Events, {
      * 属性值为非 null 或非 undefined 时返回 true
      *
      * @method has
+     * @param {string} key
      * @return 
      **/
     has : function( key ) {
@@ -68,6 +70,9 @@ Chassis.mixin( Model.prototype, Events, {
      * 会触发 "change" 事件。 
      *
      * @method set
+     * @param {string} key
+     * @param {*} val
+     * @param {object} options
      * @return 
      **/
     set : function( key, val, options ) {
@@ -130,10 +135,12 @@ Chassis.mixin( Model.prototype, Events, {
      * 从内部属性散列表中删除指定属性。 如果未设置 silent 选项，会触发 "change" 事件。
      *
      * @method clear
+     * @param {string} attr
+     * @param {object} options
      * @return 
      **/
     unset : function( attr, options ) {
-        return this.set( attr, void 0,
+        return this.set( attr, Chassis.Undefined,
                 Chassis.mixin( {}, options, { unset: true } ) );
     },
     
@@ -141,12 +148,13 @@ Chassis.mixin( Model.prototype, Events, {
      * 从模型中删除所有属性。 如果未设置 silent 选项，会触发 "change" 事件。
      *
      * @method clear
+     * @param {object} options
      * @return 
      **/
     clear : function( options ) {
         var attrs = {};
         Chassis.each( this.attributes, function( item, key ) {
-            attrs[ key ] = void 0;
+            attrs[ key ] = Chassis.Undefined;
         } );
         
         return this.unset( attrs, options );
@@ -177,6 +185,7 @@ Chassis.mixin( Model.prototype, Events, {
      * 如果将数据从模型插入 HTML，使用 escape 取数据可以避免 XSS 攻击.
      *
      * @method escape
+     * @param {string} attr
      * @return 
      **/
     escape : function( attr ) {
@@ -187,6 +196,7 @@ Chassis.mixin( Model.prototype, Events, {
      *在 "change" 事件发生的过程中，本方法可被用于获取已改变属性的旧值。
      *
      * @method previous
+     * @param {string} attr
      * @return 
      **/
     previous : function( attr ) {
@@ -219,6 +229,7 @@ Chassis.mixin( Model.prototype, Events, {
      * 手动获取数据
      *
      * @method fetch
+     * @param {object} options
      * @return 
      **/
     fetch : function( options ) {
@@ -247,6 +258,8 @@ Chassis.mixin( Model.prototype, Events, {
      * 自定义数据解析，建议用自定义的逻辑重载它
      *
      * @method parse
+     * @param {object} resp
+     * @param {object} options
      * @return 
      **/
     parse: function( resp, options ) {

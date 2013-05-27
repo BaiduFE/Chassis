@@ -74,9 +74,9 @@ Chassis.mixin( Router.prototype, Events, {
      **/
     route : function( route, name ) {
 
-        var self = this,
+        var me = this,
             callback = this._getHandler( name ),
-            routeRe = self._routeToRegExp( route ),
+            routeRe = me._routeToRegExp( route ),
             keys = routeRe.exec( route ).slice( 1 );
         
         Chassis.each( keys, function( item, key ) {
@@ -91,9 +91,9 @@ Chassis.mixin( Router.prototype, Events, {
             vals = routeRe.exec( fragment ).slice( 1 );
             Request = Chassis.object( keys, vals );
             
-            self.Request = Request;
+            me.Request = Request;
 
-            callback.call( self );
+            callback.call( me );
         
         } );
 
@@ -309,16 +309,16 @@ Chassis.mixin( Router.prototype, Events, {
      * @return 
      **/
     _bindRoutes : function() {
-        var self = this;
+        var me = this;
         
         // 对routes支持数组的处理
-        self._routeArray.call( self );
+        me._routeArray.call( me );
         
-        Chassis.each( self.routes, function( item, key ) {
-            self.route( key, item );
+        Chassis.each( me.routes, function( item, key ) {
+            me.route( key, item );
         } );
         
-        return self;
+        return me;
     },
     
     /**
@@ -329,16 +329,16 @@ Chassis.mixin( Router.prototype, Events, {
      * @return 
      **/
     _routeArray : function() {
-        var self = this,
+        var me = this,
             _routes = {},
-            hasPageOrder = !!self.pageOrder.length;
+            hasPageOrder = !!me.pageOrder.length;
         
-        if ( !Chassis.isArray( self.routes ) ) {
-            return self;
+        if ( !Chassis.isArray( me.routes ) ) {
+            return me;
         }
         
         
-        Chassis.each( self.routes, function( item, key ) {
+        Chassis.each( me.routes, function( item, key ) {
             var first = item.split( /\//g )[ 0 ],
                 name = first;
 
@@ -347,19 +347,19 @@ Chassis.mixin( Router.prototype, Events, {
             }
             
             if ( first === '' ) {
-                name = self._index;
+                name = me._index;
             }
             
             _routes[ item ] = name;
             
             if ( !hasPageOrder ) {
-                self.pageOrder.push( name );
+                me.pageOrder.push( name );
             }
         } );
         
-        self.routes = Chassis.clone( _routes );
+        me.routes = Chassis.clone( _routes );
         
-        return self;
+        return me;
        
     },
     

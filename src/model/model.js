@@ -77,7 +77,7 @@ Chassis.mixin( Model.prototype, Events, {
      **/
     set : function( key, val, options ) {
 
-        var self = this,
+        var me = this,
             attr, 
             attrs, 
             unset, 
@@ -120,15 +120,15 @@ Chassis.mixin( Model.prototype, Events, {
         
         Chassis.each( attrs, function( item, key ) {
             if ( options.unset ) {
-                delete self.attributes[ key ];
+                delete me.attributes[ key ];
             } else {
-                self.attributes[ key ] = item;
+                me.attributes[ key ] = item;
             }
             
                 
         } );
         
-        self.trigger( 'change', self );
+        me.trigger( 'change', me );
     },
     
     /**
@@ -233,23 +233,23 @@ Chassis.mixin( Model.prototype, Events, {
      * @return 
      **/
     fetch : function( options ) {
-        var self = this;
+        var me = this;
         
         options = options ? Chassis.clone( options ) : {};
         
         $.ajax({
-            url : self.url(),
+            url : me.url(),
             data : (options.data || {}),
             dataType : 'json',
             success : function( resp ) {
-                resp = self.parse( resp, options );
+                resp = me.parse( resp, options );
                 
                 options.success = options.success || function() {};
-                options.success.call( self );
-                self.set( resp, options );
+                options.success.call( me );
+                me.set( resp, options );
             },
             error : function() {
-                self.trigger( 'error' );
+                me.trigger( 'error' );
             }
         });
     },

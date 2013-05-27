@@ -46,14 +46,14 @@ Chassis.mixin( History.prototype, Events, {
      * @return 
      **/
     _triggerHandle : function( fragment ) {
-        var self = this;
+        var me = this;
 
-        Chassis.each( self.handler, function( item, key ) {
+        Chassis.each( me.handler, function( item, key ) {
             if ( !item.reg.test( fragment ) ) {
                 return;
             }
 
-            item.callback.call( self, fragment );
+            item.callback.call( me, fragment );
         } );
     },
     

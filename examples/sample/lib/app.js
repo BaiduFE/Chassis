@@ -1,5 +1,5 @@
 //创建Router
-var Router = Chassis.Router.extend({
+var Router = Chassis.Router.extend( {
     
     routes : [
         '', 
@@ -7,27 +7,27 @@ var Router = Chassis.Router.extend({
     ]
 
     
-});
+} );
 
 var router = new Router;
 
-/*HOME*/
-var IndexModel = Chassis.Model.extend({
+/*INDEX*/
+var IndexModel = Chassis.Model.extend( {
 
     init: function(attributes, options) {
 
     },
     
-    url : function(){
+    url : function() {
         return 'lib/albums.php';
     },
     
-    parse : function(resp){
+    parse : function(resp) {
         return resp.plaze_album_list.RM.album_list;
     }
-});
+} );
 
-Chassis.PageView.index = Chassis.PageView.extend({
+Chassis.PageView.index = Chassis.PageView.extend( {
 
     el: '#list',
 
@@ -37,6 +37,7 @@ Chassis.PageView.index = Chassis.PageView.extend({
     },
 
     init: function( opts ) {
+        
         this.model = new IndexModel;
     },
 
@@ -49,16 +50,18 @@ Chassis.PageView.index = Chassis.PageView.extend({
 
     onModelChange: function() {
         this.$el.html( 
-            baidu.template( $( '#albumlist' ).html(), this.model.toJSON() ));
+            baidu.template( $( '#albumlist' ).html(), 
+                this.model.toJSON() )
+        );
     },
 
     onModelError: function() {
         this.$el.html( 'something is wrong' );
     }
-});
+} );
 
 /*INFO*/
-var InfoModel = Chassis.Model.extend({
+var InfoModel = Chassis.Model.extend( {
 
     init: function(attributes, options) {
 
@@ -71,7 +74,7 @@ var InfoModel = Chassis.Model.extend({
     parse : function(resp){
         return resp;
     }
-});
+} );
 
 Chassis.PageView.info = Chassis.PageView.extend({
 
@@ -79,7 +82,7 @@ Chassis.PageView.info = Chassis.PageView.extend({
 
     events: {
         'change model': 'onModelChange',
-        'error model': 'onModelError'
+        'error model' : 'onModelError'
     },
 
     init: function( opts ) {
@@ -98,13 +101,15 @@ Chassis.PageView.info = Chassis.PageView.extend({
 
     onModelChange: function() {
         this.$el.html( 
-            baidu.template( $( '#albuminfo' ).html(), this.model.toJSON() ));
+            baidu.template( $( '#albuminfo' ).html(), 
+                this.model.toJSON() )
+        );
     },
 
     onModelError: function() {
         this.$el.html( 'something is wrong' );
     }
-});
+} );
 
 Chassis.history.start();
 

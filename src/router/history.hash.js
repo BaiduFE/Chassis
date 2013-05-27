@@ -14,7 +14,7 @@ History.Hash = History.extend({
      * @return 
      **/
     start : function( options ) {
-        var self = this;
+        var me = this;
 
         if ( History.start ) {
             return;
@@ -32,12 +32,12 @@ History.Hash = History.extend({
                 document.documentMode === 8) ) {
 
             $( window ).on( 'hashchange', function() {
-                self.navigate( self._getHash(), { trigger: true }, true );
+                me.navigate( me._getHash(), { trigger: true }, true );
             } );
             
             // 处理当前hash
             if ( !options.silent ) {
-                self.navigate( self._getHash(), { trigger: true }, true ); 
+                me.navigate( me._getHash(), { trigger: true }, true ); 
             }
             
         }
@@ -55,18 +55,18 @@ History.Hash = History.extend({
      * @return 
      **/
     navigate : function( fragment, options, replace ) {
-        var self = this;
+        var me = this;
         
         if ( !options ) {
             options = {};
         }
 
         // 如果不是来自onchange监控的事件
-        if ( !self.pushState && !replace ) {
+        if ( !me.pushState && !replace ) {
 
             // 缓存当前的配置
-            self.cacheOptions = options;
-            self._setHash( fragment );
+            me.cacheOptions = options;
+            me._setHash( fragment );
             
             // 因为后面会自动触发window.onhashchange事件
             return; 
@@ -74,16 +74,16 @@ History.Hash = History.extend({
         
         
         // 从非onchange监控的options里获取配置
-        if ( !self.pushState && !replace ) {
+        if ( !me.pushState && !replace ) {
 
-            if ( self.cacheOptions ) {
-                options = Chassis.clone( self.cacheOptions );
+            if ( me.cacheOptions ) {
+                options = Chassis.clone( me.cacheOptions );
             }
         }
-        self.cacheOptions = null;
+        me.cacheOptions = null;
         
         if ( options.trigger ) {
-            self._triggerHandle.call( self, fragment );
+            me._triggerHandle.call( me, fragment );
         }
         
 

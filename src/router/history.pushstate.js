@@ -15,7 +15,7 @@ History.Pushstate = History.extend({
      * @return 
      **/
     start : function( options ) {
-        var self = this;
+        var me = this;
 
         if ( History.start ) {
             return;
@@ -29,19 +29,21 @@ History.Pushstate = History.extend({
         
         if ( options.pushState ) {
 
-            self.pushState = true;
+            me.pushState = true;
 
             if ( options.root ) {
-                self.root = options.root;
+                me.root = options.root;
             }
             
             // 当浏览器前进后退时触发
             $( window ).on( 'popstate', function() {
-                var fragment = window.location.href.split( /\// ).slice( 3 )
-                        .join( '/' ).substring( self.root.length );
-                
-                self._triggerHandle.call( self, fragment );
+                me._triggerHandle.call( me, me._getFragment() );
             } );
+            
+            // 处理当前pushState
+            if ( !options.silent ) {
+                me._triggerHandle.call( me, me._getFragment() );
+            }
             
             return;
         }
@@ -59,20 +61,20 @@ History.Pushstate = History.extend({
      * @return 
      **/
     navigate : function( fragment, options/*, replace*/ ) {
-        var self = this;
+        var me = this;
         
         if ( !options ) {
             options = {};
         }
         
-        if ( self.pushState ) {
-            self._setPushState( fragment );
+        if ( me.pushState ) {
+            me._setPushState( fragment );
         }
         
-        self.cacheOptions = null;
+        me.cacheOptions = null;
         
         if ( options.trigger ) {
-            self._triggerHandle.call( self, fragment );
+            me._triggerHandle.call( me, fragment );
         }
     },
     
@@ -91,7 +93,25 @@ History.Pushstate = History.extend({
             history.pushState( {}, document.title, fragment );
             return this;
         }
+    },
+    
+    /**
+     * 获取当前的fragment
+     *
+     * @private
+     * @method _getFragment
+     * @return 
+     **/
+    _getFragment : function() {
+        
+        return window.location.href
+                .split( /\// )
+                .slice( 3 )
+                .join( '/' )
+                .substring( this.root.length );
     }
+    
+    
 });
 
 History.Pushstate.extend = Chassis.extend;

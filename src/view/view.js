@@ -350,6 +350,7 @@ Chassis.mixin( View.prototype, Events, {
 	},
 
 	_ensureElement: function() {
+        // 如果未指定DOM元素则自动创建并设置id/className
 		if ( !this.el ) {
             // attributes有可能来自原型属性因此需要复制
 			var attrs = Chassis.mixin( {}, this.attributes || {} );
@@ -365,6 +366,7 @@ Chassis.mixin( View.prototype, Events, {
 			var $el = Chassis.$( '<' + this.tagName + '>' ).attr( attrs );
 			this.setElement( $el, false );
 
+        // 如果已经指定DOM元素则不会设置id/className
 		} else {
 			this.setElement( this.el, false);
 		}
@@ -389,7 +391,7 @@ Chassis.mixin( View.prototype, Events, {
 					break;
 			}
 
-			// TODO view.$el.hide();
+			view.$el.hide();
 
 		} else {
 			throw new Error("view is not an instance of Chassis.View.");

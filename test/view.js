@@ -478,4 +478,99 @@ $(document).ready(function() {
     
   });
 
+  test('subview constructor arguments', 6, function() {
+
+    var counter = 0;
+
+    var View = Chassis.SubView.extend({
+      init: function() {
+        ok(true);
+      },
+      doCounter: function() {
+        counter++;
+      }
+    });
+
+    var sub1 = new View({
+      el: '<div><button>BTN</button></div>',
+      events: {'click button' : 'doCounter'}
+    });
+
+    var sub2 = new View({
+      id: 'sub2'
+    }, sub1);
+
+    sub1.$('button').trigger('click');
+    equal( counter, 1 );
+
+    equal( sub2.$el[0].id, 'sub2' );
+
+    ok(!sub1.parent);
+    equal( sub2.parent, sub1 );
+  });
+
+  test('subview getStamp api', 1, function() {
+    var data = {
+      a: 1
+    };
+
+    var view = new Chassis.SubView();
+
+    strictEqual(view.getStamp(data),Chassis.$.param(data));
+  } );
+
+  test('pageview constructor arguments', 5, function() {
+    var counter = 0;
+    var PageView = Chassis.PageView.extend({
+      init: function(){
+        ok(true);
+      },
+      doCounter: function(){
+        counter++;
+      }
+    });
+
+    var action = 'home';
+
+    var view = new PageView({
+      id: 'pageview',
+      className: 'pageview',
+      events: {'click': 'doCounter'}
+    }, action);
+
+    equal(view.$el[0].id, 'pageview');
+    equal(view.$el[0].className, 'pageview');
+    view.$el.trigger('click');
+    equal(counter,1);
+    equal(view.action,action);
+
+  } );
+
+  test('pageview isActive api', 2, function(){
+    var view = new Chassis.PageView();
+
+    ok(!view.isActive());
+
+    view.$el.show();
+    ok(view.isActive());
+  });
+
+  asyncTest('pageview save and restore position', 2, function(){
+    var view = new Chassis.PageView();
+    var startY = window.scrollY;
+
+    view.savePos();
+
+    window.scrollTo(0,300);
+
+    equal(window.scrollY,300);
+
+    view.restorePos();
+
+    setTimeout(function() {
+      equal(startY, window.scrollY);
+      start();
+    }, 300);
+  });
+
 });

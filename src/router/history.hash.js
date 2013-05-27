@@ -40,7 +40,10 @@ History.Hash = History.extend({
                 me.navigate( me._getHash(), { trigger: true }, true ); 
             }
             
+            return;
         }
+        
+        throw new Error( 'current browser do not suport hashchange event;' );
     },
     
     /**
@@ -62,7 +65,7 @@ History.Hash = History.extend({
         }
 
         // 如果不是来自onchange监控的事件
-        if ( !me.pushState && !replace ) {
+        if ( !replace ) {
 
             // 缓存当前的配置
             me.cacheOptions = options;
@@ -74,7 +77,7 @@ History.Hash = History.extend({
         
         
         // 从非onchange监控的options里获取配置
-        if ( !me.pushState && !replace ) {
+        if ( !replace ) {
 
             if ( me.cacheOptions ) {
                 options = Chassis.clone( me.cacheOptions );

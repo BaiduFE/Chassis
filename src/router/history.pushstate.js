@@ -27,26 +27,23 @@ History.Pushstate = History.extend({
             options = {};
         }
         
-        if ( options.pushState ) {
-
-            me.pushState = true;
-
-            if ( options.root ) {
-                me.root = options.root;
-            }
-            
-            // 当浏览器前进后退时触发
-            $( window ).on( 'popstate', function() {
-                me._triggerHandle.call( me, me._getFragment() );
-            } );
-            
-            // 处理当前pushState
-            if ( !options.silent ) {
-                me._triggerHandle.call( me, me._getFragment() );
-            }
-            
-            return;
+        
+        if ( options.root ) {
+            me.root = options.root;
         }
+        
+        // 当浏览器前进后退时触发
+        $( window ).on( 'popstate', function() {
+            me._triggerHandle.call( me, me._getFragment() );
+        } );
+        
+        // 处理当前pushState
+        if ( !options.silent ) {
+            me._triggerHandle.call( me, me._getFragment() );
+        }
+        
+        return;
+       
 
     },
     
@@ -67,9 +64,9 @@ History.Pushstate = History.extend({
             options = {};
         }
         
-        if ( me.pushState ) {
-            me._setPushState( fragment );
-        }
+        
+        me._setPushState( fragment );
+        
         
         me.cacheOptions = null;
         
@@ -87,12 +84,11 @@ History.Pushstate = History.extend({
      * @return 
      **/
     _setPushState : function( fragment ) {
+
+        fragment = fragment || this.root;
+        history.pushState( {}, document.title, fragment );
+        return this;
         
-        if ( this.pushState ) {
-            fragment = fragment || this.root;
-            history.pushState( {}, document.title, fragment );
-            return this;
-        }
     },
     
     /**

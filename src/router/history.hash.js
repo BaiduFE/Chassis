@@ -34,9 +34,7 @@ History.Hash = History.extend({
             me._onHashChangeEvent();
             
             // 处理当前hash
-            if ( opts.trigger ) {
-                me.navigate( me._getHash(), { trigger: true }, true ); 
-            }
+            me.navigate( me._getHash(), { trigger: true }, true ); 
             
             return;
         }

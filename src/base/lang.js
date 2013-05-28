@@ -7,8 +7,7 @@ var proto = Array.prototype,
     nativeForEach = proto.forEach,
     breaker = {},
     toString = proto.toString,
-    nativeIsArray = Array.isArray,
-    Undefined;
+    nativeIsArray = Array.isArray;
 
 Chassis.mixin = $.extend;
 

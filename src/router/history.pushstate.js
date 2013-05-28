@@ -38,9 +38,7 @@ History.Pushstate = History.extend({
         } );
         
         // 处理当前pushState
-        if ( opts.trigger ) {
-            me._triggerHandle.call( me, me._getFragment() );
-        }
+        me._triggerHandle.call( me, me._getFragment() );
         
         return;
        

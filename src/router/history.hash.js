@@ -31,9 +31,7 @@ History.Hash = History.extend({
                 ((typeof document.documentMode === 'undefined') ||
                 document.documentMode === 8) ) {
 
-            $( window ).on( 'hashchange', function() {
-                me.navigate( me._getHash(), { trigger: true }, true );
-            } );
+            me._onHashChangeEvent();
             
             // 处理当前hash
             if ( opts.trigger ) {
@@ -60,31 +58,25 @@ History.Hash = History.extend({
     navigate : function( fragment, opts, replace ) {
         var me = this;
         
+        // 先取消监听，完成后再回来
+        me._offHashChangeEvent();
+        
         if ( !opts ) {
             opts = {};
         }
-
-        // 如果不是来自onchange监控的事件
-        if ( !replace ) {
-
-            // 缓存当前的配置
-            me.cacheOptions = opts;
-            me._setHash( fragment );
-            
-            // 因为后面会自动触发window.onhashchange事件
-            return; 
-        }
         
         
-        // 从非onchange监控的options里获取配置
-        if ( replace && me.cacheOptions ) {
-            opts = Chassis.clone( me.cacheOptions );
-        }
-        me.cacheOptions = null;
+        me._setHash( fragment );
+        
         
         if ( opts.trigger ) {
             me._triggerHandle.call( me, fragment );
         }
+        
+        window.setTimeout( function() {
+            me._onHashChangeEvent();
+        }, 0 );
+        
         
 
     },
@@ -116,5 +108,19 @@ History.Hash = History.extend({
     _getHash : function() {
         var match = window.location.href.match( /#(.*)$/ );
         return match ? match[ 1 ] : '';
+    },
+    
+    
+    _onHashChangeEvent : function() {
+        var me = this;
+        $( window ).on( 'hashchange', function( e ) {
+
+            me.navigate( me._getHash(), { trigger: true }, true );
+            
+        } );
+    },
+    _offHashChangeEvent : function() {
+        var me = this;
+        $( window ).off( 'hashchange' );
     }
 });

@@ -207,6 +207,48 @@ $(document).ready(function() {
 
   });
   
+  test("test navigate no delay", 3, function() {
+    var Router,router;
+    stop();
+    
+    Router = Chassis.Router.extend({
+        routes : {
+            'index/:id' : 'index',
+            'info/:id'  : 'info'
+        },
+        
+        index : function(){
+            
+            ok(true);
+            
+            return false;
+        },
+        
+        info : function(){
+            
+            ok(true);
+            
+            return false;
+        }
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+    
+    Chassis.history.navigate( 'index/2',{trigger:true} );
+    Chassis.history.navigate( 'info/3',{trigger:true} );
+    Chassis.history.navigate( 'index/4',{trigger:true} );
+    
+    window.setTimeout(function(){
+        delete Chassis.PageView.index;
+        Chassis.history.navigate( '',{trigger:false} );
+        Chassis.history.destroy();
+        start();
+    },0);
+
+  });
+  
   test("test init for hashchange when routes is array", 1, function() {
     var Router,router;
     stop();

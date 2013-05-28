@@ -125,6 +125,7 @@ Chassis.mixin( View.prototype, Events, {
      * 设置需绑定的事件，事件由参数`events`或者`this.events`中的键值对指定。
      * 事件绑定采用代理的方式实现(除了选择符是window和document)，事件回调中的执行上下文为当
      * 前`View`实例。
+     * @note 每次调用时都不会自动接绑定之前的事件，因此多次调用会多次绑定；
      * @method delegateEvents
      * @param  {objects} events
      * @example
@@ -152,7 +153,10 @@ Chassis.mixin( View.prototype, Events, {
             return this;
         }
 
-        this.undelegateEvents();
+        // 默认undelegate时，对于view/model的事件不好处理，如果view/model的事件直接
+        // 解绑定的话将会使外界注册的以及beforepagein/afterpagein失效；因此暂时去掉
+        // 自动解绑定功能。
+        // this.undelegateEvents();
 
         for ( key in events ) {
 
@@ -278,47 +282,31 @@ Chassis.mixin( View.prototype, Events, {
      */
     onAfterPageIn: noop,
 
+    /**
+     * View所在PageView显示前触发
+     * @event beforepagein
+     * @param {object} params
+     *      params.from: 即将被隐藏的视图
+     *      params.to: 即将显示的视图
+     *      params.params: 路由参数
+     */
     _onBeforePageIn: function( params ) {
 
-        // console.log( 'beforepagein' );
-        // console.log( params );
-
         this.onBeforePageIn( params );
-
-        /**
-         * View所在PageView显示前触发
-         * @event beforepagein
-         * @param {object} params
-         *      params.from: 即将被隐藏的视图
-         *      params.to: 即将显示的视图
-         *      params.params: 路由参数
-         */
-        // pageview是事件触发起点因此无需再次触发
-        if ( !this.root ) {
-            this.trigger( 'beforepagein', params );
-        }
         
     },
 
+    /**
+     * View所在PageView显示后触发
+     * @event afterpagein
+     * @param {object} params
+     *      params.from: 已隐藏的视图
+     *      params.to: 当前显示的视图
+     *      params.params: 路由参数
+     */
     _onAfterPageIn: function( params ) {
 
-        // console.log( 'afterpagein' ); 
-        // console.log( params );
-
         this.onAfterPageIn( params );
-
-        /**
-         * View所在PageView显示后触发
-         * @event afterpagein
-         * @param {object} params
-         *      params.from: 已隐藏的视图
-         *      params.to: 当前显示的视图
-         *      params.params: 路由参数
-         */
-        // pageview是事件触发起点因此无需再次触发
-        if ( !this.root ) {
-            this.trigger( 'afterpagein', params );
-        }
     },
 
     /**
@@ -327,13 +315,14 @@ Chassis.mixin( View.prototype, Events, {
      * @param {object} opts
      */
     _initialize: function( opts ) {
-        var listenTarget = this.root || this;
 
         this.root = this._getRoot();
         this.children = {};
 
         // 子类初始化
         this.init( opts );
+
+        var listenTarget = this.root || this;
 
         // 自动监听常用事件
         this.listenTo( listenTarget, 'beforepagein', this._onBeforePageIn );

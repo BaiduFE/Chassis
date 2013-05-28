@@ -108,7 +108,7 @@ var Events = Chassis.Events = {
 
         names = name ? [ name ] : Chassis.keys( this._events );
         
-        Chassis.each( names, function( nItem, nKey ) {
+        Chassis.$.each( names, function( nKey, nItem ) {
             name = nItem;
             events = me._events[ name ];
 
@@ -116,7 +116,7 @@ var Events = Chassis.Events = {
                 me._events[ name ] = retain = [];
 
                 if ( callback || context ) {
-                    Chassis.each( events, function( eItem, eKey ) {
+                    Chassis.$.each( events, function( eKey, eItem ) {
                         ev = eItem;
                         if ( (callback && callback !== ev.callback &&
                                 callback !== ev.callback._callback) ||
@@ -203,7 +203,7 @@ var Events = Chassis.Events = {
             (listeners = {})[ obj._listenerId ] = obj;
         }
         
-        Chassis.each( listeners, function( item, key ) {
+        Chassis.$.each( listeners, function( key, item ) {
 
             listeners[ key ].off( name, callback, me );
             
@@ -229,7 +229,7 @@ var eventsApi = function( obj, action, name, rest ) {
     }
 
     if ( typeof name === 'object' ) {
-        Chassis.each( name, function( item, key ) {
+        Chassis.$.each( name, function( key, item ) {
             obj[ action ].apply( obj, [ key, item ].concat( rest ) );
         } );
         
@@ -240,7 +240,7 @@ var eventsApi = function( obj, action, name, rest ) {
         
         names = name.split( eventSplitter );
         
-        Chassis.each( names, function( item, key ) {
+        Chassis.$.each( names, function( key, item ) {
             obj[ action ].apply( obj, [ item ].concat( rest ) );
         } );
         
@@ -291,7 +291,7 @@ var triggerEvents = function( events, args ) {
 var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
 
 
-Chassis.each( listenMethods, function( implementation, method ) {
+Chassis.$.each( listenMethods, function( method, implementation ) {
     Events[ method ] = function( obj, name, callback ) {
 
         var me = this,

@@ -57,37 +57,7 @@ Chassis.extend = function( protoProps, staticProps ) {
 
 
 
-Chassis.each = Chassis.forEach = function( obj, iterator, context ) {
 
-    var i,
-        l,
-        key;
-
-    if ( obj === null ) {
-        return;
-    }
-
-    
-    if ( nativeForEach && obj.forEach === nativeForEach ) {
-        obj.forEach( iterator, context );
-
-    } else if ( obj.length === +obj.length ) {
-        for ( i = 0, l = obj.length ; i < l; i++ ) {
-            if ( iterator.call( context, obj[ i ], i, obj ) === breaker ) {
-                return;
-            }
-        }
-    } else {
-        for ( key in obj ) {
-            if ( Chassis.has( obj, key ) ) {
-                if ( iterator.call( context, obj[ key ], key, obj ) ===
-                        breaker ) {
-                    return;
-                }
-            }
-        }
-    }
-};
       
       
 Chassis._once = function( func ) {
@@ -119,7 +89,7 @@ Chassis.keys = function( obj ) {
         throw new TypeError( 'Invalid object' );
     }
     
-    Chassis.each( obj, function( item, key ) {
+    Chassis.$.each( obj, function( key, item ) {
         if ( Chassis.has( obj, key ) ) {
             keys[ keys.length ] = key;
         }
@@ -186,7 +156,7 @@ Chassis.object = function( list, values ) {
         return {};
     }
     
-    Chassis.each( list, function( item, key ) {
+    Chassis.$.each( list, function( key, item ) {
         if ( values ) {
             result[ item ] = values[ key ];
         } else {

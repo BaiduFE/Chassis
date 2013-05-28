@@ -62,11 +62,9 @@ $(document).ready(function() {
         init : function(){
             delete Chassis.PageView.index;
             ok(true);
-            window.setTimeout(function(){
-                Chassis.history.navigate( '',{trigger:false} );
-                Chassis.history.destroy();
-                start();
-            },0);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
 
         }
     });
@@ -127,11 +125,9 @@ $(document).ready(function() {
         index : function(){
             delete Chassis.PageView.index;
             ok(true);
-            window.setTimeout(function(){
-                Chassis.history.navigate( '',{trigger:false} );
-                Chassis.history.destroy();
-                start();
-            },0);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
             return false;
         }
     });
@@ -158,11 +154,9 @@ $(document).ready(function() {
         index : function(){
             delete Chassis.PageView.index;
             ok(true);
-            window.setTimeout(function(){
-                Chassis.history.navigate( '',{trigger:false} );
-                Chassis.history.destroy();
-                start();
-            },0);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
             return false;
         }
     });
@@ -198,12 +192,10 @@ $(document).ready(function() {
     
     Chassis.history.navigate( 'index/2',{trigger:false} );
     
-    window.setTimeout(function(){
-        delete Chassis.PageView.index;
-        Chassis.history.navigate( '',{trigger:false} );
-        Chassis.history.destroy();
-        start();
-    },0);
+    delete Chassis.PageView.index;
+    Chassis.history.navigate( '',{trigger:false} );
+    Chassis.history.destroy();
+    start();
 
   });
   
@@ -240,12 +232,10 @@ $(document).ready(function() {
     Chassis.history.navigate( 'info/3',{trigger:true} );
     Chassis.history.navigate( 'index/4',{trigger:true} );
     
-    window.setTimeout(function(){
-        delete Chassis.PageView.index;
-        Chassis.history.navigate( '',{trigger:false} );
-        Chassis.history.destroy();
-        start();
-    },0);
+    delete Chassis.PageView.index;
+    Chassis.history.navigate( '',{trigger:false} );
+    Chassis.history.destroy();
+    start();
 
   });
   
@@ -258,12 +248,9 @@ $(document).ready(function() {
         init : function(){
             delete Chassis.PageView.index;
             ok(true);
-            window.setTimeout(function(){
-                Chassis.history.navigate( '',{trigger:false} );
-                Chassis.history.destroy();
-                start();
-            },0);
-
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
         }
     });
     
@@ -287,11 +274,9 @@ $(document).ready(function() {
         init : function(){
             delete Chassis.PageView.index;
             ok(true);
-            window.setTimeout(function(){
-                Chassis.history.navigate( '',{trigger:false} );
-                Chassis.history.destroy();
-                start();
-            },0);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
 
         }
     });

@@ -60,7 +60,7 @@ History.Hash = History.extend({
         me._offHashChangeEvent();
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         

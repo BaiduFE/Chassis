@@ -79,7 +79,7 @@ Chassis.mixin( Router.prototype, Events, {
             routeRe = me._routeToRegExp( route ),
             keys = routeRe.exec( route ).slice( 1 );
         
-        Chassis.each( keys, function( item, key ) {
+        Chassis.$.each( keys, function( key, item ) {
             keys[ key ] = item.substring( 1 );
         } );
         
@@ -314,7 +314,7 @@ Chassis.mixin( Router.prototype, Events, {
         // 对routes支持数组的处理
         me._routeArray.call( me );
         
-        Chassis.each( me.routes, function( item, key ) {
+        Chassis.$.each( me.routes, function( key, item ) {
             me.route( key, item );
         } );
         
@@ -338,7 +338,7 @@ Chassis.mixin( Router.prototype, Events, {
         }
         
         
-        Chassis.each( me.routes, function( item, key ) {
+        Chassis.$.each( me.routes, function( key, item ) {
             var first = item.split( /\//g )[ 0 ],
                 name = first;
 
@@ -439,7 +439,7 @@ Chassis.mixin( Router.prototype, Events, {
             return;
         }
 
-        Chassis.each( request, function( val, key ) {
+        Chassis.$.each( request, function( key, val ) {
             request[ key ] = decodeURIComponent( val );
         } );
 

@@ -113,7 +113,7 @@ Chassis.mixin( Model.prototype, Events, {
             me[ me.idAttribute ] = attrs[ me.idAttribute ];
         }
         
-        Chassis.each( attrs, function( item, key ) {
+        Chassis.$.each( attrs, function( key, item ) {
             if ( opts.unset ) {
                 delete me.attributes[ key ];
             } else {
@@ -146,7 +146,7 @@ Chassis.mixin( Model.prototype, Events, {
      **/
     clear : function( opts ) {
         var attrs = {};
-        Chassis.each( this.attributes, function( item, key ) {
+        Chassis.$.each( this.attributes, function( key, item ) {
             attrs[ key ] = Chassis.Undefined;
         } );
         

@@ -48,7 +48,7 @@ Chassis.mixin( History.prototype, Events, {
     _triggerHandle : function( fragment ) {
         var me = this;
 
-        Chassis.each( me.handler, function( item, key ) {
+        Chassis.$.each( me.handler, function( key, item ) {
             if ( !item.reg.test( fragment ) ) {
                 return;
             }

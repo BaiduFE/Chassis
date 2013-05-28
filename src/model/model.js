@@ -232,6 +232,7 @@ Chassis.mixin( Model.prototype, Events, {
         opts = opts ? Chassis.clone( opts ) : {};
         
         opts = Chassis.mixin( {}, {
+            dataType : 'json',
             success : function() {}
         }, opts );
         

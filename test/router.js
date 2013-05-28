@@ -207,7 +207,7 @@ $(document).ready(function() {
 
   });
   
-  test("test navigate no delay", 3, function() {
+  test("test navigate without delay", 3, function() {
     var Router,router;
     stop();
     

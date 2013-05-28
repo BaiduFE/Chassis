@@ -28,15 +28,6 @@
 
 var SubView = Chassis.SubView = View.SubView = View.extend({
 
-	/**
-	 * 获取页面内的识别串，用于同一个页面中不同子页面间的识别
-	 * @param  {object} params
-	 * @return {string}
-	 */
-	getStamp: function( params ) {
-		return Chassis.$.param( params || {} );
-	},
-
 	_initialize: function( opts, parent ) {
 
 		this.parent = parent;

@@ -59,7 +59,7 @@ $(document).ready(function() {
 
     view.delegateEvents(events);
     view.$('#test').trigger('click');
-    equal(counter1, 3);
+    equal(counter1, 4);
     equal(counter2, 3);
 
     events = {
@@ -74,16 +74,16 @@ $(document).ready(function() {
     view.delegateEvents(events);
 
     $(document).trigger('click');
-    equal(counter1, 4);
-
-    $(window).trigger('orientationchange');
     equal(counter1, 5);
 
-    view.model.trigger('change');
+    $(window).trigger('orientationchange');
     equal(counter1, 6);
 
-    view.trigger('beforepagein');
+    view.model.trigger('change');
     equal(counter1, 7);
+
+    view.trigger('beforepagein');
+    equal(counter1, 8);
 
   });
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
 
     view.delegateEvents(events);
     view.$el.trigger('click');
-    equal(view.counter, 3);
+    equal(view.counter, 4);
   });
 
   /*
@@ -268,7 +268,7 @@ $(document).ready(function() {
 
     view1.delegateEvents();
     $el.trigger('click');
-    equal(5, count);
+    equal(6, count);
   });
 
   /*
@@ -400,44 +400,6 @@ $(document).ready(function() {
     equal(counter, 4);
   });
 
-  test('page change events', 2, function() {
-
-    var View = Chassis.View.extend({
-      onBeforePageIn: function(){
-        ok(true);
-      },
-      onAfterPageIn: function(){
-        ok(true);
-      }
-    });
-
-    var view1 = new View();
-    view1.trigger('beforepagein');
-    view1.trigger('afterpagein');
-  });
-
-  test('destroy function and event', 2, function() {
-
-    var View = Chassis.View.extend({
-      el: '<p><a id="test"></a></p>',
-      onDestroy: function(){
-        ok(true);
-      }
-    });
-
-    var view1 = new View({
-      events: {
-        'click #test': function(){
-          counter++;
-        }
-      }
-    });
-
-    view1.destroy();
-
-    ok(!this.$el);
-  });
-
   test('hierarchical views', 6, function() {
 
     var View = Chassis.View.extend();
@@ -478,99 +440,53 @@ $(document).ready(function() {
     
   });
 
-  test('subview constructor arguments', 6, function() {
+  test('destroy function and event', 2, function() {
 
-    var counter = 0;
-
-    var View = Chassis.SubView.extend({
-      init: function() {
+    var View = Chassis.View.extend({
+      el: '<p><a id="test"></a></p>',
+      onDestroy: function(){
         ok(true);
-      },
-      doCounter: function() {
-        counter++;
       }
     });
 
-    var sub1 = new View({
-      el: '<div><button>BTN</button></div>',
-      events: {'click button' : 'doCounter'}
-    });
-
-    var sub2 = new View({
-      id: 'sub2'
-    }, sub1);
-
-    sub1.$('button').trigger('click');
-    equal( counter, 1 );
-
-    equal( sub2.$el[0].id, 'sub2' );
-
-    ok(!sub1.parent);
-    equal( sub2.parent, sub1 );
-  });
-
-  test('subview getStamp api', 1, function() {
-    var data = {
-      a: 1
-    };
-
-    var view = new Chassis.SubView();
-
-    strictEqual(view.getStamp(data),Chassis.$.param(data));
-  } );
-
-  test('pageview constructor arguments', 5, function() {
-    var counter = 0;
-    var PageView = Chassis.PageView.extend({
-      init: function(){
-        ok(true);
-      },
-      doCounter: function(){
-        counter++;
+    var view1 = new View({
+      events: {
+        'click #test': function(){
+          counter++;
+        }
       }
     });
 
-    var action = 'home';
+    view1.destroy();
 
-    var view = new PageView({
-      id: 'pageview',
-      className: 'pageview',
-      events: {'click': 'doCounter'}
-    }, action);
-
-    equal(view.$el[0].id, 'pageview');
-    equal(view.$el[0].className, 'pageview');
-    view.$el.trigger('click');
-    equal(counter,1);
-    equal(view.action,action);
-
-  } );
-
-  test('pageview isActive api', 2, function(){
-    var view = new Chassis.PageView();
-
-    ok(!view.isActive());
-
-    view.$el.show();
-    ok(view.isActive());
+    ok(!this.$el);
   });
 
-  asyncTest('pageview save and restore position', 2, function(){
-    var view = new Chassis.PageView();
-    var startY = window.scrollY;
+  asyncTest('page change events', 4, function(){
+    var router = new Chassis.Router( {
+      routes: [ 'list/:id' ]
+    } );
 
-    view.savePos();
+    Chassis.PageView['list'] = Chassis.PageView.extend( {
+      onBeforePageIn: function( opts ) {
+        // ok(!opts.from);
+        strictEqual(opts.to, this);
+        strictEqual(opts.params.id, '123');
+      },
+      onAfterPageIn: function( opts ) {
+        // ok(!opts.from);
+        strictEqual(opts.to, this);
+        strictEqual(opts.params.id, '123');
+        start();
 
-    window.scrollTo(0,300);
+        Chassis.history.navigate( '' );
+        Chassis.history.destroy();
+      }
+    } );
 
-    equal(window.scrollY,300);
+    Chassis.history.start();
+    Chassis.history.navigate( 'list/123', { trigger: true } );
 
-    view.restorePos();
-
-    setTimeout(function() {
-      equal(startY, window.scrollY);
-      start();
-    }, 300);
   });
 
 });

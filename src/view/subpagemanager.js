@@ -22,7 +22,7 @@
  * transitionEnd: 切换完成后的回调，必须在自定义函数中调用；
  * [opts.dirFn] {function} 自定义切换方向(-1-默认，0-无方向，1-向左，2-向右)；
  */
-var SPM = View.SubPageMgr = function( opts ) {
+var SPM = Chassis.SubPageMgr = View.SubPageMgr = function( opts ) {
 	Chassis.mixin( this, {
 		max: 3,
 
@@ -31,13 +31,22 @@ var SPM = View.SubPageMgr = function( opts ) {
 		/*klass,*/
 		
 		/*dirFn,*/
-		transition: 'slide'
+		transition: 'slider'
 	}, opts );
 
 	this._init();
 };
 
 Chassis.mixin( SPM.prototype, Events, {
+
+	/**
+	 * 获取页面内的识别串，用于同一个页面中不同子页面间的识别
+	 * @param  {object} params
+	 * @return {string}
+	 */
+	getStamp: function( params ) {
+		return Chassis.$.param( params || {} );
+	},
 
 	/**
 	 * 添加新的子页面
@@ -72,15 +81,15 @@ Chassis.mixin( SPM.prototype, Events, {
 			cid;
 
 		if ( key === 'cid' ) {
-			return pages[ key ];
+			return pages[ val ];
 		}
 
 		for ( cid in pages ) {
-			if ( pages.hasOwnProperty( cid ) && pages.hasOwnProperty( cid ) ) {
+			if ( pages.hasOwnProperty( cid ) ) {
 				subview = pages[ cid ];
 
 				if ( subview[ key ] === val ) {
-					return;
+					return subview;
 				}
 			}
 		}
@@ -142,7 +151,9 @@ Chassis.mixin( SPM.prototype, Events, {
 			this._doSwitch( from, to, dir, function() {
 
 				// 隐藏已切出子页面
-				from.$el.hide();
+				if ( from ) {
+					from.$el.hide();
+				}
 
 				me._setCurrent( to );
 
@@ -225,6 +236,11 @@ Chassis.mixin( SPM.prototype, Events, {
      * @return {int} 方向参数（含义可扩展）：1-向左，2-向右
 	 */
 	_calcDir: function( from, to ) {
+
+		if ( !from ) {
+			return 0;
+		}
+
 		var pages = this.pagesMap,
 			fromOrder = pages[ from.cid ].__order__,
 			toOrder = pages[ to.cid ].__order__;
@@ -273,7 +289,7 @@ Chassis.mixin( SPM.prototype, Events, {
 		var from = e.from,
 			to = e.to,
 			params = e.params,
-			stamp = this.owner.getStamp( params );
+			stamp = this.getStamp( params );
 
 		// 跨页面切换到子页面时，当前子页面若不是目标子页面，须提前隐藏，保证切换效果
 		if (  from !== to &&
@@ -287,7 +303,7 @@ Chassis.mixin( SPM.prototype, Events, {
 
 		var params = e.params,
 			owner = this.owner,
-			stamp = owner.getStamp( params ),
+			stamp = this.getStamp( params ),
 			target = this.getBy( 'stamp', stamp ),
 			subpage;
 
@@ -296,6 +312,7 @@ Chassis.mixin( SPM.prototype, Events, {
 
 			// TODO: 某些数据可能不允许自动生成subview
 			subpage = new this.kclass( params || {}, owner );
+			subpage.stamp = stamp;
 
 			owner.append( subpage );
 			this.register( subpage );
@@ -309,7 +326,7 @@ Chassis.mixin( SPM.prototype, Events, {
 	_setCurrent: function( subview ) {
 		if ( subview !== this.current ) {
 			this.previous = this.current;
-			this.current = this.previous;
+			this.current = subview;
 		}
 	}
 

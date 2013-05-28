@@ -33,7 +33,7 @@ Chassis.mixin( History.prototype, Events, {
      * @method navigate
      * @return 
      **/
-    navigate: function( /*fragment, options, replace*/ ) {
+    navigate: function( /*fragment, opts, replace*/ ) {
         return this;
     },
     
@@ -46,14 +46,14 @@ Chassis.mixin( History.prototype, Events, {
      * @return 
      **/
     _triggerHandle : function( fragment ) {
-        var self = this;
+        var me = this;
 
-        Chassis.each( self.handler, function( item, key ) {
+        Chassis.each( me.handler, function( item, key ) {
             if ( !item.reg.test( fragment ) ) {
                 return;
             }
 
-            item.callback.call( self, fragment );
+            item.callback.call( me, fragment );
         } );
     },
     
@@ -63,20 +63,20 @@ Chassis.mixin( History.prototype, Events, {
      *
      * @public
      * @method start
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    start : function( options ) {
+    start : function( opts ) {
         var handler = Chassis.clone( this.handler ),
             type = 'Hash';
         
-        if ( !options ) {
-            options = {};
+        if ( !opts ) {
+            opts = {};
         }
         
         this.destroy();
         
-        if ( options.pushState ) {
+        if ( opts.pushState ) {
             type = 'Pushstate';
         }
         
@@ -84,7 +84,7 @@ Chassis.mixin( History.prototype, Events, {
             throw new Error( 'History.' + type + ' is not found' );
         }
         Chassis.history = new History[ type ]( handler );
-        return Chassis.history.start( options );
+        return Chassis.history.start( opts );
     },
 
     /**

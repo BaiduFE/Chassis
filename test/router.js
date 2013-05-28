@@ -1,10 +1,59 @@
 $(document).ready(function() {
-    
-   
   module("Chassis.Router");
 
+  test("test init", 1, function() {
+    var Router,router;
+    stop();
+
+    Router = Chassis.Router.extend({
+        init : function(){
+            ok(true);
+            
+            Chassis.history.destroy();
+            start();
+        },
+        routes : {}
+    });
+    
+    router = new Router();
+    Chassis.history.start();
+  });
   
-  test("init for hashchange", 1, function() {
+  test("test destroy", 2, function() {
+    var Router,router;
+    stop();
+
+    Router = Chassis.Router.extend({
+
+        routes : {
+            'index/:id' : 'index'
+        },
+        
+        index : function(){
+            ok(false, "hashchange handle has not be destroy");
+            return false;
+        }
+        
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+    Chassis.history.navigate( 'index/2',{trigger:false} );
+    Chassis.history.navigate( '', {trigger:false} );
+    
+    Chassis.history.destroy();
+    
+    strictEqual(Chassis.History.start, false);
+    strictEqual(Chassis.history.handler.length, 0);
+    
+    start();
+
+  });
+  
+  
+  
+  test("test init with routes", 2, function() {
     var Router,router;
     stop();
     
@@ -13,12 +62,195 @@ $(document).ready(function() {
         init : function(){
             delete Chassis.PageView.index;
             ok(true);
-            window.setTimeout(function(){
-                Chassis.history.navigate( '',{trigger:false} );
-                Chassis.history.destroy();
-                start();
-            },1000);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
 
+        }
+    });
+    
+    Router = Chassis.Router.extend({
+        routes : {
+            'index/:id' : 'index'
+        },
+        
+        index : function(){
+            strictEqual( this.Request.id, '2');
+        }
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+    
+    Chassis.history.navigate( 'index/2',{trigger:true} );
+
+  });
+  
+  test("test pageOrder when routes is array", 1, function() {
+    var Router,router;
+    stop();
+    
+
+    Router = Chassis.Router.extend({
+        routes : [
+            'index/:id',
+            'info/:id'
+        ]
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+
+    deepEqual( router.pageOrder, ['index','info'] );
+    
+    Chassis.history.destroy();
+    start();
+    
+
+  });
+
+  test("test init for routers handle when return false;", 1, function() {
+    var Router,router;
+    stop();
+    
+
+    
+    Router = Chassis.Router.extend({
+        routes : {
+            'index/:id' : 'index'
+        },
+        
+        index : function(){
+            delete Chassis.PageView.index;
+            ok(true);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
+            return false;
+        }
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+    
+    Chassis.history.navigate( 'index/2',{trigger:true} );
+
+  });
+  
+  test("test navigate with options true", 1, function() {
+    var Router,router;
+    stop();
+    
+
+    
+    Router = Chassis.Router.extend({
+        routes : {
+            'index/:id' : 'index'
+        },
+        
+        index : function(){
+            delete Chassis.PageView.index;
+            ok(true);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
+            return false;
+        }
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+    
+    Chassis.history.navigate( 'index/2',{trigger:true} );
+
+  });
+  
+  test("test navigate with options false", 0, function() {
+    var Router,router;
+    stop();
+    
+    Router = Chassis.Router.extend({
+        routes : {
+            'index/:id' : 'index'
+        },
+        
+        index : function(){
+            
+            ok(true);
+            
+            return false;
+        }
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+    
+    Chassis.history.navigate( 'index/2',{trigger:false} );
+    
+    delete Chassis.PageView.index;
+    Chassis.history.navigate( '',{trigger:false} );
+    Chassis.history.destroy();
+    start();
+
+  });
+  
+  test("test navigate without delay", 3, function() {
+    var Router,router;
+    stop();
+    
+    Router = Chassis.Router.extend({
+        routes : {
+            'index/:id' : 'index',
+            'info/:id'  : 'info'
+        },
+        
+        index : function(){
+            
+            ok(true);
+            
+            return false;
+        },
+        
+        info : function(){
+            
+            ok(true);
+            
+            return false;
+        }
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+    
+    Chassis.history.navigate( 'index/2',{trigger:true} );
+    Chassis.history.navigate( 'info/3',{trigger:true} );
+    Chassis.history.navigate( 'index/4',{trigger:true} );
+    
+    delete Chassis.PageView.index;
+    Chassis.history.navigate( '',{trigger:false} );
+    Chassis.history.destroy();
+    start();
+
+  });
+  
+  test("test init for hashchange when routes is array", 1, function() {
+    var Router,router;
+    stop();
+    
+    Chassis.PageView.index = Chassis.PageView.extend({
+        
+        init : function(){
+            delete Chassis.PageView.index;
+            ok(true);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
         }
     });
     
@@ -31,23 +263,20 @@ $(document).ready(function() {
     Chassis.history.start();
     
     Chassis.history.navigate( 'index/2',{trigger:true} );
-    
-    
+
   });
   
-  
-  test("use pushState and root", 1, function() {
+  test("test pushState and root when routes is array", 1, function() {
     var Router,router;
     stop();
     
     Chassis.PageView.index = Chassis.PageView.extend({
         init : function(){
+            delete Chassis.PageView.index;
             ok(true);
-            window.setTimeout(function(){
-                Chassis.history.navigate( '',{trigger:false} );
-                Chassis.history.destroy();
-                start();
-            },1000);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
 
         }
     });
@@ -68,11 +297,6 @@ $(document).ready(function() {
   });
   
   
-  
-  
-  
-  
-
   /*
 
 

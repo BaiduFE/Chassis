@@ -3,10 +3,10 @@
  * @requires Router.History
  */
 
-var Router = Chassis.Router = function( options ) {
+var Router = Chassis.Router = function( opts ) {
     
-    if ( !options ) {
-        options = {};
+    if ( !opts ) {
+        opts = {};
     }
     
     /**
@@ -30,14 +30,14 @@ var Router = Chassis.Router = function( options ) {
      *      ]
      *      这种配置方式会使用默认的路由行为：路由目标为`__Chassis__.PageView.info`;
      *      使用这种配置方式时如果路由action为空时会默认路由到`__Chassis__.PageView.index`,
-     *      可以通过`options.index`来重新设置;
+     *      可以通过`opts.index`来重新设置;
      */
-    if ( options.routes ) {
-        this.routes = options.routes;
+    if ( opts.routes ) {
+        this.routes = opts.routes;
     }
 
     // 默认的路由action
-    this._index = options.index || 'index';
+    this._index = opts.index || 'index';
 
     // 保存的视图列表，对应不同页面
     this.views = {};
@@ -74,9 +74,9 @@ Chassis.mixin( Router.prototype, Events, {
      **/
     route : function( route, name ) {
 
-        var self = this,
+        var me = this,
             callback = this._getHandler( name ),
-            routeRe = self._routeToRegExp( route ),
+            routeRe = me._routeToRegExp( route ),
             keys = routeRe.exec( route ).slice( 1 );
         
         Chassis.each( keys, function( item, key ) {
@@ -91,9 +91,9 @@ Chassis.mixin( Router.prototype, Events, {
             vals = routeRe.exec( fragment ).slice( 1 );
             Request = Chassis.object( keys, vals );
             
-            self.Request = Request;
+            me.Request = Request;
 
-            callback.call( self );
+            callback.call( me );
         
         } );
 
@@ -105,11 +105,11 @@ Chassis.mixin( Router.prototype, Events, {
      * @private
      * @method navigate
      * @param {string} fragment
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    navigate : function( fragment, options ) {
-        return Chassis.history.navigate( fragment, options );
+    navigate : function( fragment, opts ) {
+        return Chassis.history.navigate( fragment, opts );
     },
 
     /** 
@@ -309,16 +309,16 @@ Chassis.mixin( Router.prototype, Events, {
      * @return 
      **/
     _bindRoutes : function() {
-        var self = this;
+        var me = this;
         
         // 对routes支持数组的处理
-        self._routeArray.call( self );
+        me._routeArray.call( me );
         
-        Chassis.each( self.routes, function( item, key ) {
-            self.route( key, item );
+        Chassis.each( me.routes, function( item, key ) {
+            me.route( key, item );
         } );
         
-        return self;
+        return me;
     },
     
     /**
@@ -329,16 +329,16 @@ Chassis.mixin( Router.prototype, Events, {
      * @return 
      **/
     _routeArray : function() {
-        var self = this,
+        var me = this,
             _routes = {},
-            hasPageOrder = !!self.pageOrder.length;
+            hasPageOrder = !!me.pageOrder.length;
         
-        if ( !Chassis.isArray( self.routes ) ) {
-            return self;
+        if ( !Chassis.isArray( me.routes ) ) {
+            return me;
         }
         
         
-        Chassis.each( self.routes, function( item, key ) {
+        Chassis.each( me.routes, function( item, key ) {
             var first = item.split( /\//g )[ 0 ],
                 name = first;
 
@@ -347,19 +347,19 @@ Chassis.mixin( Router.prototype, Events, {
             }
             
             if ( first === '' ) {
-                name = self._index;
+                name = me._index;
             }
             
             _routes[ item ] = name;
             
             if ( !hasPageOrder ) {
-                self.pageOrder.push( name );
+                me.pageOrder.push( name );
             }
         } );
         
-        self.routes = Chassis.clone( _routes );
+        me.routes = Chassis.clone( _routes );
         
-        return self;
+        return me;
        
     },
     

@@ -139,15 +139,13 @@ Chassis.uniqueId = (function() {
 
     
 
-Chassis.isArray = nativeIsArray || function( obj ) {
-    return toString.call( obj ) === '[object Array]';
-};
+Chassis.isArray = Chassis.$.isArray;
 
 Chassis.isObject = function( obj ) {
     return obj === Object( obj );
 };
 
-Chassis.isFunction = $.isFunction;
+Chassis.isFunction = Chassis.$.isFunction;
 
 Chassis.clone = function( obj ) {
     if ( !Chassis.isObject( obj ) ) {

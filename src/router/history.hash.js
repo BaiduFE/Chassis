@@ -10,11 +10,11 @@ History.Hash = History.extend({
      * @overwrite
      * @public
      * @method start
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    start : function( options ) {
-        var self = this;
+    start : function( opts ) {
+        var me = this;
 
         if ( History.start ) {
             return;
@@ -22,8 +22,8 @@ History.Hash = History.extend({
         
         History.start = true;
         
-        if ( !options ) {
-            options = {};
+        if ( !opts ) {
+            opts = {};
         }
         
         // 开始监听hashchange
@@ -31,16 +31,17 @@ History.Hash = History.extend({
                 ((typeof document.documentMode === 'undefined') ||
                 document.documentMode === 8) ) {
 
-            $( window ).on( 'hashchange', function() {
-                self.navigate( self._getHash(), { trigger: true }, true );
-            } );
+            me._onHashChangeEvent();
             
             // 处理当前hash
-            if ( !options.silent ) {
-                self.navigate( self._getHash(), { trigger: true }, true ); 
+            if ( opts.trigger ) {
+                me.navigate( me._getHash(), { trigger: true }, true ); 
             }
             
+            return;
         }
+        
+        throw new Error( 'current browser do not suport hashchange event;' );
     },
     
     /**
@@ -50,41 +51,32 @@ History.Hash = History.extend({
      * @public
      * @method navigate
      * @param {string} fragment
-     * @param {object} options
+     * @param {object} opts
      * @param {boolean} replace
      * @return 
      **/
-    navigate : function( fragment, options, replace ) {
-        var self = this;
+    navigate : function( fragment, opts, replace ) {
+        var me = this;
         
-        if ( !options ) {
-            options = {};
-        }
-
-        // 如果不是来自onchange监控的事件
-        if ( !self.pushState && !replace ) {
-
-            // 缓存当前的配置
-            self.cacheOptions = options;
-            self._setHash( fragment );
-            
-            // 因为后面会自动触发window.onhashchange事件
-            return; 
+        // 先取消监听，完成后再回来
+        me._offHashChangeEvent();
+        
+        if ( !opts ) {
+            opts = {};
         }
         
         
-        // 从非onchange监控的options里获取配置
-        if ( !self.pushState && !replace ) {
-
-            if ( self.cacheOptions ) {
-                options = Chassis.clone( self.cacheOptions );
-            }
-        }
-        self.cacheOptions = null;
+        me._setHash( fragment );
         
-        if ( options.trigger ) {
-            self._triggerHandle.call( self, fragment );
+        
+        if ( opts.trigger ) {
+            me._triggerHandle.call( me, fragment );
         }
+        
+        window.setTimeout( function() {
+            me._onHashChangeEvent();
+        }, 0 );
+        
         
 
     },
@@ -116,5 +108,19 @@ History.Hash = History.extend({
     _getHash : function() {
         var match = window.location.href.match( /#(.*)$/ );
         return match ? match[ 1 ] : '';
+    },
+    
+    
+    _onHashChangeEvent : function() {
+        var me = this;
+        $( window ).on( 'hashchange', function( e ) {
+
+            me.navigate( me._getHash(), { trigger: true }, true );
+            
+        } );
+    },
+    _offHashChangeEvent : function() {
+        var me = this;
+        $( window ).off( 'hashchange' );
     }
 });

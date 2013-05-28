@@ -11,11 +11,11 @@ History.Pushstate = History.extend({
      * @overwrite
      * @public
      * @method start
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    start : function( options ) {
-        var self = this;
+    start : function( opts ) {
+        var me = this;
 
         if ( History.start ) {
             return;
@@ -23,28 +23,27 @@ History.Pushstate = History.extend({
         
         History.start = true;
         
-        if ( !options ) {
-            options = {};
+        if ( !opts ) {
+            opts = {};
         }
         
-        if ( options.pushState ) {
-
-            self.pushState = true;
-
-            if ( options.root ) {
-                self.root = options.root;
-            }
-            
-            // 当浏览器前进后退时触发
-            $( window ).on( 'popstate', function() {
-                var fragment = window.location.href.split( /\// ).slice( 3 )
-                        .join( '/' ).substring( self.root.length );
-                
-                self._triggerHandle.call( self, fragment );
-            } );
-            
-            return;
+        
+        if ( opts.root ) {
+            me.root = opts.root;
         }
+        
+        // 当浏览器前进后退时触发
+        $( window ).on( 'popstate', function() {
+            me._triggerHandle.call( me, me._getFragment() );
+        } );
+        
+        // 处理当前pushState
+        if ( opts.trigger ) {
+            me._triggerHandle.call( me, me._getFragment() );
+        }
+        
+        return;
+       
 
     },
     
@@ -55,24 +54,24 @@ History.Pushstate = History.extend({
      * @public
      * @method navigate
      * @param {string} fragment
-     * @param {object} options
+     * @param {object} opts
      * @return 
      **/
-    navigate : function( fragment, options/*, replace*/ ) {
-        var self = this;
+    navigate : function( fragment, opts/*, replace*/ ) {
+        var me = this;
         
-        if ( !options ) {
-            options = {};
+        if ( !opts ) {
+            opts = {};
         }
         
-        if ( self.pushState ) {
-            self._setPushState( fragment );
-        }
         
-        self.cacheOptions = null;
+        me._setPushState( fragment );
         
-        if ( options.trigger ) {
-            self._triggerHandle.call( self, fragment );
+        
+        me.cacheOptions = null;
+        
+        if ( opts.trigger ) {
+            me._triggerHandle.call( me, fragment );
         }
     },
     
@@ -85,13 +84,30 @@ History.Pushstate = History.extend({
      * @return 
      **/
     _setPushState : function( fragment ) {
+
+        fragment = fragment || this.root;
+        history.pushState( {}, document.title, fragment );
+        return this;
         
-        if ( this.pushState ) {
-            fragment = fragment || this.root;
-            history.pushState( {}, document.title, fragment );
-            return this;
-        }
+    },
+    
+    /**
+     * 获取当前的fragment
+     *
+     * @private
+     * @method _getFragment
+     * @return 
+     **/
+    _getFragment : function() {
+        
+        return window.location.href
+                .split( /\// )
+                .slice( 3 )
+                .join( '/' )
+                .substring( this.root.length );
     }
+    
+    
 });
 
 History.Pushstate.extend = Chassis.extend;

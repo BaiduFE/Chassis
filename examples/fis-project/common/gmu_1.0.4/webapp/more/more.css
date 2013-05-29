@@ -1,0 +1,54 @@
+.ui-more {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    border-top: 1px solid #C1C1C1;
+    -webkit-box-shadow: 1px 0 0 rgba(216,216,216,.21) inset,0 1px 0 rgba(216,216,216,.21) inset,-1px 0 0 rgba(216,216,216,.21) inset,0 1px 0 rgba(255,255,255,.75),0 -1px 0 rgba(255,255,255,.75);
+    position: relative;
+    background:#f3f3f3;
+    padding-bottom:5px;
+}
+
+.ui-more-arrow {
+    position: absolute;
+    top: -8px;
+    right: 22px;
+    width: 12px;
+    height: 8px;
+    background: url(/static/common/lib/gmu/more/more.png) no-repeat;
+    -webkit-background-size: 12px 8px;
+}
+
+.ui-more-links{
+    display: -webkit-box;
+    -webkit-box-flex: 1;
+    height: 42px;
+    background:#e4e4e4;
+}
+.ui-more-links:last-child {
+    border-bottom: 1px solid #CECECE;
+}
+
+.ui-more-link{
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    color: #545164;
+}
+
+.ui-more-link span{
+	display:inline-block;
+	width:42px;
+	height:24px;
+	text-align:center;
+	line-height:24px;
+}
+
+.ui-more-link-hover{
+	outline:1px solid #c9c9c9;
+	background-color: #d3d3d3;
+/*	-webkit-border-radius:2px;*/
+/*	margin-left:-1px;*/
+}

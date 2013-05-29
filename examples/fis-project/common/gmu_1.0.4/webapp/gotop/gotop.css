@@ -1,0 +1,42 @@
+.ui-gotop{
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	z-index: 90;
+	background:#454545;
+	color: white;
+	cursor:pointer;
+	/** display:none; */
+	visibility: hidden;
+	-webkit-transform-style: preserve-3d;
+	-webkit-backface-visibility: hidden;
+    /* -webkit-transform: translate(0px, -10px); */
+	-webkit-border-radius: 2px;
+	-webkit-transition-property: bottom;
+	-webkit-transition-duration: 400ms;
+	-webkit-transition-timing-function: ease;
+	-webkit-box-shadow: 0px 0px 5px #9c9c9c;
+	opacity: 0.9;
+	
+	/** -webkit-transform: translate3d(0px, -80px, 0px);
+	display:none;
+	-webkit-transition-duration: 400ms;
+	opacity: 0.8;
+	-webkit-transform: translate3d(0px, 1886px, 0px); */
+}
+
+.ui-gotop span {
+	position: relative;
+	display: block;
+	padding: 9px 0;
+	line-height: 14px;
+	text-align: center;
+}
+
+.ui-gotop span {
+	background: url(/static/common/lib/gmu/gotop/gotop_2.png) no-repeat 13px 12px;
+	-webkit-background-size: 18px 15px;
+	background-position: 50% 70%;
+}

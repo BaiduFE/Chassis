@@ -1,0 +1,76 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-input-mask{
+	position: relative;
+	z-index: 99;
+}
+
+.ui-suggestion{
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+	z-index: 9999;	
+	font-size: 16px;
+	border: 1px solid #b1b1b1;
+	background-color:#fff;
+}
+
+.ui-suggestion ul{
+	list-style: none;
+	background: #fff;
+}
+
+.ui-suggestion ul li{
+	border-bottom: 1px solid #e7e7e7;
+	height: 38px;
+	line-height: 38px;
+	cursor: pointer;
+	display: -webkit-box;
+}
+/*
+.ui-suggestion ul li:active{
+	background: #ededed;
+}
+*/
+
+.ui-suggestion .ui-suggestion-result{
+	margin: 0 10px;
+	display: -webkit-box;
+	-webkit-box-flex: 1;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.ui-suggestion ul li.ui-suggestion-result-hover {
+    background: #ededed;
+}
+
+.ui-suggestion .ui-suggestion-result span{
+	color: #878787;
+}
+
+.ui-suggestion .ui-suggestion-content{
+	position: relative;
+}
+
+.ui-suggestion .ui-suggestion-button{
+	height: 33px;
+	line-height: 33px;
+}
+
+.ui-suggestion-button span{
+	text-decoration: underline;
+	text-align: center;
+	color: #787878;
+	display: inline-block;
+	font-size: 14px;
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+.ui-suggestion-button span:first-child{
+	float: left;
+}
+
+.ui-suggestion-button span:last-child{
+ 	float: right;
+}

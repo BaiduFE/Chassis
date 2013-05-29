@@ -1,0 +1,70 @@
+.ui-input-mask{
+	position: relative;
+	z-index: 9999;
+}
+
+.ui-suggestion{
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+	z-index: 9999;	
+	font-size: 16px;
+	border: 1px solid #b1b1b1;
+	background-color:#fff;
+}
+
+.ui-suggestion ul{
+	list-style: none;
+	background: #fff;
+}
+
+.ui-suggestion ul li{
+	border-bottom: 1px solid #e7e7e7;
+	height: 33px;
+	line-height: 33px;
+}
+
+.ui-suggestion .ui-suggestion-result{
+	padding: 0 10px;
+	display: block;
+}
+
+.ui-suggestion .ui-suggestion-result-highlight{
+	background: #ededed;
+}
+
+.ui-suggestion .ui-suggestion-result span{
+	color: #878787;
+}
+
+.ui-suggestion .ui-suggestion-content{
+	position: relative;
+}
+
+.ui-suggestion .ui-suggestion-button{
+	border-top: 1px solid #e7e7e7;
+	background: #f7f7f7;
+	height: 33px;
+	line-height: 33px;
+}
+
+.ui-suggestion-button span{
+	text-decoration: none;
+	text-align: center;
+	color: #4B4B4B;
+	display: inline-block;
+	font-size: 14px;
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+.ui-suggestion-button span:first-child{
+	float: left;
+	border-right: 1px solid #e7e7e7;
+}
+
+.ui-suggestion-button span:last-child{
+ 	float: right;
+ 	border-left: 1px solid #e7e7e7;
+}

@@ -1,0 +1,16 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-input-mask{
+	position: relative;
+}
+
+.ui-input-mask input{
+	outline: none;
+}
+
+.ui-quickdelete-button{
+	background: url(/static/common/lib/gmu/quickdelete/delete.png) no-repeat left top;
+	-webkit-background-size: contain;
+	visibility: hidden;
+	position: absolute;
+	cursor: pointer;
+}

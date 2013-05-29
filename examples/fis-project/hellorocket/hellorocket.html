@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>hellorocket-2.0</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <link rel="apple-touch-icon-precomposed" href="http://m.baidu.com/static/news/webapp_114.png" />
+    <link rel="stylesheet" type="text/css" href="./css/rocket.css" />
+    <link id="statLink" rel="stylesheet" />
+</head>
+<body>
+    <div id="wrapper" class="news">
+<!--html snippets-->
+/*{fis-inline file="./tpl/globalloading.tpl.html"}*/ 
+/*{fis-inline file="./tpl/pageloading.tpl.html"}*/ 
+
+<!--page view-->
+/*{fis-inline file="./page/index/html/index.html"}*/ 
+/*{fis-inline file="./page/sayhello/html/sayhello.html"}*/ 
+
+    </div>
+
+    <script>
+        F.load(['common_lib', 'common_chassis', 'hellorocket_app'], function(){
+            rocket.init();
+        }); 
+    </script>
+
+<!--front template-->
+/*{fis-inline file="./page/index/tpl/index.tpl.html"}*/ 
+/*{fis-inline file="./page/sayhello/tpl/sayhello.tpl.html"}*/ 
+</body>
+</html>

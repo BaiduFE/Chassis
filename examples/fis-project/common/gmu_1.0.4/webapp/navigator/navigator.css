@@ -1,0 +1,221 @@
+/** 一级导航样式 */
+.ui-navigator {
+    display: -webkit-box;
+    border-top: 1px solid #2468c9;
+    border-bottom: 1px solid #0145a5;
+    background:#2773dc;
+    width: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.ui-navigator .ui-navigator-wrap {
+    -webkit-box-flex: 1;
+    border-right: 1px solid rgba(36,105,201,1);
+    height: 42px;
+}
+
+.ui-navigator .ui-navigator-shadowleft {
+    background-position: right top;
+}
+
+.ui-navigator .ui-navigator-shadowRight {
+    background-position: left top;
+}
+
+.ui-navigator .ui-navigator-list, .ui-navigator .ui-navigator-fix {
+    display: -webkit-box;
+}
+
+.ui-navigator .ui-navigator-shadowleft {
+    background: url(/static/common/lib/gmu/navigator/nav.png) 0 0 no-repeat;
+}
+
+.ui-navigator .ui-navigator-shadowright {
+    background: url(/static/common/lib/gmu/navigator/nav.png) right -44px no-repeat;
+}
+
+.ui-navigator .ui-navigator-shadowall {
+    background: url(/static/common/lib/gmu/navigator/nav.png) 0 0 no-repeat, url(/static/common/lib/gmu/navigator/nav.png) right -44px no-repeat;
+}
+
+.ui-navigator .ui-navigator-list li.cur, .ui-navigator div.fix-cur {
+	background:#0c4da8;
+}
+
+.ui-navigator .ui-navigator-list li a, .ui-navigator .ui-navigator-fix a {
+    display: -webkit-box;
+    -webkit-box-sizing: border-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    padding: 0 15px;
+    height: 42px;
+    font-size: 16px;
+    color: #ffffff;
+    text-decoration: none;
+    outline: none;
+    font-family: "微软雅黑" "黑体" ;
+    font-weight: bold;
+}
+
+/** 二级导航样式 */
+.instance-sec {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    border-top: 1px solid #d2d2d2;;
+    border-bottom: 1px solid #d2d2d2;
+    background:#f4f4f4;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.instance-sec .ui-navigator-wrap {
+    padding: 4px 0;
+    -webkit-box-flex: 1;
+    height: 28px;
+}
+
+.instance-sec .ui-navigator-list {
+    -webkit-box-orient: horizontal;
+    padding: 0px 4px;
+    display: -webkit-box;
+
+}
+
+.instance-sec .ui-navigator-list li.cur {
+    /*background: -webkit-gradient(linear, left top, left bottom, from(#e6edf7), to(#cfdced));*/
+    /*-webkit-box-shadow: inset 0px 0px 1px 1px #bed0e8;*/
+    border-radius: 1px;
+    background-color: #dbe5f2;
+    outline: 1px solid  #bed0e8;
+    height: 28px;
+}
+
+.instance-sec .ui-navigator-list li.cur a {
+    color: #0a50b1;
+    /*line-height: 26px;*/
+}
+
+.instance-sec .ui-navigator-list li a {
+    display: -webkit-box;
+    text-align: center;
+    line-height: 28px;
+    padding: 0 15px;
+    height: 28px;
+    font-size: 16px;
+    color: #3b3b3b;
+    text-decoration: none;
+    font-family: "微软雅黑" "黑体";
+    font-weight: bold;
+}
+
+/*二级导航样式*/
+.instance-sec2 {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    border-top: 1px solid #d2d2d2;
+    border-bottom: 1px solid #d2d2d2;
+    background: #f4f4f4;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.instance-sec2 .ui-navigator-wrap {
+    padding: 4px 0;
+    -webkit-box-flex: 1;
+    height: 28px;
+}
+
+.instance-sec2 .ui-navigator-list {
+    -webkit-box-orient: horizontal;
+
+    display: -webkit-box;
+}
+
+.instance-sec2 .ui-navigator-list li {
+    display: -webkit-box;
+    -webkit-box-flex: 1;
+    -webkit-box-align: center;
+    width: 50%;
+}
+
+.instance-sec2 .ui-navigator-list li.cur {
+    border-radius: 1px;
+    background-color: #dbe5f2;
+    outline: 1px solid  #bed0e8;
+    height: 28px;
+}
+
+.instance-sec2 .ui-navigator-list li.cur a {
+    -webkit-box-flex: 1;
+    color: #0a50b1;
+    font-family: "微软雅黑" "黑体";
+    font-weight: bold;
+}
+
+.instance-sec2 .ui-navigator-list li a {
+    display: -webkit-box;
+    -webkit-box-flex: 1;
+    -webkit-box-pack: center;
+    -webkit-box-orient: vertical;
+    height: 28px;
+    font-size: 16px;
+    color: #3b3b3b;
+    text-decoration: none;
+    text-align: center;
+    font-family: "微软雅黑" "黑体";
+    font-weight: bold;
+}
+
+/*二级导航样式*/
+.instance-sec3 {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    border-top: 1px solid #d2d2d2;
+    border-bottom: 1px solid #d2d2d2;
+    background: #f4f4f4;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.instance-sec3 .ui-navigator-wrap {
+    padding: 4px 0px;
+    -webkit-box-flex: 1;
+    height: 28px;
+}
+
+.instance-sec3 .ui-navigator-list {
+    -webkit-box-orient: horizontal;
+    padding: 0px 6px;
+    display: -webkit-box;
+}
+
+.instance-sec3 .ui-navigator-list li {
+    -webkit-box-flex: 1;
+    -webkit-box-align: center;
+    width: 50%;
+    text-align: center;
+}
+
+.instance-sec3 .ui-navigator-list li.cur {
+    border-radius: 1px;
+    background-color: #cdebde;
+    outline: 1px solid  #c7e0d3;
+    height: 28px;
+}
+
+.instance-sec3 .ui-navigator-list li.cur a {
+    -webkit-box-flex: 1;
+    color:#3d7c53;
+    font-family: "微软雅黑" "黑体";
+    font-weight: bold;
+}
+
+.instance-sec3 .ui-navigator-list li a {
+    -webkit-box-flex: 1;
+    line-height: 28px;
+    height:28px;
+    font-size: 16px;
+    color: #3b3b3b;
+    text-decoration: none;
+    text-align: center;
+    font-family: "微软雅黑" "黑体";
+    font-weight: bold;
+    display: block;
+}

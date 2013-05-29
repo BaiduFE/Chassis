@@ -1,0 +1,15 @@
+#wrapper{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+/*global*/
+@import url("./globalloading.css")
+@import url("./pageloading.css")
+
+/*page*/
+@import url("../page/index/css/index.css")
+@import url("../page/sayhello/css/sayhello.css")

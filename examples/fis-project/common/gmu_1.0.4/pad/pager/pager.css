@@ -1,0 +1,47 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-pager{
+	clear: both;
+	font-size: 14px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.ui-pager:after{
+	display: block;
+	clear: both;
+	content: "\20";
+	height: 0;
+}
+
+.ui-pager a, .ui-pager a:hover{
+	border: 1px solid #e7ecf0;
+	padding: 0 9px 0 9px;
+	height: 32px;
+	line-height: 34px;
+	min-width: 20px;
+	margin: 0 10px 5px 0;
+	display: inline-block;
+}
+
+.ui-pager a{
+	color: #0000cc;
+	text-decoration: none;
+}
+
+.ui-pager a:hover{
+	background: #EFF2FA;
+}
+
+.ui-pager a.current{
+	color: #000000;
+	border: none;
+	cursor: default;
+}
+
+.ui-pager a.dot{
+	width: 20px;
+	border: none;
+	padding: 0;
+	color: #747474;
+	cursor: default;
+}

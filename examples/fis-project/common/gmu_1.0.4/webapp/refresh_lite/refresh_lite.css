@@ -1,0 +1,129 @@
+/** Pull up styles */
+.ui-refresh {
+	background: #fff;
+	height: 40px;
+	line-height: 40px;
+	padding: 5px 10px;
+	border-bottom: 1px solid #ccc;
+	font-size: 14px;
+	color: #888;
+	text-align: center;
+}
+
+.ui-refresh .ui-refresh-pullup-icon  {
+	margin-top: 8px;
+	width: 25px; height: 25px;
+	background: url(/static/common/lib/gmu/refresh/refresh.png) 0 0 no-repeat;
+	-webkit-background-size: 25px 50px; 
+	background-size: 25px 50px;
+   display: inline-block;
+}
+
+.ui-refresh .ui-refresh-pullup-label {
+    vertical-align: top;
+    color: #2E435D;
+}
+
+.ui-refresh .ui-refresh-pullup-icon  {
+	-webkit-transition-property: -webkit-transform;
+	-webkit-transition-duration: 400ms;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transform: rotate(180deg);
+}
+
+.ui-refresh.ui-refresh-flip .ui-refresh-pullup-icon {
+     -webkit-transform: rotate(0deg) translateZ(0);
+ }
+
+.ui-refresh.ui-refresh-flip-origin .ui-refresh-pullup-icon {
+    -webkit-transform: rotate(180deg) translateZ(0);
+}
+
+.ui-refresh-loading .ui-refresh-pullup-icon {
+	background-position: 0 100%;
+	-webkit-transform: rotate(0deg);
+	-webkit-transition-duration: 0ms;
+
+	-webkit-animation-name: ui-refresh-loading-anim;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes ui-refresh-loading-anim {
+	from {
+        -webkit-transform: rotate(0deg);
+    }
+    8.32% {
+        -webkit-transform: rotate(0deg);
+    }
+    8.33% {
+        -webkit-transform: rotate(30deg);
+    }
+    16.65% {
+        -webkit-transform: rotate(30deg);
+    }
+    16.66% {
+        -webkit-transform: rotate(60deg);
+    }
+    24.99% {
+        -webkit-transform: rotate(60deg);
+    }
+    25% {
+        -webkit-transform: rotate(90deg);
+    }
+    33.32% {
+        -webkit-transform: rotate(90deg);
+    }
+    33.33% {
+        -webkit-transform: rotate(120deg);
+    }
+    41.65% {
+        -webkit-transform: rotate(120deg);
+    }
+    41.66% {
+        -webkit-transform: rotate(150deg);
+    }
+    49.99% {
+        -webkit-transform: rotate(150deg);
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+    }
+    58.32% {
+        -webkit-transform: rotate(180deg);
+    }
+    58.33% {
+        -webkit-transform: rotate(210deg);
+    }
+    66.65% {
+        -webkit-transform: rotate(210deg);
+    }
+    66.66% {
+        -webkit-transform: rotate(240deg);
+    }
+    74.99% {
+        -webkit-transform: rotate(240deg);
+    }
+    75% {
+        -webkit-transform: rotate(270deg);
+    }
+    83.32% {
+        -webkit-transform: rotate(270deg);
+    }
+    83.33% {
+        -webkit-transform: rotate(300deg);
+    }
+    91.65% {
+        -webkit-transform: rotate(300deg);
+    }
+    91.66% {
+        -webkit-transform: rotate(330deg);
+    }
+    99.99% {
+        -webkit-transform: rotate(330deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,66 @@
+/*页面视图id，与action同名，以_page为后缀*/
+#index_page{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    /*最低高度，确保即使没内容，loading也可以展示，同时能遮住下方内容*/
+    min-height:600px;
+
+    /*阻止文本选中*/
+    -webkit-user-select:none;
+    -moz-user-select:none;
+}
+
+#index_page_header{
+    border-left:10px solid #F0A22A;
+    border-bottom:1px solid #F0A22A;
+    padding:5px;
+    font:bold 26px/40px normal;
+    text-shadow:rgba(64, 64, 64, 0.3) 3px -3px 2px;
+}
+
+#index_page_content{
+    /*作为绝对定位的loading样式的容器，需要使用relative定位*/
+    position:relative;
+    padding-top:10px;
+}
+
+#index_page_content a{
+    display:block;
+    position:relative;
+    margin:3px 3px 0;
+    padding-left:5px;
+    background:#eee;
+    border:1px outset #ddd;
+    border-radius:4px;
+    font:normal 16px/40px Arial;
+    color:#000;
+    text-decoration:none;
+}
+
+#index_page_content a span{
+    display:inline-block;
+    position:absolute;
+    right:5px;
+    top:50%;
+    margin-top:-9px;
+    background-image:url("../../../img/icons-36-black.png");
+    background-position:-108px 50%;
+    background-size:776px 18px;
+    width:18px;
+    height:18px;
+}
+
+#index_page_content *{
+    -webkit-transform:translateZ(0);
+}
+

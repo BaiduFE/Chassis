@@ -1,0 +1,18 @@
+/*图片上传样式*/
+
+.ui-imageuploader .ui-imageuploader-wrap {
+    display: -webkit-box;
+    background: url(/static/common/lib/gmu/imageuploader/i-up.png) no-repeat;
+    width: 26px;
+    height: 23px;
+    -webkit-box-orient: horizontal;
+    -webkit-box-pack: center;
+}
+
+.ui-imageuploader .ui-imageuploader-ipt {
+    opacity: 0;
+    width: 26px;
+    height: 23px;
+    cursor: pointer;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

@@ -1,0 +1,79 @@
+.ui-dropmenu {
+	font-size: 14px;
+	font-weight: bold;
+	width: 120px;
+}
+
+.ui-dropmenu-button {
+	border: 1px solid #d3d3d3;
+	height: 37px;
+	line-height: 37px;
+	text-align: center;
+	cursor: pointer;
+	position: relative;
+	border-radius: 2px;
+	background:  -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#ededed));  
+}
+
+.ui-dropmenu-arrow {
+	position:  absolute;
+	top:  15px;
+	right: 10px;
+	width: 0px;
+	height: 0px;
+	border-bottom: none;
+	border-top: 4px solid #46446d;
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+}
+
+.ui-dropmenu-arrow-on {
+	border-top: none;
+	border-bottom: 4px solid #46446d;
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+}
+
+.ui-dropmenu-content {
+	width: 118px;
+	position: absolute;
+	border-radius: 2px;
+	-webkit-box-shadow:  2px 1px 3px #2b2b2b;
+}
+
+.ui-dropmenu-content-arrow {
+	position:  absolute;
+	top:  -8px;
+	width:  15px;
+	height:  8px;
+	background: url(/static/common/lib/gmu/dropmenu/dropmenu_icon.png) no-repeat 0 2px;
+	-webkit-background-size:  42px 326px;
+}
+
+.ui-dropmenu-content-arrowbottom {
+	background:  url(/static/common/lib/gmu/dropmenu/dropmenu_icon.png) no-repeat 1px -25px;
+    -webkit-background-size:  42px 326px;
+}
+
+.ui-dropmenu-items {
+	border: 1px solid #d3d3d3;
+	border-bottom: 0;
+    border-radius: 2px;
+}
+
+.ui-dropmenu .horizontal {
+	width: 100%;
+}
+
+.ui-dropmenu .horizontal li {
+	float: left;
+}
+
+.ui-dropmenu-items li {
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+	background: #fff;
+	font-size: 15px;
+}

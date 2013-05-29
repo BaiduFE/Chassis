@@ -1,0 +1,49 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-button{
+    display: inline-block;
+    padding: 7px 9px;
+    margin: 2px;
+    border: 1px solid #D2D2D2;
+    -webkit-border-radius:  1px;
+    -moz-border-radius:  1px;
+    border-radius:  1px;
+    background-color: #fff;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.0;
+    cursor:pointer;
+    -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+button.ui-button, input.ui-button {
+    -webkit-appearance:none;
+}
+
+.ui-button-hover{
+    background-color: #d9d9d9;
+    border-color: #B3B3B3;
+}
+
+.ui-button-disabled {
+    color:#ababab;
+    background-color:#e6e6e6 ;
+    border-color: #d2d2d2;
+    cursor: default;
+}
+
+.ui-button-blue {
+    color:#fff;
+    background-color: #2d7ded;
+    border-color:#135cbe;
+}
+
+.ui-button-blue-hover {
+    background-color: #266aca;
+    border-color: #104ea2;
+}
+
+.ui-button-blue-disabled {
+    color:#9ac0f4;
+    background-color:#2773dc ;
+    border-color: #135cbe;
+}

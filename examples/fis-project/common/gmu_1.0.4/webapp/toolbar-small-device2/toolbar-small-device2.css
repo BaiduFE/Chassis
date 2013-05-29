@@ -1,0 +1,121 @@
+.ui-toolbar-container {
+    display: -webkit-box;
+    position: relative;
+    min-width: 320px;
+    max-width: 1280px;
+    width: 100%;
+}
+
+.ui-toolbar {
+    display: block;
+    border-top: #d2d2d2 solid 1px;
+    width: 100%;
+    height: 43px;
+    z-index: 2;
+    text-align: center;
+    background: -webkit-gradient(linear, center top, center bottom, from(rgb(240, 240, 240)), to(rgb(234, 234, 234)));
+    /** 效果无法与下面的一致，但是不会导致dom不显示 */
+    -webkit-box-shadow: 0px 3px 3px -3px #7f7f7f;
+    box-shadow: 0px 0px 5px #7f7f7f;
+    font-weight: 600;
+    line-height: 44px;
+}
+
+/** android下可以，但是需要动一下才能显示
+.ui-toolbar: before{
+    content: "";
+    position: absolute;
+    top: 44px;
+    width: 100%;
+    -webkit-box-shadow: 0 0px 10px #000;
+    box-shadow: 0px 0px 10px #000;
+    height: 1px;
+    left: 0px;
+    z-index: -1;
+} */
+
+.ui-sub-toolbar {
+    display: block;
+    -webkit-box-orient: horizontal;
+    position: absolute;
+    top: 44px;
+    left: 0;
+    width: 100%;
+    height: 38px;
+    right: 0;
+    z-index: 2;
+    background: -webkit-gradient(linear, center top, center bottom, from(rgb(240, 240, 240)), to(rgb(234, 234, 234)));
+}
+
+.ui-toolbar .ui-toolbar-backcon, .ui-toolbar .ui-toolbar-toolscon{
+    height: 100%;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.ui-sub-toolbar .ui-toolbar-toolscon .ui-toolbar-btn, .ui-toolbar .ui-toolbar-toolscon .ui-toolbar-btn{
+    height: 100%;
+    float: left;
+}
+
+.ui-toolbar .ui-toolbar-backbtn {
+    margin: 5px;
+}
+
+.ui-toolbar .ui-toolbar-backbtn {
+    text-indent:-0.3em;
+    padding:0 8px;
+    border:1px solid #d9d9d9;
+    display:block;
+    height:30px;
+    line-height:30px;
+    margin-top:5px;
+    float:left;
+    -webkit-border-radius:3px;
+    position: relative;
+    margin-left: 15px;
+    z-index: 4;
+    text-indent: -0.3em;
+    background:#f7f7f7;
+    color:#333;
+    text-decoration:none;
+}
+.ui-toolbar .ui-toolbar-backbtn:after {
+    content:'';display:block;
+    position:absolute;
+
+    border:1px solid #d9d9d9;
+    -webkit-border-radius:3px;z-index:-1;
+    /* -webkit-transform:rotate(-45deg) translate(5.6px ,-32.4px); */
+
+    width:16.41px; height:16.41px;
+    -webkit-transform: matrix(0.7,1,0.7,-1,-15.8,-23.6);
+    border-right:none;
+    border-bottom:none;
+    background:#f7f7f7;
+}
+
+.ui-toolbar .ui-toolbar-backcon{
+    float: left;
+    color: #fff;
+    line-height: 30px;
+}
+
+.ui-toolbar .ui-toolbar-toolscon{
+    float: right;
+    color: #fff;
+    line-height: 30px;
+    display: inline-block;
+    min-width: 60px;
+}
+
+.ui-sub-toolbar .ui-toolbar-toolscon{
+    height: 38px;
+    background: none;
+    display: block;
+    float: right;
+}

@@ -12,7 +12,7 @@
  * @param  {object} opts
  * opts.owner {view} 子页面所属视图
  * [opts.max] {int} 子页面并存上限，超过此上限将回收
- * opts.kclass {view} 子页面实例对应的视图类
+ * opts.klass {view} 子页面实例对应的视图类
  * [opts.transition] {string|function} 子页面切换效果，如果是字符串则会从
  * `Chassis.FX[transition]`中调用切换方法；如果是函数则直接调用改函数来处理切换。
  * 对于自定义页面切换函数将接收以下参数：
@@ -311,7 +311,7 @@ Chassis.mixin( SPM.prototype, Events, {
 		if ( !target ) {
 
 			// TODO: 某些数据可能不允许自动生成subview
-			subpage = new this.kclass( params || {}, owner );
+			subpage = new this.klass( params || {}, owner );
 			subpage.stamp = stamp;
 
 			owner.append( subpage );

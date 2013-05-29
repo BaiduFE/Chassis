@@ -14,7 +14,7 @@ $(document).ready(function() {
         this.spm = new Chassis.SubPageMgr({
           owner: this,
           max: 4,
-          kclass: SubViewTabContent,
+          klass: SubViewTabContent,
           dirFn: function() {}
         });
       }
@@ -27,7 +27,7 @@ $(document).ready(function() {
 
     equal( spm.owner, svt );
     equal( spm.max, 4 );
-    equal( spm.kclass, SubViewTabContent );
+    equal( spm.klass, SubViewTabContent );
     ok( Chassis.isFunction( spm.dirFn ) ); 
     ok( Chassis.isFunction( spm.dirFn ) );
     equal( spm.transition, 'slider' );
@@ -40,10 +40,10 @@ $(document).ready(function() {
       init: function() {
         this.spm = new Chassis.SubPageMgr( {
           owner: this,
-          kclass: SubViewTabContent
+          klass: SubViewTabContent
         } );
 
-        this.subpage = new this.spm.kclass;
+        this.subpage = new this.spm.klass;
         this.spm.register( this.subpage );
         this.spm.register( this.subpage );
       }
@@ -73,7 +73,7 @@ $(document).ready(function() {
       init: function() {
         this.spm = new Chassis.SubPageMgr({
           owner: this,
-          kclass: SubViewTabContent
+          klass: SubViewTabContent
         });
       }
     });
@@ -95,11 +95,11 @@ $(document).ready(function() {
       init: function() {
         this.spm = new Chassis.SubPageMgr({
           owner: this,
-          kclass: SubViewTabContent
+          klass: SubViewTabContent
         });
 
-        this.subpage1 = new this.spm.kclass;
-        this.subpage2 = new this.spm.kclass;
+        this.subpage1 = new this.spm.klass;
+        this.subpage2 = new this.spm.klass;
 
         this.spm.register( this.subpage1 );
         this.spm.register( this.subpage2 );
@@ -125,13 +125,13 @@ $(document).ready(function() {
         this.spm = new Chassis.SubPageMgr( {
           owner: this,
           max: 2,
-          kclass: SubViewTabContent
+          klass: SubViewTabContent
         } );
 
-        this.subpage1 = new this.spm.kclass;
-        this.subpage2 = new this.spm.kclass;
-        this.subpage3 = new this.spm.kclass;
-        this.subpage4 = new this.spm.kclass;
+        this.subpage1 = new this.spm.klass;
+        this.subpage2 = new this.spm.klass;
+        this.subpage3 = new this.spm.klass;
+        this.subpage4 = new this.spm.klass;
 
         this.spm.register( this.subpage1 );
         this.spm.register( this.subpage2 );
@@ -157,7 +157,7 @@ $(document).ready(function() {
     equal( spm.pagesList[ 0 ], svt.subpage3 );
     equal( spm.pagesList[ 1 ], svt.subpage4 );
 
-    var subpage5 = new spm.kclass;
+    var subpage5 = new spm.klass;
     spm.current = svt.subpage3;
 
     spm.register( subpage5 );
@@ -187,7 +187,7 @@ $(document).ready(function() {
       init: function( opts ) {
         this.spm = new Chassis.SubPageMgr( {
           owner: this,
-          kclass: PageBSubView
+          klass: PageBSubView
         } );
       }
     } );
@@ -229,7 +229,7 @@ $(document).ready(function() {
 
           this.spm = new Chassis.SubPageMgr( {
             owner: this,
-            kclass: PageBSubView,
+            klass: PageBSubView,
             transition: function( from, to, dir, transitionEnd ) {
               equal( from, me.spm.pagesList[ 0 ] );
               equal( to, me.spm.pagesList[ 1 ] );
@@ -269,7 +269,7 @@ $(document).ready(function() {
 
           this.spm = new Chassis.SubPageMgr( {
             owner: this,
-            kclass: PageBSubView,
+            klass: PageBSubView,
             dirFn: function( from, to ) {
               equal( from, me.spm.pagesList[ 0 ] );
               equal( to, me.spm.pagesList[ 1 ] );
@@ -313,7 +313,7 @@ $(document).ready(function() {
       init: function( opts ) {
         this.spm = new Chassis.SubPageMgr( {
           owner: this,
-          kclass: PageBSubView
+          klass: PageBSubView
         } );
       }
     } );

@@ -111,5 +111,5 @@ Chassis.PageView.info = Chassis.PageView.extend({
     }
 } );
 
-Chassis.history.start();
+Chassis.history.start({trigger:true});
 

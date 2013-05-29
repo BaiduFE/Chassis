@@ -129,10 +129,15 @@ Chassis.mixin( SPM.prototype, Events, {
 		var dir = -1,
 			fromPage = params.from,
 			toPage = params.to,
-			me = this;
+			me = this,
+			evt = {
+				from: from,
+				to: to,
+				params: params
+			};
 
 		// 派发事件
-		to.trigger( 'beforeswitchin', params );
+		to.trigger( 'beforeswitchin', evt );
 
 		to.$el.show();
 
@@ -157,7 +162,7 @@ Chassis.mixin( SPM.prototype, Events, {
 
 				me._setCurrent( to );
 
-				to.trigger( 'afterswtichin', params );
+				to.trigger( 'afterswitchin', evt );
 
 				// 子页面回收
 				me.recycle();
@@ -171,7 +176,7 @@ Chassis.mixin( SPM.prototype, Events, {
 
 			this._setCurrent( to );
 
-			to.trigger( 'afterswtichin', params );
+			to.trigger( 'afterswitchin', evt );
 
 			this.recycle();
 		}

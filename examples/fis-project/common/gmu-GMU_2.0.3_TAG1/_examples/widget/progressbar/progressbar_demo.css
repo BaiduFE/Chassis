@@ -1,0 +1,16 @@
+
+body {
+    background: #686868;
+}
+#progressbar {
+    margin:30px 50px;
+}
+
+#progressbar-2 {
+    height: 200px;
+    margin: 40px;
+}
+
+input {
+    margin-left:30px;
+}

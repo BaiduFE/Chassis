@@ -1,0 +1,118 @@
+/** add2desktop */
+.ui-add2desktop{
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    height: 85px;
+    width: 195px;
+    margin-left: -96px;
+    z-index: 99;
+}
+
+.ui-add2desktop-close{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 40px;
+    width: 40px;
+    z-index: 999;
+}
+
+.ui-add2desktop-close-btn{
+    position: absolute;
+    right: 10px;
+    top: 13px;
+    height: 3px;
+    width: 12px;
+    background: #fff;
+    color: #fff;
+    font: bold 3.25em/0 arial;
+    -webkit-transform: rotate(45deg);
+    border-radius: .02em;
+}
+
+.ui-add2desktop-close-btn:after{
+    content: ".";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 3px;
+    width: 12px;
+    overflow: hidden;
+    background: #fff;
+    -webkit-transform: rotate(90deg);
+    border-radius: .02em;
+}
+
+.ui-add2desktop-shadowbox{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: url(/static/common/lib/gmu/add2desktop/add2desktop_icon.png) no-repeat center top;
+    -webkit-background-size: 195px 150px;
+}
+
+.ui-add2desktop-text{
+    margin: 3px 0 0;
+    font-size: 13px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.ui-add2desktop-new,.ui-add2desktop-old{
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    margin: 2px 3px 0;
+    background-image: url(/static/common/lib/gmu/add2desktop/add2desktop_icon.png);
+    vertical-align: top;
+}
+
+.ui-add2desktop-old{
+    background-position:0 -100px;
+    -webkit-background-size: 195px 150px;
+}
+
+.ui-add2desktop-new{
+    background-position:0 -125px;
+    -webkit-background-size: 195px 150px;
+}
+
+.ui-add2desktop-content{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 172px;
+    padding: 10px 10px 11px 13px;
+    color: #fff;
+    font-size: 12px;
+    z-index: 2;
+}
+
+.ui-add2desktop-type{
+    float: left;
+    display: inline;
+
+}
+
+.ui-add2desktop-type img{
+    display: block;
+    height: 55px;
+    width: 55px;
+    overflow: hidden;
+    vertical-align: middle;
+    padding-right: 6px;
+}
+
+.ui-add2desktop-text{
+    padding-top: .25em;
+    line-height: 22px;
+}
+
+.ui-add2desktop-text img{
+    width: 1em;
+    padding: 0 .25em;
+}

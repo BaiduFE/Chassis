@@ -1,0 +1,59 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-tooltips-box {
+	position:absolute;
+	font-size:14px;
+	background: #ffffd9;
+	border:1px solid #d0b88c;
+	text-align:left;
+	z-index:0;
+    width:200px;
+}
+.ui-tooltips-content{
+ 	padding:14px 15px 13px 15px;
+}
+.ui-tooltips-arrow {
+	position:absolute;
+	width:21px;
+	height:11px;
+	display: block;
+	background:url(/static/common/lib/gmu/tooltips/ui_tooltips_arrow.png) no-repeat;
+	z-index:10;
+	position: absolute;
+}
+.ui-tooltips-box .bottom {
+    top:-11px;
+	left:0;
+    background-position:-11px 0;
+}
+.ui-tooltips-box .top {
+	left:0;
+    bottom:-11px;
+    background-position:-11px -32px;
+}
+.ui-tooltips-box .right {
+    top:0;
+	left:-11px;
+    width:11px;
+    height:21px;
+    background-position:0 -11px;
+}
+.ui-tooltips-box .left {
+	right:-11px;
+    top:0;
+    width:11px;
+    height:21px;
+    background-position:-32px -11px;
+}
+
+.ui-tooltips-close {
+	position:absolute;
+	right:5px;
+	top:5px;
+	width:16px;
+	height:16px;
+	cursor:pointer;
+	z-index:2;
+	color:#C9AB78;
+    background:url(/static/common/lib/gmu/tooltips/ui_tooltips_close.png) center center no-repeat;
+    background-size:50% 50%;
+}

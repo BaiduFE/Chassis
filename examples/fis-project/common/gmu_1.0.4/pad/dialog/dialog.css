@@ -1,0 +1,49 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-dialog{
+	overflow: hidden;
+	margin: 0 auto;
+	background: #f5f5f5;
+	z-index: 9999;
+	position:absolute;
+	display: none;
+	-webkit-box-shadow: 0px 1px 10px #bbbbbb;
+}
+
+.ui-dialog .ui-dialog-title{
+	height: 50px;
+	line-height: 50px;
+	font-size: 16px;
+	text-align: center;
+	background: #373737;
+	color: #fff;
+	font-weight: 700;
+	position: relative;
+}
+
+.ui-dialog .ui-dialog-close{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 30px;
+	height: 30px;
+	font-size: 20px;
+	line-height: 30px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.ui-dialog .ui-dialog-content{
+	padding: 20px 0;
+	position: relative;
+}
+
+/** mask */
+.ui-mask{
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #888;
+	opacity: 0.5;
+	display: none;
+	z-index: 9999;
+}

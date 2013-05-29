@@ -1,0 +1,16 @@
+.ui-input-mask{
+	position: relative;
+}
+
+.ui-input-mask input{
+	outline: none;
+}
+
+.ui-quickdelete-button{
+	background: url(/static/common/lib/gmu/quickdelete/delete.png) no-repeat;
+	-webkit-background-size: 100%;
+    -webkit-background-origin: content-box;
+	visibility: hidden;
+	position: absolute;
+	cursor: pointer;
+}

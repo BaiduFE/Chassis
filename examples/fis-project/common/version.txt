@@ -1,0 +1,4 @@
+zpeto(v1.0rc1) http://zeptojs.com
+backbone(0.9.10) https://github.com/documentcloud/backbone.git
+underscore(1.4.4) http://underscorejs.org
+iscroll(4.2.5) https://github.com/cubiq/iscroll.git

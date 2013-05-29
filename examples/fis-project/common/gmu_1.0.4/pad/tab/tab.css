@@ -1,0 +1,45 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-tab{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+.ui-tab .ui-tab-nav {
+    display: -webkit-box;
+    border: solid #d4d4d4;
+    border-width: 0 0 1px 1px;
+}
+
+.ui-tab .ui-tab-nav li {
+    display: -webkit-box;
+    border: solid #d4d4d4;
+    border-width: 1px 1px 0 0;
+}
+
+.ui-tab .ui-tab-nav li a {
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    text-decoration: none;
+    color: #4a4a4a;
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: #f4f4f4;
+}
+
+.ui-tab .ui-tab-nav li.cur a{
+    background-color: #ffffff;
+    margin-bottom: -1px;
+}
+
+.ui-tab .ui-tab-cont{
+    border: solid #d4d4d4;
+    border-width: 0 1px 1px 1px;
+    overflow: hidden;
+    -webkit-box-flex: 1;
+    width: 460px;
+}
+.ui-tab .ui-tab-cont .ui-tab-pannel{
+    width: 460px;
+}
+.ui-tab .ui-tab-contwrap{
+    -webkit-transform-origin: 0px 0px;
+    -webkit-transition: -webkit-transform 200ms;
+}

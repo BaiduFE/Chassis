@@ -1,0 +1,337 @@
+@import url("/static/common/lib/gmu/common/common.css")
+body {
+    font-family: arial, "华文细黑";
+}
+
+a {color: #00C;}
+
+/*
+* 搜索框
+*/
+.search {
+    padding: 17px 22px 19px;
+    background: whiteSmoke;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+.logo {
+    float: left;
+    width: 115px;
+    display: inline;
+    margin: 0 10px 9px 0;
+}
+
+.s-tab {
+    float: left;
+    font-size: 15px;
+    height: 36px;
+    margin: 8px 0 0 0;
+    color: #0000CC;
+}
+
+.s-tab a, .s-tab strong {
+    text-decoration: none;
+    float: left;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+    padding: 15px 12px 6px 12px;
+    display: block;
+    font-size: 16px;
+}
+
+.s-tab strong {
+    font-weight: bold;
+    color: #000000;
+}
+
+.news-type {
+    font-size: 18px;
+    height: 22px;
+}
+
+.news-type input, .news-type label {
+    float: left;
+}
+
+.news-type label {
+    padding: 2px 17px 0 5px;
+    font-size: 16px;
+    color: #000000;
+}
+
+/*
+* suggestion
+*/
+.suggestion-top, .suggestion-end {
+    position: relative;
+    font-size: 18px;
+    margin: 0 0 18px 0;
+}
+
+.footer-search {
+    padding: 30px 22px 0 22px;
+}
+
+.sug-top-inner, .sug-end-inner {
+    position: relative;
+    margin-right: 120px;
+    height: 38px;
+    line-height: 38px;
+    border: 1px solid #979797;
+    background: white;
+    box-shadow: inset 1px 1px 2px #CCC;
+    -webkit-box-shadow: inset 1px 1px 2px #CCC;
+}
+
+.search-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 119px;
+    height: 38px;
+    line-height: 38px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #323232;
+    border: 1px solid #989898;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    background: -webkit-gradient(linear, 1 0, 0 100%, from(#FBFBFB), to(#E7E7E7));
+}
+
+.input {
+    /*width: 90%;*/
+    height: 38px;
+    font-size: 18px;
+    color: black;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    outline: none;
+    text-indent: 10px;
+}
+
+/*
+* 用户栏
+*/
+.userbar {
+    position: absolute;
+    right: 17px;
+    top: -4px;
+    z-index: 100;
+    font-size: 12px;
+}
+
+.userbar span.div-line {
+    margin: 0 5px 0 0;
+    color: #CDCDCD;
+    border-right: 1px solid #CDCDCD;
+    width: 1px;
+    height: 10px;
+    line-height: 10px;
+    font-size: 10px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.userbar a {
+    padding: 5px;
+    text-decoration:none;
+    font-size:14px;
+}
+
+#user {
+    display: inline-block;
+}
+
+.ui-dropmenu-content {
+    width: 80px;
+}
+.ui-dropmenu-title {
+    margin-left:-8px;
+}
+
+.ui-dropmenu-content {
+    border: 0;
+    width: 106px;
+    padding: 0 6px 6px 6px;
+    -webkit-background-size: cover;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+}
+
+/*
+* 搜索条目
+*/
+.main {
+    padding: 12px 0 0;
+}
+
+.article {
+    padding: 12px 22px;
+    font-size: 15px;
+    width: 670px;
+    line-height: 1.5;
+}
+
+.article .highlight {
+    color: #CC0000;
+}
+
+.article .image {
+    float: left;
+}
+
+.article h3 {
+    color: #0000cc;
+    font-size: 18px;
+    display: inline;
+    line-height: 1.0;
+}
+
+.article .article-info {
+    font-size: 15px;
+    color: #2d2d2d;
+}
+
+.article .like-news {
+    color: #008000;
+}
+
+article.clearfix header, article.clearfix > div {
+    padding-left: 100px;
+}
+article.clearfix > div {
+    margin-top:2px;
+}
+
+article.clearfix > div.image {
+    padding: 0px 0 0;
+}
+
+.image img {
+    border: 1px solid #261cdc;
+}
+
+#pager .ui-pager {
+    text-align: left;
+    padding: 0 22px;
+    margin-bottom: 25px;
+}
+
+#pager a {
+    text-align: center;
+}
+
+/*
+* 相关搜索
+*/
+.other-search {
+    background: #eff2fa;
+    padding: 13px 22px 5px 22px;
+    font-size: 14px;
+}
+
+.other-search strong {
+    font-weight: bold;
+}
+
+.other-search p {
+    margin-top: 3px;
+    line-height: 33px;
+}
+
+.other-search a {
+    display:inline-block;
+    width:141px;
+}
+
+/*
+* 页脚
+*/
+footer {
+    padding: 33px 0 5px 0;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+footer .cp {
+    color: #7a77c8;
+}
+
+.version-type {
+    font-size: 14px;
+    padding: 11px 0;
+
+}
+
+.version-type strong, .version-type span.div-line, .version-type a {
+    font-weight: normal;
+    padding: 0 9px 0 11px;
+}
+
+.version-type span.div-line {
+    marign: 0 9px 0 9px;
+    color: #CDCDCD;
+    border-right: 1px solid #CDCDCD;
+    width: 1px;
+    height: 10px;
+    line-height: 10px;
+    font-size: 10px;
+    padding: 0;
+    overflow: hidden;
+}
+
+/**
+*中间 文章列表
+*/
+
+.ui-dropmenu-items li:last-child {
+    border-top: 1px solid #E1E1E1;
+}
+
+.ui-dropmenu-content-arrow {
+    background-image: none;
+}
+
+#pager {
+    margin: 24px 0 0 0;
+}
+
+#pager .ui-pager a, .ui-dropmenu-button {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+.ui-dropmenu-content .ui-dropmenu-items {
+    box-shadow: 1px 2px 3px #b1b1b1;
+}
+
+/*横屏*/
+@media screen and(orientation:landscape) {
+
+}
+
+/*竖屏*/
+@media screen and(orientation:portrait) {
+
+}
+
+/*pad1*/
+@media only screen and(-webkit-max-device-pixel-ratio: 1) {
+
+}
+
+/*pad3 all*/
+@media only screen and(-webkit-min-device-pixel-ratio: 2) {
+
+}
+
+/*pad3 竖屏*/
+@media screen and(orientation:portrait) and(-webkit-min-device-pixel-ratio: 2) {
+
+}

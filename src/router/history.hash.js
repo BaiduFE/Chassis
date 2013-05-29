@@ -60,9 +60,12 @@ History.Hash = History.extend({
         me._offHashChangeEvent();
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
+		if ( fragment.indexOf( '#' ) === 0 ) {
+			fragment = fragment.substring( 1 );
+		}
         
         me._setHash( fragment );
         

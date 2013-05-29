@@ -87,6 +87,40 @@ $(document).ready(function() {
 
   });
   
+  test("test navigate without arguments", 2, function() {
+    var Router,router;
+    stop();
+    
+    Chassis.PageView.index = Chassis.PageView.extend({
+        
+        init : function(){
+            delete Chassis.PageView.index;
+            ok(true);
+            Chassis.history.navigate( '',{trigger:false} );
+            Chassis.history.destroy();
+            start();
+
+        }
+    });
+    
+    Router = Chassis.Router.extend({
+        routes : {
+            'index/:id' : 'index'
+        },
+        
+        index : function(){
+            strictEqual( this.Request.id, '2');
+        }
+    });
+    
+    router = new Router();
+
+    Chassis.history.start();
+    
+    Chassis.history.navigate( 'index/2' );
+
+  });
+  
   test("test pageOrder when routes is array", 1, function() {
     var Router,router;
     stop();

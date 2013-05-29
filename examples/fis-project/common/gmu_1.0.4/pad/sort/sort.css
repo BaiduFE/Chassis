@@ -1,0 +1,87 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-sort {
+    padding:2px 0;
+    background:#f8f8f8;
+    border-bottom:1px solid #e5e5e5;
+    font-size:14px;
+}
+.sort-line {
+    position:relative;
+
+}
+.sort-line ul li.ui-selected {
+}
+.sort-list ul {
+    display:-webkit-box;
+    -webkit-box-orient: horizontal;
+    position:relative;
+    z-index:2;
+    padding:7.5px 0;
+    border-bottom:1px solid #ededed;
+}
+.sort-list-default ul {
+    margin:0;
+}
+.sort-list ul li {
+    line-height:32px;
+    cursor:pointer;
+    padding:0 14px;
+    text-align:center;
+    border-right:1px solid #e5e5e5;
+}
+.ui-sort .ui-animation {
+    padding:0 14px;
+    line-height:32px;
+    height:32px;
+    background:#f5f5f5;
+    display:inline-block;
+    position:absolute;
+    border:1px solid #d9d9d9;
+    top:6.5px;
+}
+.sort-list ul li:last-child {
+    border-right:none;
+}
+.sort-bar {
+    padding-left:22px;
+}
+.sort-bar .sort-list {
+    float:left;
+}
+.sort-bar .sort-list ul {
+    border:none;
+}
+.sort-list-button {
+    margin-top:12.5px;
+    float:right;
+    display:inline-block;
+    padding:0 15px;
+    height:20px;
+    border-left:1px solid #e5e5e5;
+    cursor:pointer;
+}
+.sort-bar span {
+    display:inline-block;
+    width:14.5px;
+    height:9px;
+    float:right;
+    margin-top:5px;
+}
+.sort-bar .sort-button {
+    background:url(/static/common/lib/gmu/sort/ui-sort-arrow.png) left -10px no-repeat;
+    -webkit-background-size:cover;
+}
+.sort-bar .open {
+    background:url(/static/common/lib/gmu/sort/ui-sort-arrow.png) left top no-repeat;
+    -webkit-background-size:cover;
+}
+
+.ui-sort .ui-animation {
+    padding:0;
+    -webkit-transition: all .5s ease-in-out ;
+}
+.ui-sort .sort-list-more {
+    padding:0 22px;
+    -webkit-transition: height .5s ease-in-out ;
+    overflow:hidden;
+}

@@ -1,0 +1,64 @@
+@import url("/static/common/lib/gmu/common/common.css")
+/* add screen icon begin */
+.ui-toscreen {
+	position: absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:60px;
+	background:#d7e7fa;
+	border-bottom:1px solid #bebec2;
+	margin-bottom:10px;
+	padding: 10px 0;
+}
+.ui-toscreen b {
+	font-weight:bold;
+}
+.ui-toscreen .icon{
+	float:left;
+	width:54px;
+	height:54px;
+	display: block;
+	border:2px solid #fff;
+	border-radius:12px;
+	-webkit-border-radius:12px;
+	-moz-border-radius: 12px;
+	margin:0 20px;
+	background: #ffffff url(/static/common/lib/gmu/toscreen/toscreen-icon.png) center center no-repeat;
+}
+.ui-toscreen  p{
+	float:left;
+	font-size:14px;
+	color:#445b84;
+	line-height: 30px;
+}
+.ui-toscreen .screenClose{
+	float:right;
+	width:40px;
+	height:40px;
+	margin:10px 23px 0 0;
+	line-height: 40px;
+	font-size:36px;
+	text-align:center;
+	color:#7d92b6;
+	font-family: Arial;
+	cursor: pointer;
+	display:block;
+}
+.ui-toscreen .add {
+    width:15px;
+    height:15px;
+    display:inline-block;
+    background:url(/static/common/lib/gmu/toscreen/toscreen-icon-add.png) center center no-repeat;
+    vertical-align:center;
+    margin:0 3px;
+}
+.ui-toscreen .add2 {
+    width:17px;
+    height:17px;
+    display:inline-block;
+    background:url(/static/common/lib/gmu/toscreen/toscreen-icon-addto.png) center center no-repeat;
+    vertical-align:center;
+    margin:0 3px;
+}
+/* add screen icon end*/

@@ -1,0 +1,273 @@
+@import url("/static/common/lib/gmu/common/common.css")
+/*覆盖dialog默认样式*/
+.ui-login-dialog {
+    overflow: hidden;
+    margin: 0 auto;
+    background: #ffffff;
+    z-index: 9999;
+    position: absolute;
+    display: none;
+    border: 1px solid #cccccc;
+    font-family: "微软雅黑" "黑体" ;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.ui-login-dialog .ui-dialog-title {
+    height: 48px;
+    line-height: 50px;
+    font-size: 20px;
+    text-align: center;
+    background: #fcfcfc;
+    color: #000000;
+    font-weight: 700;
+    position: relative;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.ui-login-dialog .ui-dialog-close {
+    position: absolute;
+    top: 0px;
+    right: 17px;
+    width: 19px;
+    height: 17px;
+    line-height: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #cccccc;
+    font-size:30px;
+    text-indent:100px;
+    padding: 15px;
+    background: url(/static/common/lib/gmu/login/delete.png) 15px 15px no-repeat;
+}
+.ui-login-dialog .ui-dialog-content {
+    padding-top: 15px;
+    position: relative;
+}
+
+.ui-login-dialog .ui-dialog-content .contentHtml {
+    height: auto;
+    min-height: 420px;
+}
+
+/** mask */
+.ui-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #7f7f7f;
+    opacity: 0.5;
+    display: none;
+    z-index: 9999;
+}
+
+/*覆盖dialog默认样式*/
+.ui-login-tab {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0 40px;
+}
+
+.ui-login-tab .ui-tab-nav {
+    display: -webkit-box;
+    border: solid #d4d4d4;
+    border-width: 0 0 1px 1px;
+}
+
+.ui-login-tab .ui-tab-nav li {
+    display: -webkit-box;
+    border: solid #d4d4d4;
+    border-width: 1px 1px 0 0;
+}
+
+.ui-login-tab .ui-tab-nav li a {
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    text-decoration: none;
+    color: #333333;
+    font-size: 14px;
+    padding: 10px 25px;
+    background-color: #f4f4f4;
+    font-size:16px;
+}
+
+.ui-login-tab .ui-tab-nav li.cur a {
+    background-color: #ffffff;
+    margin-bottom: -1px;
+    color: #333333;
+    font-weight: 700;
+}
+
+.ui-login-tab .ui-tab-cont {
+    overflow: hidden;
+    -webkit-box-flex: 1;
+    padding: 10px 0;
+}
+
+.ui-login-tab .ui-tab-contwrap {
+    -webkit-transform-origin: 0px 0px;
+    -webkit-transition: -webkit-transform 200ms;
+}
+
+/*覆盖passport login默认样式*/
+.pass_login_p_username, .pass_login_p_password,
+.pass_login_p_phoneNumber, .pass_login_p_verifycode {
+    display: -webkit-box;
+    padding-top: 25px;
+    position: relative;
+}
+
+.pass_login_input{
+    background-image:url(/static/common/lib/gmu/login/border.png);
+    background-repeat:no-repeat;
+}
+
+.pass_login_label_username, .pass_login_label_password,
+.pass_login_label_phoneNumber, .pass_login_label_verifycode {
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: end;
+    font-size: 14px;
+    width: 45px;
+    font-family:"微软雅黑" "黑体";
+    padding-right: 10px;
+}
+
+.pass_login_input_username, .pass_login_input_password,
+.pass_login_input_verifycode, .pass_login_input_phoneNumber {
+    width: 382px;
+    padding: 10px;
+    color: #cccccc;
+    font-size: 14px;
+    border: 1px solid #979797;
+    -webkit-box-shadow: 0px 1px 2px #eeeeee;
+    border-radius: 0;
+}
+
+.pass_login_err {
+    position: absolute;
+    top: 10px;
+    left: 56px;
+    font-size: 12px;
+    color: #cc0001;
+}
+
+.pass_login_label_rem {
+    font-size: 14px;
+    color: #666666;
+    padding-left: 10px;
+    font-family:"微软雅黑" "黑体";
+}
+
+.pass_login_p_des {
+    display: none;
+}
+
+.pass_login_input_submit {
+    background: -webkit-gradient(linear, left top, left bottom, from(#4c9ae7), to(#4892dc));
+    color: #ffffff;
+    font-size: 18px;
+    height: 42px;
+    width: 402px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    border-radius: 0;
+    border: 1px solid #4388cd;
+    font-weight: bold;
+    font-family:"微软雅黑" "黑体";
+    margin-left: 55px;
+}
+
+.pass_login_p_rem {
+    padding-top: 6px;
+    padding-bottom: 20px;
+    padding-left: 52px;
+}
+.pass_login_p_rem .pass_login_input_rem{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    border-radius: 0px;
+    border-color: #cbcbcb;
+}
+
+.pass_login_p_btn, .pass_login_p_img_verifycode {
+    position: relative;
+}
+
+.pass_login_a_fgtpwd, .pass_login_change_verifycode {
+    position: absolute;
+    top: -35px;
+    right: 0;
+    text-decoration: none;
+    color: #4444da;
+    font-size: 14px;
+    font-family:"微软雅黑" "黑体";
+}
+
+.pass_login_verifycode {
+    position: absolute;
+    left: 185px;
+    top: -42px;
+    width: 98px;
+    height: 39px;
+    border: 1px solid #bbbbbb;
+}
+
+.pass_login_change_verifycode {
+    left: 300px;
+    top: -30px;
+}
+
+.pass_login_input_verifycode {
+    width: 100px;
+}
+
+.login-reg {
+    padding-top: 30px;
+    text-align: center;
+    width:400px;
+    margin-left:56px;
+}
+
+.login-reg .login-reg-des {
+    font-size: 14px;
+    color: #666;
+
+}
+
+.login-reg .login-reg-link {
+    text-decoration: none;
+    font-size: 14px;
+}
+/*合作网站样式*/
+.login-authsite{
+    display: -webkit-box;
+    border-top: #e5e5e5 1px dotted;
+    border-bottom: #e5e5e5 1px dotted;
+    margin: 10px 40px 0 40px;
+    font-size: 14px;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+}
+.login-authsite .login-authsite-des{
+    color: #666666;
+}
+.login-authsite .bd-acc-list{
+    display: -webkit-box;
+    padding: 20px 0;
+}
+
+.login-authsite .bd-acc-list li img{
+    width: 16px;
+    height: 16px;
+}
+
+.login-authsite .bd-acc-list li.bd-acc-tsina, .login-authsite .bd-acc-list li.bd-acc-renren{
+    background: url(/static/common/lib/gmu/login/sina.png) no-repeat;
+    height: 16px;
+    padding-left: 20px;
+    color: #4444DA;
+    cursor: pointer;
+    width: 65px;
+    margin-left: 13px;
+}
+.login-authsite .bd-acc-list li.bd-acc-renren{
+    background-position: 0 -24px;
+}

@@ -1,0 +1,48 @@
+@-webkit-keyframes loading-anim {
+    0% {-webkit-transform: rotate(0);}
+    50% {-webkit-transform: rotate(180deg);}
+    100% {-webkit-transform: rotate(360deg);}
+}
+
+.global-loading{
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    display:-webkit-box;
+    -webkit-box-pack:start;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background-color:#FFF;
+    z-index:1000;
+}
+
+.global-loading-anim{
+    height:50px;
+    width:50px;
+    -webkit-animation: loading-anim 2s linear infinite;
+    background:url("../img/rotating.png") 0 0 no-repeat;
+    background-size: 50px 50px;
+}
+
+.global-loading-text{
+    margin-top:160px;
+    color: #888;
+    font: bold 16px/30px normal;
+}
+
+.global-loading-logo{
+    margin-top:120px;
+    height:66px;
+    width:66px;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background: url("../img/loading-logo-news.png") 0 0 no-repeat;
+    background-size: 65px 65px;
+}
+

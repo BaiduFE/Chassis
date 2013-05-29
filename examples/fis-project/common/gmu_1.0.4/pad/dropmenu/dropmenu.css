@@ -1,0 +1,80 @@
+@import url("/static/common/lib/gmu/common/common.css")
+.ui-dropmenu {
+	font-size: 14px;
+	width: 100px;
+    color:#3127de;
+}
+
+.ui-dropmenu-button {
+	height: 37px;
+	line-height: 37px;
+	text-align: center;
+	cursor: pointer;
+	position: relative;
+	border-radius: 2px;
+    padding:0 5px 0 0;
+}
+
+.ui-dropmenu-arrow {
+	position:  absolute;
+	top:  15px;
+	right: 10px;
+	width: 9px;
+	height: 6px;
+    background:url(/static/common/lib/gmu/dropmenu/blue-arrow.png) center center no-repeat;
+    -webkit-background-size:9px 6px;
+    background-size:9px 6px;
+}
+
+.ui-dropmenu-arrow-on {
+    -webkit-transform:rotate(180deg);
+}
+
+.ui-dropmenu-content {
+	width: 118px;
+	position: absolute;
+	border-radius: 2px;
+	-webkit-box-shadow:  2px 1px 3px #2b2b2b;
+}
+
+.ui-dropmenu-content-arrow {
+	position:  absolute;
+	top:  -8px;
+	width:  15px;
+	height:  8px;
+	background: url(/static/common/lib/gmu/dropmenu/arrow.png) no-repeat;
+	-webkit-background-size:  12px 8px;
+}
+
+.ui-dropmenu-content-arrowbottom {
+	background:  url(/static/common/lib/gmu/dropmenu/arrow_2.png) no-repeat;
+	-webkit-background-size:  12px 8px;
+}
+
+.ui-dropmenu-items {
+	border: 1px solid #d3d3d3;
+}
+
+.ui-dropmenu .horizontal {
+	width: 100%;
+}
+
+.ui-dropmenu .horizontal li {
+	float: left;
+}
+
+.ui-dropmenu-items li {
+	height: 36px;
+	line-height: 36px;
+	text-align: left;
+	cursor: pointer;
+    text-indent:22px;
+    text-align:left;
+	background: #fff;
+}
+.scrollBox {
+    border: 1px solid #d3d3d3;
+}
+.scrollBox  .ui-dropmenu-items {
+    border:none;
+}

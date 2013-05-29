@@ -423,7 +423,9 @@ Chassis.mixin( Router.prototype, Events, {
 
         me.trigger( 'routechange', {
             from: me.previousView,
-            to: me.currentView
+            to: me.currentView,
+            params: request,
+            views: this.views
         } );
 
         me.switchPage(

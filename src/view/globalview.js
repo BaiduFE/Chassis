@@ -27,20 +27,18 @@ var GlobalView = Chassis.GlobalView = View.GlobalView = View.extend({
      * 默认路由事件响应函数
      * @param params.from 起始页面视图
      * @param params.to 目标页面视图
-     * @param params.pageviews 页面视图列表，以action为索引
+     * @param params.views 页面视图列表，以action为索引
+     * @param params.params 路由中的参数
      */
     _onRouteChange: function( params ) {
-        var from = params.from,
-            to = params.to,
-            pageviews = params.pageviews;
-    
-
+        
         /**
          * 路由事件
          * @event routechange
          * @param {pageview} params.from 起始页面视图
          * @param {pageview} params.to 目标页面视图
-         * @param {object} params.pageviews 页面视图列表，以action为索引
+         * @param {object} params.views 页面视图列表，以action为索引
+         * @param {object} params.params 路由中的参数
          */
         this.trigger( 'routechange', Chassis.mixin( {}, params ) );
     },

@@ -344,4 +344,120 @@ $(document).ready(function() {
 
   } );
 
+  asyncTest( 'switch events on different pages', 10, function() {
+
+    var Router = Chassis.Router.extend( {
+      routes: [ 'pagea/:aid', 'pageb/:bid' ]
+    } );
+
+    var counter = 0;
+
+    Chassis.PageView[ 'pagea' ] = Chassis.PageView.extend( {} );
+
+    Chassis.PageView[ 'pageb' ] = Chassis.PageView.extend( {
+      id: 'pageb',
+      init: function( opts ) {
+        this.spm = new Chassis.SubPageMgr( {
+          owner: this,
+          klass: PageBSubView
+        } );
+      }
+    } );
+
+    var PageBSubView = Chassis.SubView.extend( {
+
+      onBeforeSwitchIn: function( e ) {
+
+        equal( e.from, null );
+        equal( e.to, this );
+        equal( e.params.from.action, 'pagea' );
+        equal( e.params.to.action, 'pageb' );
+        equal( e.params.params.bid, 2 );
+      },
+
+      onAfterSwitchIn: function( e ) {
+
+        equal( e.from, null );
+        equal( e.to, this );
+        equal( e.params.from.action, 'pagea' );
+        equal( e.params.to.action, 'pageb' );
+        equal( e.params.params.bid, 2 );
+
+        start();
+        Chassis.history.navigate( '' );
+        Chassis.history.destroy();
+      }
+    } );
+
+    var switchRouter = new Router();
+
+    Chassis.history.start();
+
+    Chassis.history.navigate( 'pagea/1' );
+
+    Chassis.history.navigate( 'pageb/2' );
+
+  } );
+
+  asyncTest( 'switch events on the same page', 10, function() {
+
+    var Router = Chassis.Router.extend( {
+      routes: [ 'pageb/:bid' ]
+    } );
+
+    var counter = 0;
+
+    Chassis.PageView[ 'pageb' ] = Chassis.PageView.extend( {
+      id: 'pageb',
+      init: function( opts ) {
+        this.spm = new Chassis.SubPageMgr( {
+          owner: this,
+          klass: PageBSubView
+        } );
+      }
+    } );
+
+    var PageBSubView = Chassis.SubView.extend( {
+
+      onBeforeSwitchIn: function( e ) {
+
+        if ( e.from ) {
+
+          ok( e.from instanceof PageBSubView  );
+          equal( e.to, this );
+          equal( e.params.from, e.params.to );
+          equal( e.params.from.action, 'pageb' );
+          equal( e.params.params.bid, 2 );
+
+        }
+      },
+
+      onAfterSwitchIn: function( e ) {
+
+        if ( e.from ) {
+
+          ok( e.from instanceof PageBSubView  );
+          equal( e.to, this );
+          equal( e.params.from, e.params.to );
+          equal( e.params.from.action, 'pageb' );
+          equal( e.params.params.bid, 2 );
+
+          start();
+          Chassis.history.navigate( '' );
+          Chassis.history.destroy();
+          
+        }
+      }
+    } );
+
+    var switchRouter = new Router();
+
+    Chassis.history.start();
+
+    Chassis.history.navigate( 'pageb/1' );
+
+    Chassis.history.navigate( 'pageb/2' );
+
+  } );
+
 });

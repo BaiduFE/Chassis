@@ -228,8 +228,12 @@ Chassis.mixin( SPM.prototype, Events, {
 	 */
 	_boundToView: function() {
 
-		this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
-		this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+		var listenTarget = this.owner.root || this.owner;
+
+		// 监听PageView的beforepagein和afterpagein事件
+		this.listenTo( listenTarget, 'beforepagein', this._beforePageIn );
+		this.listenTo( listenTarget, 'afterpagein', this._afterPageIn );
+		
 		this.listenTo( this.owner, 'beforedestroy', this._destroy );
 
 	},

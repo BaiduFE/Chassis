@@ -464,10 +464,10 @@ $(document).ready(function() {
 
   asyncTest('page change events', 4, function(){
     var router = new Chassis.Router( {
-      routes: [ 'list/:id' ]
+      routes: [ 'list1/:id' ]
     } );
 
-    Chassis.PageView['list'] = Chassis.PageView.extend( {
+    Chassis.PageView['list1'] = Chassis.PageView.extend( {
       onBeforePageIn: function( opts ) {
         // ok(!opts.from);
         strictEqual(opts.to, this);
@@ -485,7 +485,46 @@ $(document).ready(function() {
     } );
 
     Chassis.history.start();
-    Chassis.history.navigate( 'list/123', { trigger: true } );
+    Chassis.history.navigate( 'list1/123' );
+
+  });
+
+  asyncTest('page change events on subview', 2, function(){
+    var router = new Chassis.Router( {
+      routes: [ 'list2/:id' ]
+    } );
+
+    Chassis.PageView['list2'] = Chassis.PageView.extend( {
+      init: function( opts ) {
+        this.append( new SubView1( opts, this ) );
+      }
+    } );
+
+    var SubView1 = Chassis.SubView.extend( {
+
+      init: function ( opts ) {
+        this.append( new SubView2( opts, this ) );
+      }
+    } );
+
+    var SubView2 = Chassis.SubView.extend( {
+
+      onBeforePageIn: function( e ) {
+        ok( true );
+      },
+
+      onAfterPageIn: function( e ) {
+        ok( true );
+
+        start();
+        Chassis.history.navigate( '' );
+        Chassis.history.destroy();
+
+      }
+    } );
+
+    Chassis.history.start();
+    Chassis.history.navigate( 'list2/123' );
 
   });
 

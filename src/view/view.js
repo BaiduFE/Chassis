@@ -416,4 +416,27 @@ Chassis.mixin( View.prototype, Events, {
 	}
 } );
 
+// 引入view.loading.js后会在view的原型增加以下方法
+
+/**
+ * 显示页面Loading
+ * @method showLoading
+ */
+
+/**
+ * 隐藏页面Loading
+ * @method hideLoading
+ */
+
+/**
+ * 显示全局Loading
+ * @method showGLoading
+ */
+
+/**
+ * 隐藏全局Loading
+ * @method hideGLoading
+ */
+
+
 View.extend = Chassis.extend;

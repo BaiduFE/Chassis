@@ -93,6 +93,19 @@ module.exports = function(grunt) {
           ]
         }
       }
+    },
+
+    yuidoc: {
+      compile: {
+        name: '<%= pkg.name %>',
+        description: '<%= pkg.description %>',
+        version: '<%= pkg.version %>',
+        url: '<%= pkg.homepage %>',
+        options: {
+          paths: 'build/',
+          outdir: 'docs/api/'
+        }
+      }
     }
 
   });
@@ -108,7 +121,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-qunit');
 
+  grunt.loadNpmTasks('grunt-contrib-yuidoc');
+
   // Default task(s).
-  grunt.registerTask( 'default', [ 'jsbint', 'concat', 'qunit', 'uglify' ] );
+  grunt.registerTask( 'default', [ 'jsbint', 'concat', 'qunit', 'uglify', 'yuidoc' ] );
 
 };

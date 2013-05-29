@@ -53,6 +53,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 设置Loading元素，可以是已经存在元素的选择符或HTML结构。
 			 * @method setup
+			 * @static
 			 * @param {mixed} el
 			 */
 			setup: setup,
@@ -60,6 +61,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 显示全局Loading
 			 * @method show
+			 * @static
 			 */
 			show: function() {
 				this.$el.show();
@@ -68,6 +70,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 隐藏全局Loading
 			 * @method hide
+			 * @static
 			 */
 			hide: function() {
 				this.$el.hide();
@@ -84,6 +87,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 设置Loading元素，可以是已经存在元素的选择符或HTML结构。
 			 * @method setup
+			 * @static
 			 * @param {mixed} el
 			 */
 			setup: setup,
@@ -91,6 +95,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 将Loading元素插入View中并显示（如果不指定View则直接显示）
 			 * @method show
+			 * @static
 			 * @param  {View} [view]
 			 */
 			show: function( view ) {
@@ -108,6 +113,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 隐藏Loading
 			 * @method hide
+			 * @static
 			 */
 			hide: function() {
 
@@ -116,6 +122,11 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			}
 		},
 
+		/**
+		 * 将全局方法添加到view中作为原型方法。
+		 * @method mixToView
+		 * @static
+		 */
 		mixToView: function() {
 
 			var GL = Loading.Global,

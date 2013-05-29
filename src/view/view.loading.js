@@ -7,7 +7,7 @@
  * @class Loading
  * @namespace View
  */
-var Loading = View.Loading = (function() {
+var Loading = View.Loading = Chassis.Loading = (function() {
 
 	function isExistedDom( el ) {
 		return !!Chassis.$( el )[ 0 ].parentNode;
@@ -22,6 +22,26 @@ var Loading = View.Loading = (function() {
 	}
 
 	return {
+
+		/**
+		 * 设置全局以及页面Loading所对应的元素
+		 * @param  {mixed} globalEl 全局Loading元素
+		 * @param  {mixed} [viewEl] 页面Loading元素，如果省略则`viewEl=globalEl`
+		 */
+		setup: function( globalEl, viewEl ) {
+			var argLen = arguments.length;
+
+			if ( !argLen ) {
+				return;
+			}
+
+			if ( argLen === 1 ) {
+				viewEl = globalEl;
+			}
+
+			Loading.Global.setup( globalEl );
+			Loading.View.setup( viewEl );
+		},
 
 		/**
 		 * 全局Loading
@@ -94,6 +114,33 @@ var Loading = View.Loading = (function() {
 				Loading.Global.hide();
 				this.$el.remove();
 			}
+		},
+
+		mixToView: function() {
+
+			var GL = Loading.Global,
+				VL = Loading.View;
+
+			Chassis.mixin( Chassis.View.prototype, {
+
+				showLoading: function() {
+					VL.show( this );
+				},
+
+				hideLoading: function() {
+					VL.hide();
+				},
+
+				showGLoading: function() {
+					GL.show();
+				},
+
+				hideGLoading: function() {
+					GL.hide();
+				}
+			} );
 		}
 	};
 })();
+
+Loading.mixToView();

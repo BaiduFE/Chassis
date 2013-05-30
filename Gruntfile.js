@@ -89,8 +89,17 @@ module.exports = function(grunt) {
       all: {
         options: {
           urls: [
-            'http://www.chassis.com/test/index.html'
+            'http://localhost:8000/index.html'
           ]
+        }
+      }
+    },
+
+    connect: {
+      server: {
+        options: {
+          port: 8000,
+          base: '.'
         }
       }
     },
@@ -121,9 +130,11 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-qunit');
 
+  grunt.loadNpmTasks('grunt-contrib-connect');
+
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
   // Default task(s).
-  grunt.registerTask( 'default', [ 'jsbint', 'concat', 'qunit', 'uglify', 'yuidoc' ] );
+  grunt.registerTask( 'default', [ 'jsbint', 'concat', 'connect', 'qunit', 'uglify', 'yuidoc' ] );
 
 };

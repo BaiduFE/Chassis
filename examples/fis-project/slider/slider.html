@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>webapp-2.0</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <link rel="apple-touch-icon-precomposed" href="http://m.baidu.com/static/news/webapp_114.png" />
+    <link rel="stylesheet" type="text/css" href="./css/rocket.css" />
+    <link id="statLink" rel="stylesheet" />
+</head>
+<body>
+    <div id="wrapper" class="news">
+<!--html snippets-->
+/*{fis-inline file="./tpl/globalloading.tpl.html"}*/ 
+/*{fis-inline file="./tpl/pageloading.tpl.html"}*/ 
+
+
+<!--global view-->
+/*{fis-inline file="./globalview/sidenav/html/sidenav.html"}*/ 
+/*{fis-inline file="./globalview/orientationrestrict/html/orientationrestrict.html"}*/ 
+
+
+<!--page view-->
+/*{fis-inline file="./page/outline/html/outline.html"}*/ 
+/*{fis-inline file="./page/slide/html/slide.html"}*/ 
+
+
+    </div>
+
+    <script>
+        F.load(['common_lib', 'common_chassis', 'slider_app'], function(){
+            rocket.init();
+        }); 
+    </script>
+
+<!--front template-->
+/*{fis-inline file="./page/outline/tpl/outline.tpl.html"}*/ 
+/*{fis-inline file="./page/slide/tpl/slide.tpl.html"}*/ 
+/*{fis-inline file="./globalview/sidenav/tpl/sidenav.tpl.html"}*/ 
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+/*全局视图id，以_globalview为后缀*/
+#sidenav_globalview{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    bottom:2px;
+    left:2px;
+    width:40px;
+    z-index:2000;
+    overflow:hidden;
+    border-radius:2px;
+
+    /*最低高度，确保即使没内容，loading也可以展示，同时能遮住下方内容*/
+    /*min-height:600px;*/
+
+    /*阻止文本选中*/
+    -webkit-user-select:none;
+    -moz-user-select:none;
+
+    background:rgba(0, 0, 0, 0.3);
+    border-right:2px inset #aaa;
+}
+
+.sidenav-globalview-btn-info,
+.sidenav-globalview-btn-leave,
+.sidenav-globalview-btn-relayout,
+.sidenav-globalview-btn-up,
+.sidenav-globalview-btn-down,
+.sidenav-globalview-btn-next,
+.sidenav-globalview-btn-prev,
+.sidenav-globalview-btn-increasefont,
+.sidenav-globalview-btn-decreasefont,
+.sidenav-globalview-btn-increaseimage,
+.sidenav-globalview-btn-decreaseimage,
+.sidenav-globalview-btn-shutdown{
+    display:block;
+    height:40px;
+    border:1px outset #fff;
+    border-width:0 0 1px;
+    text-align:center;
+    font:normal 18px/40px normal;
+    color:#fff;
+    cursor:pointer;
+}
+
+.sidenav-globalview-btn-info{
+    background:url(../../../img/info.png) no-repeat center center;;
+    background-size:30px 30px;
+}
+
+.sidenav-globalview-btn-leave{
+    background:url(../../../img/leave.png) no-repeat center center;;
+    background-size:30px 30px;
+}
+
+.sidenav-globalview-btn-shutdown{
+    background:url(../../../img/shutdown.png) no-repeat center center;;
+    background-size:30px 30px;
+}
+
+.sidenav-globalview-btn-relayout{
+    background:url(../../../img/relayout.png) no-repeat center center;;
+    background-size:20px 20px;
+}
+
+.sidenav-globalview-btn-next{
+    background:url(../../../img/next.png) no-repeat center center;;
+    background-size:25px 25px;
+}
+
+.sidenav-globalview-btn-prev{
+    background:url(../../../img/prev.png) no-repeat center center;;
+    background-size:25px 25px;
+}
+
+.sidenav-globalview-btn-up{
+    background:url(../../../img/up.png) no-repeat center center;;
+    background-size:25px 25px;
+}
+
+.sidenav-globalview-btn-down{
+    background:url(../../../img/down.png) no-repeat center center;;
+    background-size:25px 25px;
+}
+
+.sidenav-globalview-btn-increasefont{
+    background:url(../../../img/font_inc.png) no-repeat center center;;
+    background-size:30px 30px;
+}
+
+.sidenav-globalview-btn-decreasefont{
+    background:url(../../../img/font_dec.png) no-repeat center center;;
+    background-size:30px 30px;
+}
+
+.sidenav-globalview-btn-increaseimage{
+    background:url(../../../img/image_inc.png) no-repeat center center;;
+    background-size:34px 34px;
+}
+
+.sidenav-globalview-btn-decreaseimage{
+    background:url(../../../img/image_dec.png) no-repeat center center;;
+    background-size:34px 34px;
+}

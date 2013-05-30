@@ -1,0 +1,19 @@
+#wrapper{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+/*global*/
+@import url("./globalloading.css")
+@import url("./pageloading.css")
+
+/*globalview*/
+@import url("../globalview/sidenav/css/sidenav.css")
+@import url("../globalview/orientationrestrict/css/orientationrestrict.css")
+
+/*page*/
+@import url("../page/outline/css/outline.css")
+@import url("../page/slide/css/slide.css")

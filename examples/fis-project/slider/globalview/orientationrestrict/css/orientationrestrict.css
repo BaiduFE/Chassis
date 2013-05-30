@@ -1,0 +1,38 @@
+/*全局视图id，以_globalview为后缀*/
+#orientationrestrict_globalview{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    z-index:3000;
+
+    /*最低高度，确保即使没内容，loading也可以展示，同时能遮住下方内容*/
+    /*min-height:600px;*/
+
+    /*阻止文本选中*/
+    -webkit-user-select:none;
+    -moz-user-select:none;
+
+    background:#000;
+}
+
+#orientationrestrict_globalview_content{
+    height:100%;
+    width:100%;
+
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+
+    color:#fff;
+    font:bold 50px/100px normal;
+    text-align:center;
+}

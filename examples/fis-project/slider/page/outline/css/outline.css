@@ -1,0 +1,205 @@
+/*页面视图id，与action同名，以_page为后缀*/
+#outline_page{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    /*最低高度，确保即使没内容，loading也可以展示，同时能遮住下方内容*/
+    min-height:600px;
+
+    /*阻止文本选中*/
+    -webkit-user-select:none;
+    -moz-user-select:none;
+}
+
+#outline_page_header{}
+
+#outline_page_content{
+    /*作为绝对定位的loading样式的容器，需要使用relative定位*/
+    position:relative;
+    height:100%;
+    /*覆盖markdown-wrapper*/
+    margin:0;
+    /*防止tile把容器撑开*/
+    overflow:hidden;
+    background:url(../img/bg_2.jpg) repeat 0 0;
+}
+
+#outline_page_content *{
+    -webkit-transform:translateZ(0);
+}
+
+.outline-page-content-relayoutbtn{
+    position:absolute;
+    left:20px;
+    top:20px;
+    z-index:10000;
+    cursor:pointer;
+}
+
+.outline-page-content-tile{
+    position:absolute;
+    width:220px;
+    height:160px;
+    padding:5px;
+    border:1px inset #bbb;
+    background:#eee;
+    border-radius:6px;
+}
+
+.outline-page-content-tile-content{
+    position:relative;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+.outline-page-content-tile h2{
+    border-left:10px solid #F0A22A;
+    padding:5px;
+    font:bold 18px/30px normal;
+}
+
+.outline-page-content-tile p{
+    font:bold 14px/20px normal;
+}
+
+.outline-page-content-tile-mask{
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    cursor:move;
+    text-align:left;
+    color:#fff;
+    background:rgba(0,0,0,0.3) url(../img/half-transparent-bg.png) repeat-x 0 bottom;
+    background-size:90px 30px;
+    font:bold 80px/200px normal;
+}
+
+.outline-page-content-tile-gobtn{
+    position:absolute;
+    width:25px;
+    height:25px;
+    top:-15px;
+    right:-15px;
+    cursor:pointer;
+    border-radius:5px;
+    background:rgba(94,181,226,0.5) url(../../../img/bg_arrows.png) no-repeat -25px 0;
+    background:rgba(0,0,0,0.3) url(../../../img/bg_arrows.png) no-repeat -25px 0;
+    background-size:50px 50px;
+}
+
+/**
+ * markdown style
+ */
+.markdown-wrapper{
+    margin-top:18px;
+    padding:0 5px;
+}
+
+.markdown-wrapper h1{
+    margin:10px 0;
+    font:bold 26px/30px normal;
+}
+
+.markdown-wrapper h2{
+    margin:8px 0;
+    font:bold 22px/26px normal;
+}
+
+.markdown-wrapper h3{
+    margin:6px 0;
+    font:bold 18px/22px normal;
+}
+
+.markdown-wrapper h4{
+    margin:4px 0;
+    font:bold 14px/18px normal;
+}
+
+.markdown-wrapper a{
+    background:#6bfafa;
+    text-decoration:none;
+    color:#f00;
+}
+
+.markdown-wrapper em{
+    background:#F7CC27;
+    text-decoration:none;
+}
+
+.markdown-docinfo{
+    text-align:right;
+}
+
+.markdown-docinfo h1{
+    text-align:center; 
+}
+
+.markdown-docinfo span{
+    margin:0 5px;
+    color:#888; 
+    font:normal 14px/18px normal;
+}
+
+.markdown-paragraph{
+    margin-top:5px;
+    padding-left:5px;
+    text-indent:28px;
+    font:normal 14px/22px normal;
+}
+
+.markdown-ul{
+    margin-left:20px;
+    margin-top:5px;
+    padding-left:5px;
+    list-style:square outside none;
+    font:normal 14px/22px normal;
+}
+
+.markdown-ol{
+    margin-left:20px;
+    margin-top:5px;
+    padding-left:5px;
+    list-style:decimal outside none;
+    font:normal 14px/22px normal;
+}
+
+.markdown-codeblock{
+    margin:8px 0;
+    padding-left:5px;
+    border:1px solid #bbb;
+    border-radius:4px;
+    background:#eee;
+    font:italic 12px/20px Courier;
+}
+
+.markdown-codeblock span{
+    display:block;
+    overflow:hidden;
+}
+
+.markdown-imagewrapper{
+    margin:8px 0;
+    text-align:center;
+}
+
+.markdown-imagecaption{
+    text-align:center;
+    font:normal 14px/22px normal;
+}
+
+.markdown-imagewrapper img{
+    max-width:100%;
+}
+

@@ -1,0 +1,98 @@
+{
+
+"content": [
+    {
+        "title": "optimized index page"
+        ,"url": "#indexoptimized"
+        ,"icon": ""
+        ,"desc": [ 
+            "复杂subview tree创建，父view render后，再进行子view的setup"
+            ,"GMU2 button控件"
+            ,"事件中心用于自定义事件的注册和派发"
+        ]
+    }
+
+    ,{
+        "title": "simple index page"
+        ,"url": "#"
+        ,"icon": ""
+        ,"desc": [ 
+            "简单subview tree"
+        ]
+    }
+
+    ,{
+        "title": "how to ... ?"
+        ,"url": "#howtoindex"
+        ,"icon": ""
+        ,"desc": [ 
+            "框架概述"
+            ,"目录规范、编码和命名规范"
+            ,"事件中心和模块解耦"
+            ,"MVC分解和分而治之"
+            ,"共享模型"
+            ,"如何创建webapp页面"
+            ,"其他"
+        ]
+    }
+
+    ,{
+        "title": "zaker demo"
+        ,"url": "#navzaker"
+        ,"icon": ""
+        ,"desc": [ 
+            "多页横向切换，类zaker磁帖页"
+            ,"使用多栏技术模拟多页切换，通过滑动进行动画切换"
+            ,"fade动画"
+        ]
+    }
+
+    ,{
+        "title": "list page demo: zaker-like"
+        ,"url": "#listzaker/autonews"
+        ,"icon": ""
+        ,"desc": [ 
+            "支持多栏显示，规整内容自动跨栏排列（新思路、新技巧：展现与数据提供）"
+            ,"多栏之间通过滑动进行动画切换"
+            ,"支持subpage及回收"
+            ,"slide动画"
+        ]
+    }
+
+    ,{
+        "title": "list/detail page demo A: raw"
+        ,"url": "#list/focus"
+        ,"icon": ""
+        ,"desc": [ 
+            "raw scroll (iOS 5+)，非GMU"
+            ,"subpage不回收"
+            ,"页面slide切换"
+        ]
+    }
+
+    ,{
+        "title": "list/detail page demo B: gc"
+        ,"url": "#listwithgc/focus"
+        ,"icon": ""
+        ,"desc": [ 
+            "subpage iScroll，非GMU"
+            ,"subpage回收机制，可配置：this.MAX_SUBPAGES"
+            ,"页面fade-in切换"
+        ]
+    }
+
+    ,{
+        "title": "list/detail page demo C: GMU2"
+        ,"url": "#listgmu/focus"
+        ,"icon": ""
+        ,"desc": [ 
+            "subpage使用iScroll(GMU2)的一种较通用方式，有别于GMU1：创建、刷新、与回收机制配合"
+            ,"pullup to load more"
+            ,"subpage回收机制，可配置"
+            ,"页面slide切换"
+        ]
+    }
+
+]
+
+}

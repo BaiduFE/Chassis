@@ -1,0 +1,21 @@
+## 创建一个简单页面
+1. 按规范创建目录结构和空文件
+2. 按规范填充文件内容：html，css，js，tpl等
+3. 加入项目包含文件中：修改app.css, app.html
+4. 添加路由配置：routes，pageOrder， pageTransition，action entrypoint
+
+## 创建子页面
+1. html结构、css类名
+2. 父视图创建：init中创建第一个子页面，onpagebeforechange中按需创建子页面。并调用子页面管理回收API：registerSubpage, getSubpage, setCurrentSubpage, recycleSubpage等
+3. 创建子视图：用className而非el创建，必须完整提供unregisterEvents，必要时还需重写destroy方法，使用subpagebeforechagne而非pagebeforechange事件
+4. 完善viewtree的创建
+
+## 创建multi-column页面
+1. 按规范创建目录结构和空文件
+2. html结构、css
+3. pageview类，修改app.css, app.html
+4. 添加路由配置
+5. 调试html结构、css，使用overflow:scroll与-webkit-column-width等在PC上调试效果
+6. 添加subview类，主要是swipeLeft和swipeRight
+7. 必要的话，添加model或collection类，更新subview使内容数据化，通过配置模板，使展现更灵活
+8. 配置events，添加其他事件处理函数，使页面功能完善

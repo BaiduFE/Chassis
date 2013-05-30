@@ -1,0 +1,94 @@
+<script type="text/template" id="template_slide_news">
+
+<% if(type == 'cover'){ %>
+
+<% rocket.$.each(section, function(index,item){ %>
+
+    <div class="markdown-slidewrapper">
+        <!--div class="markdown-slide-navigator">
+            <div class="markdown-slide-navigator-left">prev</div>
+            <div class="markdown-slide-navigator-right">next</div>
+        </div-->
+        <div class="markdown-slide-cover">
+
+    <% rocket.$.each(item.content, function(index1,item1){ %>
+        <% if(0 == index1){%>
+        <h2 class="markdown-slide-cover-title"><%- item1 %></h2>
+        <% } else if(1 == index1){%>
+        <span class="markdown-slide-cover-author"><%- item1 %></span>
+        <% } else if(2 == index1){%>
+        <span class="markdown-slide-cover-date"><%- item1 %></span>
+        <% } %>
+    <% }); %>
+
+        </div>
+    </div>
+
+<% }); %>
+
+
+<% } else { %>
+
+
+    <div class="markdown-slidewrapper">
+        <!--div class="markdown-slide-navigator">
+            <div class="markdown-slide-navigator-left">prev</div>
+            <div class="markdown-slide-navigator-right">next</div>
+        </div-->
+        <div class="markdown-slide-main">
+
+<% rocket.$.each(section, function(index,item){ %>
+
+<% if( 'code' == item.type ){ %>
+    <p class="markdown-slide-codeblock">
+    <% rocket.$.each(item.content, function(index1,item1){ %>
+        <span><%= slider.helper.escapeMarkdownText(item.type, item1) %></span>
+    <% }); %>
+    </p>
+
+<% } else if( 'paragraph' == item.type){ %>
+    <p class="markdown-slide-paragraph">
+    <%= slider.helper.escapeMarkdownText(item.type, item.content) %>
+    </p>
+
+<% } else if( 'headline' == item.type){ %>
+    <h<%= item.level %> <% if(item.level == 2){ %>class="markdown-slide-title"<% } %>>
+    <%- item.content %>
+    </h<%= item.level %>>
+
+<% } else if( 'ul' == item.type){ %>
+    <ul class="markdown-slide-ul">
+    <% rocket.$.each(item.content, function(index1,item1){ %>
+        <li>
+    <%= slider.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ul>
+
+<% } else if( 'ol' == item.type){ %>
+    <ol class="markdown-slide-ol">
+    <% rocket.$.each(item.content, function(index1,item1){ %>
+        <li>
+    <%= slider.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ol>
+
+<% } else if( 'image' == item.type){ %>
+    <p class="markdown-slide-imagewrapper">
+        <img src="<%= item.url %>"
+            alt="<%= item.alt %>"
+            title="<%= item.title %>"
+            >
+        <p class="markdown-slide-imagecaption">图： <%= item.title %></p>
+    </p>
+
+<% } %>
+
+<% }); %>
+    </div>
+</div>
+<!--@todo: add emphasis-->
+
+<% } %>
+</script>

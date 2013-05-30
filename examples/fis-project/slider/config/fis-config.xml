@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project basedir=".." productname="vs" modulename="slider" framework="webapp-1.3.6">
+    <request>
+        <urlmap match="/^\/news$/" rewrite="data/news.php">
+            <get param="tn" match="/[a-zA-Z0-9]+/"/>
+        </urlmap>
+        <urlmap match="/^\/index$/" 
+            rewrite="data/index.json" 
+            header="Content-Type:text/javascript; charset=UTF-8"/>
+        <urlmap match="/^\/articles\/get_article.php$/" 
+            rewrite="data/get_article.php" 
+            header="Content-Type:text/javascript; charset=UTF-8"/>
+        <urlmap match="/^\/articles\/list_articles.php$/" 
+            rewrite="data/list_articles.php" 
+            header="Content-Type:text/javascript; charset=UTF-8"/>
+    </request>
+    
+    <define name="release" value="../release"/>
+    
+    <setting>
+		<smarty left_delimiter="{@" right_delimiter="@}"/>
+
+        <!--静态文件压缩-->
+        <CompressSyntax enable="false"/>
+        <JsCompressSyntax enable="true" debug_enable="false"/>
+
+        <!--css压缩-->
+        <CssCompressSyntax enable="false" yui_version="2.4.2" debug_enable="false"/>
+
+        <Base64Syntax limit="1024" enable="false"/>
+
+        <!-- inline 使用内嵌方式加入loader脚本 -->
+        <AutoLoadSyntax enable="true" inline="true"/>
+
+        <!--libs>
+            <gmu version="1.0.4" type="webapp"/>
+        </libs-->
+
+        <!--SpeedMonitorSyntax enable="true" type="app"/-->
+    </setting>
+        
+    
+    <merge>
+        <app>
+            <!-- app -->
+            <import>rocket-chassis-bridge.js</import>
+			<import>slider.helper.js</import>
+            <import>rocket.router.slider.js</import>
+            <import>rocket.init.js</import>
+
+            <!-- global view -->
+            <import>/globalview/sidenav/*.js</import>
+            <import>/globalview/orientationrestrict/*.js</import>
+
+            <!-- page -->
+            <import>/page/outline/*.js</import>
+            <import>/page/slide/*.js</import>
+
+        </app>
+
+    </merge>
+
+    <task name="refresh_manifest">
+        <delete dir="./output"/>
+        <manifestDateStamp/>
+    </task>
+
+    <build name="build" outputdir="./output" depends="refresh_manifest" />
+
+</project>

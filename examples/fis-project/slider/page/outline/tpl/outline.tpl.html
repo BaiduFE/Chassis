@@ -1,0 +1,74 @@
+<script type="text/template" id="template_outline_section">
+
+<div class="outline-page-content-tile-content">
+
+<% rocket.$.each(sectionData, function(index,item){ %>
+
+<% if( 'code' == item.type ){ %>
+    <p class="markdown-codeblock">
+    <% rocket.$.each(item.content, function(index1,item1){ %>
+        <span><%= slider.helper.escapeMarkdownText(item.type, item1) %></span>
+    <% }); %>
+    </p>
+
+<% } else if( 'docinfo' == item.type){ %>
+    <div class="markdown-docinfo">
+    <% rocket.$.each(item.content, function(index1,item1){ %>
+        <% if(0 == index1){%>
+        <h1><%- item1 %></h1>
+        <% } else if(3 > index1){%>
+        <span><%- item1 %></span>
+        <% } %>
+    <% }); %>
+    </div>
+
+<% } else if( 'paragraph' == item.type){ %>
+    <p class="markdown-paragraph">
+    <%= slider.helper.escapeMarkdownText(item.type, item.content) %>
+    </p>
+
+<% } else if( 'headline' == item.type){ %>
+    <h<%= item.level %>>
+    <%- item.content %>
+    </h<%= item.level %>>
+
+<% } else if( 'ul' == item.type){ %>
+    <ul class="markdown-ul">
+    <% rocket.$.each(item.content, function(index1,item1){ %>
+        <li>
+    <%= slider.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ul>
+
+<% } else if( 'ol' == item.type){ %>
+    <ol class="markdown-ol">
+    <% rocket.$.each(item.content, function(index1,item1){ %>
+        <li>
+    <%= slider.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ol>
+
+<% } else if( 'image' == item.type){ %>
+    <p class="markdown-imagewrapper">
+        <img src="<%= item.url %>"
+            alt="<%= item.alt %>"
+            title="<%= item.title %>"
+            >
+        <p class="markdown-imagecaption">图： <%= item.title %></p>
+    </p>
+
+<% } %>
+
+<% }); %>
+
+
+</div>
+<div class="outline-page-content-tile-mask"><%= sectionIndex %></div>
+<div class="outline-page-content-tile-gobtn"></div>
+
+
+</script>
+
+

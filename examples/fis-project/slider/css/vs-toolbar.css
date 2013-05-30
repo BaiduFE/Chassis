@@ -1,0 +1,35 @@
+.vs-toolbar{
+    height:40px;
+    text-align:center;
+    background:#eee;
+    font:bold 18px/40px normal;
+}
+
+.vs-toolbar a{
+    display:inline-block;
+    margin:5px;
+    padding:3px;
+    font:bold 18px/24px normal;
+    border-width:1px solid #ccc;
+    border-radius:4px;
+    background:#ddd;
+    text-decoration:none;
+    color:#fff;
+}
+
+.vs-toolbar .vs-toolbar-leftcontainer{
+    float:left;
+    height:100%;
+}
+
+.vs-toolbar .vs-toolbar-rightcontainer{
+    float:right;
+    height:100%;
+}
+
+.vs-toolbar .vs-toolbar-titlecontainer{
+    display:inline-block;
+    height:100%;
+}
+
+

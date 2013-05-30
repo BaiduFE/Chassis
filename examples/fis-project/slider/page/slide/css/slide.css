@@ -1,0 +1,183 @@
+#slide_page{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    /*最低高度，确保即使没内容，loading也可以展示*/
+    min-height:300px;
+
+    font-size:14px;
+}
+
+#slide_page_content{
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+.slide-page-content-pageslider{
+    /**
+     * @note: 作为loading的容器，需要设置position属性，确保loading样式正常
+     */
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:100%;
+    overflow:hidden;
+}
+
+/**
+ * markdown-slide
+ */
+.markdown-slidewrapper {
+    position:relative;
+    height:100%;
+    /*@ref: http://css-infos.net/property/-webkit-box-pack*/
+    display:-webkit-box;
+    -webkit-box-pack:center;;
+    -webkit-box-align:start;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+}
+
+.markdown-slidewrapper a{
+    background:#6bfafa;
+    text-decoration:none;
+    color:#f00;
+}
+
+.markdown-slidewrapper em{
+    background:#F7CC27;
+    text-decoration:none;
+}
+
+/**
+ * navigator
+ */
+.markdown-slide-navigator {
+    position:absolute;
+    width:120px;
+    top:10px;
+    right:20px;
+}
+
+.markdown-slide-navigator-left,
+.markdown-slide-navigator-right{
+    float:left;
+    margin-left:5px;
+    padding:5px;
+    cursor:pointer;
+    color:#fff;
+    background:#bbb;
+    border:1px outset #999;
+    border-radius:5px;
+}
+
+/**
+ * cover
+ */
+.markdown-slide-cover{
+    width:100%;
+    text-align:center;
+}
+
+.markdown-slide-cover-title{
+    margin:10px 0;
+    font:bold 2.17em/2.5em normal;
+}
+
+.markdown-slide-cover-author{
+    display:block;
+    margin:5px 0;
+    font:bold 1.33em/1.67em normal;
+}
+
+.markdown-slide-cover-date{
+    display:block;
+    margin:5px 0;
+    font:bold 1.33em/1.67em normal;
+}
+
+/**
+ * main
+ */
+.markdown-slide-main {
+    width:100%;
+}
+
+.markdown-slide-title {
+    margin:8px 0;
+    padding:0 8px;
+    border-left:10px solid #F0A22A;
+    border-bottom:1px solid #F0A22A;
+    font:bold 1.83em/3.33em normal;
+}
+
+.markdown-slide-paragraph {
+    margin-top:5px;
+    padding-left:5px;
+    text-indent:28px;
+    font:normal 1.17em/1.83em normal;
+}
+
+.markdown-slide-ul {
+    margin-left:20px;
+    margin-top:5px;
+    padding-left:5px;
+    list-style:square outside none;
+    font:normal 1.17em/1.83em normal;
+}
+
+.markdown-slide-ol {
+    margin-left:20px;
+    margin-top:5px;
+    padding-left:5px;
+    list-style:decimal outside none;
+    font:normal 1.17em/1.83em normal;
+}
+
+
+/**
+ * codeblock
+ */
+.markdown-slide-codeblock{
+    margin:8px 0;
+    width:100%;
+    padding-left:5px;
+    border:1px solid #bbb;
+    border-radius:4px;
+    background:#eee;
+    font:italic 1em/1.67em Courier;
+}
+
+.markdown-slide-codeblock span{
+    display:block;
+    overflow:hidden;
+}
+
+/**
+ * image
+ */
+.markdown-slide-imagewrapper{
+    margin:8px 0;
+    text-align:center;
+}
+
+.markdown-slide-imagecaption{
+    text-align:center;
+    font:normal 1.17em/1.83em normal;
+}
+
+.markdown-slide-imagewrapper img{
+    max-width:100%;
+}
+

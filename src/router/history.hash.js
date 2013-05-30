@@ -45,7 +45,7 @@ History.Hash = History.extend({
             me._onHashChangeEvent();
             
             // 处理当前hash
-            me.navigate( me._getHash(), { trigger: true }, true ); 
+			me._triggerHandle.call( me, me._getHash() );
             
             return;
         }
@@ -61,35 +61,21 @@ History.Hash = History.extend({
      * @method navigate
      * @param {string} fragment
      * @param {object} opts
-     * @param {boolean} replace
      * @return 
      **/
-    navigate : function( fragment, opts, replace ) {
+    navigate : function( fragment, opts ) {
         var me = this;
-        
-        // 先取消监听，完成后再回来
-        me._offHashChangeEvent();
+
         
         if ( !opts ) {
             opts = { trigger : true };
         }
-        
-		if ( fragment.indexOf( '#' ) === 0 ) {
-			fragment = fragment.substring( 1 );
-		}
-        
+
         me._setHash( fragment );
-        
-        
+
         if ( opts.trigger ) {
             me._triggerHandle.call( me, fragment );
         }
-        
-        window.setTimeout( function() {
-            me._onHashChangeEvent();
-        }, 0 );
-        
-        
 
     },
     
@@ -102,12 +88,23 @@ History.Hash = History.extend({
      * @return 
      **/
     _setHash : function( fragment ) {
-
-        if ( this._getHash() !== fragment ) {
-            window.location.hash = '#' + fragment;              
+		var me = this;
+		
+		if ( fragment.indexOf( '#' ) === 0 ) {
+			fragment = fragment.substring( 1 );
+		}
+		
+        if ( me._getHash() !== fragment ) {
+			me._offHashChangeEvent();
+			
+            window.location.hash = '#' + fragment; 
+			
+			window.setTimeout( function() {
+				me._onHashChangeEvent();
+			}, 0 );
         }
 
-        return this;
+        return me;
     },
     
     /**
@@ -125,10 +122,8 @@ History.Hash = History.extend({
     
     _onHashChangeEvent : function() {
         var me = this;
-        $( window ).on( 'hashchange', function( e ) {
-
-            me.navigate( me._getHash(), { trigger: true }, true );
-            
+        $( window ).on( 'hashchange', function() {
+			me._triggerHandle.call( me, me._getHash() );
         } );
     },
     _offHashChangeEvent : function() {

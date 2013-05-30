@@ -62,6 +62,10 @@ var Router = Chassis.Router = function( opts ) {
     this._bindRoutes();
     
     this.init.apply( this, arguments );
+	
+	if ( opts.start ) {
+        Chassis.history.start();
+    }
 };
 
 Chassis.mixin( Router.prototype, Events, {

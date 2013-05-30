@@ -230,9 +230,9 @@ $(document).ready(function() {
           this.spm = new Chassis.SubPageMgr( {
             owner: this,
             klass: spmpagebSubView,
-            transition: function( from, to, dir, transitionEnd ) {
-              equal( from, me.spm.pagesList[ 0 ] );
-              equal( to, me.spm.pagesList[ 1 ] );
+            transition: function( fromEl, toEl, dir, transitionEnd ) {
+              equal( fromEl, me.spm.pagesList[ 0 ].$el );
+              equal( toEl, me.spm.pagesList[ 1 ].$el );
               equal( dir, 1 );
             }
           } );
@@ -275,9 +275,9 @@ $(document).ready(function() {
               equal( to, me.spm.pagesList[ 1 ] );
               return 5;
             },
-            transition: function( from, to, dir, transitionEnd ) {
-              equal( from, me.spm.pagesList[ 0 ] );
-              equal( to, me.spm.pagesList[ 1 ] );
+            transition: function( fromEl, toEl, dir, transitionEnd ) {
+              equal( fromEl, me.spm.pagesList[ 0 ].$el );
+              equal( toEl, me.spm.pagesList[ 1 ].$el );
               equal( dir, 5 );
             }
           } );

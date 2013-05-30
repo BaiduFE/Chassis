@@ -266,9 +266,9 @@ Chassis.mixin( SPM.prototype, Events, {
 	 */
 	_doSwitch: function( from, to, dir, transitionEnd ) {
 
-		var fxFn,
+		var toEl = to.$el,
 			fromEl,
-			toEl = to.$el;
+			fxFn;
 
 		if ( Chassis.isFunction( this.transition ) ) {
 			fxFn = this.transition;
@@ -280,7 +280,7 @@ Chassis.mixin( SPM.prototype, Events, {
 			return;
 		}
 
-		if( from ) {
+		if ( from ) {
 			fromEl = from.$el;
 		}
 

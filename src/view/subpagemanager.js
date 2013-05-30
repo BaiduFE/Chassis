@@ -8,7 +8,7 @@
  * 子页面管理器
  * @class SubPageMgr
  * @constructor
- * @namespace View
+ * @namespace __Chassis__.View
  * @param  {object} opts
  * opts.owner {view} 子页面所属视图
  * [opts.max] {int} 子页面并存上限，超过此上限将回收

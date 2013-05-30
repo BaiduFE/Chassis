@@ -88,17 +88,28 @@ History.Hash = History.extend({
      * @return 
      **/
     _setHash : function( fragment ) {
-		var me = this;
+		var me = this,
+			folder = '';
+		
+		fragment = fragment.replace( /^\s+|\s+$/g, '' );
 		
 		if ( fragment.indexOf( '#' ) === 0 ) {
 			fragment = fragment.substring( 1 );
 		}
 		
         if ( me._getHash() !== fragment ) {
-			me._offHashChangeEvent();
+		
+			me._offHashChangeEvent(); 
 			
-            window.location.hash = '#' + fragment; 
-			
+			// 处理hash为空时页面回到顶部
+			// 因为不考虑webkit之外的浏览器，所以用此方法比较有效
+			if ( fragment === '' ) {
+				folder = location.href.split( '/' ).slice( 3 ).join( '/' );
+				folder = '/' + folder.replace( /#(.*?)$/, '' );
+                history.pushState( {}, document.title, folder );
+			} else {
+                location.hash = '#' + fragment; 
+			}
 			window.setTimeout( function() {
 				me._onHashChangeEvent();
 			}, 0 );
@@ -122,8 +133,9 @@ History.Hash = History.extend({
     
     _onHashChangeEvent : function() {
         var me = this;
-        $( window ).on( 'hashchange', function() {
+        $( window ).on( 'hashchange', function( e ) {
 			me._triggerHandle.call( me, me._getHash() );
+			e.preventDefault();
         } );
     },
     _offHashChangeEvent : function() {

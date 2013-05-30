@@ -95,6 +95,7 @@ Chassis.PageView.info = Chassis.PageView.extend({
     },
 
     onModelChange: function() {
+		var me = this;
         this.$el.html( 
             baidu.template( $( '#albuminfo' ).html(), 
                 this.model.toJSON() )
@@ -105,8 +106,10 @@ Chassis.PageView.info = Chassis.PageView.extend({
         this.$el.html( 'something is wrong' );
     },
 	
-	goBack : function(e){
+	goBack : function( e ){
 		Chassis.history.navigate( '' );
+		
+		return false;
 	}
 } );
 

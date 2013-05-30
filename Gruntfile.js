@@ -138,6 +138,6 @@ module.exports = function(grunt) {
   grunt.registerTask( 'test', [ 'connect', 'qunit' ] );
 
   // Default task(s).
-  grunt.registerTask( 'default', [ 'jsbint', 'concat', 'connect', 'qunit', 'uglify', 'yuidoc' ] );
+  grunt.registerTask( 'default', [ 'jsbint', 'concat', 'connect', 'uglify', 'yuidoc' ] );
 
 };

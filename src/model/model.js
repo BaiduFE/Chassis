@@ -2,6 +2,14 @@
  * @fileOverview Model
  */
 
+/**
+ * Model
+ * @class Model
+ * @namespace __Chassis__
+ * @constructor
+ * @param {object} attributes
+ * @param {object} opts
+ */
 var Model = Chassis.Model = function( attributes, opts ) {
     var me = this,
         attrs = attributes || {},

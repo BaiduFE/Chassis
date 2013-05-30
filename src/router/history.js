@@ -2,6 +2,14 @@
  * @fileOverview history 基类
  */
 
+/**
+ * History
+ * @class History
+ * @namespace __Chassis__
+ * @constructor
+ * @param {object} handler
+ */
+
 var History = Chassis.History = function( handler ) {
     this.handler = handler || [];
 };
@@ -59,11 +67,13 @@ Chassis.mixin( History.prototype, Events, {
     
     /**
      * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
-     * (注意这是一个会被重写的基类)
      *
      * @public
      * @method start
-     * @param {object} opts
+     * @param {object} opts (optional) 
+	 * opts.trigger 是否触发事件;
+	 * opts.pushState 是否使用pushState;
+	 * opts.root 使用pushState时配置的相对路径;
      * @return 
      **/
     start : function( opts ) {

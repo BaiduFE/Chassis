@@ -2,6 +2,16 @@
  * @fileOverview 浏览器历史管理
  */
 
+/**
+ * Hash
+ * > 用户不需要手动调用，当使用history.start时，会根据传递的参数自动实例化此类并覆盖之前的history实例。
+ *
+ * > 当用户调用destroy时，history将自动恢复至初始状态。
+ * @class Hash
+ * @namespace __Chassis__.History
+ * @constructor
+ * @param {object} handler
+ */
 History.Hash = History.extend({
     
     /**

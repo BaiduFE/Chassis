@@ -280,7 +280,7 @@ Chassis.mixin( SPM.prototype, Events, {
 			return;
 		}
 
-		if( from ) {
+		if ( from ) {
 			fromEl = from.$el;
 		}
 

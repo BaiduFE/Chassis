@@ -89,7 +89,7 @@ module.exports = function(grunt) {
       all: {
         options: {
           urls: [
-            'http://localhost:8000/index.html'
+            'http://localhost:8000/test/index.html'
           ]
         }
       }
@@ -133,6 +133,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
+
+  //test
+  grunt.registerTask( 'test', [ 'connect', 'qunit' ] );
 
   // Default task(s).
   grunt.registerTask( 'default', [ 'jsbint', 'concat', 'connect', 'qunit', 'uglify', 'yuidoc' ] );

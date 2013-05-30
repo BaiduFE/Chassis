@@ -84,7 +84,7 @@ $(document).ready(function() {
   test("fetch success", 1, function() {
     var Model = Chassis.Model.extend({
         url : function(){
-            return '/test/data/data.json';
+            return 'data/data.json';
         }
     });
     var model = new Model({a:1});
@@ -101,7 +101,7 @@ $(document).ready(function() {
   test("parse fetch data", 1, function() {
     var Model = Chassis.Model.extend({
         url : function(){
-            return '/test/data/data.json';
+            return 'data/data.json';
         },
         
         parse : function(resp){
@@ -124,7 +124,7 @@ $(document).ready(function() {
   test("validate data", 1, function() {
     var Model = Chassis.Model.extend({
         url : function(){
-            return '/test/data/data.json';
+            return 'data/data.json';
         },
         
         parse : function(resp){
@@ -151,7 +151,7 @@ $(document).ready(function() {
   test("fetch error", 1, function() {
     var Model = Chassis.Model.extend({
         url : function(){
-            return '/test/data/notfound';
+            return 'data/notfound';
         }
     });
     var model = new Model({a:1});

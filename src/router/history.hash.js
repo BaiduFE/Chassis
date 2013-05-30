@@ -11,6 +11,7 @@
  * @namespace __Chassis__.History
  * @constructor
  * @param {object} handler
+ * @private
  */
 History.Hash = History.extend({
     

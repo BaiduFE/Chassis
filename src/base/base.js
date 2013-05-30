@@ -34,9 +34,11 @@ Chassis.VERSION = '0.1.0';
 Chassis.FX = {}; 
 
 /**
- * $
+ * see [jQuery](http://api.jquery.com/),
+ * [Zepto](http://zeptojs.com/),[GMU](http://gmu.baidu.com/)
+ * or [ender](https://ender.no.de)
  * @property $
- * @type jQuery|Zepto|ender
+ * @type object
  */
 Chassis.$ = root.jQuery || root.Zepto || root.ender;
 

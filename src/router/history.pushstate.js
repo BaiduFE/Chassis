@@ -12,6 +12,7 @@
  * @namespace __Chassis__.History
  * @constructor
  * @param {object} handler
+ * @private
  */
 History.Pushstate = History.extend({
     

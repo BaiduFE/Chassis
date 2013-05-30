@@ -272,5 +272,6 @@ $.support = Chassis.mixin( $.support || {}, {
  * @property Undefined
  * @static
  * @type undefined
+ * @private
  */
 Chassis.Undefined;

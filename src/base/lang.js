@@ -61,8 +61,8 @@ Chassis.extend = function( protoProps, staticProps ) {
 
 /**
  * 创建一个只能调用一次的函数。
- * 重复调用改进的方法也没有效果，还是返回第一次执行的结果。
- * 有助于初始化类型的方法，代替过去设置一个boolean标记及后续对标记检测。
+ * > 重复调用改进的方法也没有效果，还是返回第一次执行的结果。
+ * > 有助于初始化类型的方法，代替过去设置一个boolean标记及后续对标记检测。
  *
  * @method _once
  * @static
@@ -89,7 +89,7 @@ Chassis._once = function( func ) {
 
 /**
  * 判断一个对象是否有你给出名称的属性或对象。
- * 不过需要注意的是，此方法无法检查该对象的原型链中是否具有该属性，该属性必须是对象本身的一个成员。
+ * > 需要注意的是，此方法无法检查该对象的原型链中是否具有该属性，该属性必须是对象本身的一个成员。
  *
  * @method has
  * @static
@@ -127,7 +127,7 @@ Chassis.keys = function( obj ) {
 
 /**
  * 为需要的客户端模型或DOM元素生成一个全局唯一的id。
- * 如果prefix参数存在， id 将附加给它
+ * > 如果prefix参数存在， id 将附加给它
  *
  * @method uniqueId
  * @static
@@ -145,9 +145,7 @@ Chassis.uniqueId = (function() {
 
     
 /**
- * 判断是否是数组
- * 等同于$.isArray
- *
+ * see [$.isArray](http://zeptojs.com/#$.isArray)
  * @method isArray
  * @static
  */
@@ -166,8 +164,7 @@ Chassis.isObject = function( obj ) {
 };
 
 /**
- * 判断是否是函数
- * 等同于$.isFunction
+ * see [$.isFunction](http://zeptojs.com/#$.isFunction)
  *
  * @method isFunction
  * @static
@@ -176,7 +173,7 @@ Chassis.isFunction = Chassis.$.isFunction;
 
 /**
  * 创建 一个浅复制（浅拷贝）的克隆object。
- * 任何嵌套的对象或数组都通过引用拷贝，不会复制。
+ * > 任何嵌套的对象或数组都通过引用拷贝，不会复制。
  *
  * @method clone
  * @static
@@ -192,7 +189,7 @@ Chassis.clone = function( obj ) {
 
 /**
  * 返回对象属性的运行结果
- * 如果该属性是一个方法，则返回该方法的运算结果
+ * > 如果该属性是一个方法，则返回该方法的运算结果
  *
  * @method result
  * @static
@@ -232,7 +229,7 @@ Chassis.escape = function( str ) {
 };
 
 /**
- * 同x.proxy
+ * see [$.proxy](http://zeptojs.com/#$.proxy)
  *
  * @method proxy
  * @static

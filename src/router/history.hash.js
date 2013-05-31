@@ -135,11 +135,9 @@ History.Hash = History.extend({
         var me = this;
         $( window ).on( 'hashchange', function( e ) {
 			me._triggerHandle.call( me, me._getHash() );
-			e.preventDefault();
         } );
     },
     _offHashChangeEvent : function() {
-        var me = this;
         $( window ).off( 'hashchange' );
     }
 });

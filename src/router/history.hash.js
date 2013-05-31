@@ -4,7 +4,7 @@
 
 /**
  * Hash
- * > 用户不需要手动调用，当使用history.start时，会根据传递的参数自动实例化此类并覆盖之前的history实例。
+ * > 用户不需要手动调用，当使用`history.start`时，会根据传递的参数自动实例化此类并覆盖之前的`history`实例。
  *
  * > 当用户调用destroy时，history将自动恢复至初始状态。
  * @class Hash
@@ -16,7 +16,7 @@
 History.Hash = History.extend({
     
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
+     * 当所有的路由创建并设置完毕，调用 `__Chassis__.history.start()` 监控 `hashchange` 事件并分配路由。
      *
      * @overwrite
      * @public
@@ -91,11 +91,7 @@ History.Hash = History.extend({
 		var me = this,
 			folder = '';
 		
-		fragment = fragment.replace( /^\s+|\s+$/g, '' );
-		
-		if ( fragment.indexOf( '#' ) === 0 ) {
-			fragment = fragment.substring( 1 );
-		}
+		fragment = Chassis.$.trim( fragment ).replace( /^[#]+/, '' );
 		
         if ( me._getHash() !== fragment ) {
 		
@@ -126,7 +122,7 @@ History.Hash = History.extend({
      * @return 
      **/
     _getHash : function() {
-        var match = window.location.href.match( /#(.*)$/ );
+        var match = location.href.match( /#(.*)$/ );
         return match ? match[ 1 ] : '';
     },
     

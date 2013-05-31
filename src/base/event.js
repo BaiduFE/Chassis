@@ -22,7 +22,7 @@ var Events = Chassis.Events = {
 	 * @static
 	 * @example
 
-		var obj = Chassis.mixin({},Chassis.Events);
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
 		obj.on("a b c",callback);
 		obj.on({a:callback, b:callback, c:callback},obj);
 
@@ -62,7 +62,7 @@ var Events = Chassis.Events = {
 	 * @static
      * @example
 	
-		var obj = Chassis.mixin({},Chassis.Events);
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
 		obj.once("a b c",callback);
 		obj.once({a:callback, b:callback, c:callback},obj);
 	
@@ -98,7 +98,7 @@ var Events = Chassis.Events = {
 	 * @static
      * @example
 	
-		var obj = Chassis.mixin({},Chassis.Events);
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
 		obj.off("a b c",callback);
 		obj.off({a:callback, b:callback, c:callback},obj);
 	
@@ -162,7 +162,7 @@ var Events = Chassis.Events = {
 	 * @static
      * @example
 	
-		var obj = Chassis.mixin({},Chassis.Events);
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
 		obj.trigger("a b c");
 	
 	 */
@@ -206,7 +206,7 @@ var Events = Chassis.Events = {
 	 * @static
      * @example
 	
-		var obj = Chassis.mixin({},Chassis.Events);
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
 		obj.stopListening("a b c",callback);
 	
 	 */

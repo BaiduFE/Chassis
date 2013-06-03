@@ -115,6 +115,21 @@ module.exports = function(grunt) {
           outdir: 'docs/api/'
         }
       }
+    },
+
+    size: {
+        build: {
+            cwd: 'build/',
+            src: ['**/*.js']
+        },
+        dist: {
+            cwd: 'dist/',
+            src: ['**/*.js']
+        },
+        all: {
+            cwd: 'src/',
+            src: ['**/*.js']
+        }
     }
 
   });
@@ -133,6 +148,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
+
+  // 负责报告文件大小
+  grunt.loadNpmTasks( 'grunt-size' );
 
   //test
   grunt.registerTask( 'test', [ 'connect', 'qunit' ] );

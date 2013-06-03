@@ -1,12 +1,12 @@
 //创建Router
-var Router = Chassis.Router.extend( {
+var Router = {
     
     routes : [
-          ''
-        , 'info/:id'
+
+        'info/:id'
     ]
 
-} );
+};
 
 
 
@@ -113,6 +113,8 @@ Chassis.PageView.info = Chassis.PageView.extend({
 	}
 } );
 
-var router = new Router({start:true});
+
+
+Chassis.history.start( {router:Router} );
 
 

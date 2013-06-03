@@ -72,7 +72,7 @@ $(document).ready(function() {
         strictEqual(opts.params.id, '123');
         start();
 
-        Chassis.history.navigate( '' );
+        Chassis.history.navigate( '',{trigger:false}  );
         Chassis.history.destroy();
       }
     });
@@ -121,7 +121,7 @@ $(document).ready(function() {
 
     start();
     
-    Chassis.history.navigate( '' );
+    Chassis.history.navigate( '',{trigger:false}  );
     Chassis.history.destroy();
 
   });

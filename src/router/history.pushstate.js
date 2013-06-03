@@ -35,7 +35,7 @@ History.Pushstate = History.extend({
         History.start = true;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         
@@ -49,7 +49,9 @@ History.Pushstate = History.extend({
         } );
         
         // 处理当前pushState
-        me._triggerHandle.call( me, me._getFragment() );
+        if ( opts.trigger ) {
+			me._triggerHandle.call( me, me._getHash() );
+		}
         
         return;
        
@@ -70,7 +72,7 @@ History.Pushstate = History.extend({
         var me = this;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         

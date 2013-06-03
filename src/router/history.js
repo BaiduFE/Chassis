@@ -43,7 +43,7 @@ Chassis.mixin( History.prototype, Events, {
 	 * @param {object} opts 配置，opts.trigger指定是否触发事件
      * @return 
      **/
-    navigate: function( /*fragment, opts, replace*/ ) {
+    navigate: function() {
         return this;
     },
     
@@ -57,7 +57,7 @@ Chassis.mixin( History.prototype, Events, {
      **/
     _triggerHandle : function( fragment ) {
         var me = this;
-
+		
         Chassis.$.each( me.handler, function( key, item ) {
             if ( !item.reg.test( fragment ) ) {
                 return;
@@ -78,13 +78,25 @@ Chassis.mixin( History.prototype, Events, {
      * @return 
      **/
     start : function( opts ) {
-        var handler = Chassis.clone( this.handler ),
-            type = 'Hash';
+        var handler = {},
+            type = 'Hash',
+			router;
         
         if ( !opts ) {
             opts = {};
         }
+		
+		
+		
+		if ( opts.router ) {
+			
+			opts.trigger = (opts.trigger === false) ? false : true;
+			router = Chassis.Router.extend( opts.router );
+			new router();
+		}
         
+		handler = Chassis.clone( this.handler );
+		
         this.destroy();
         
         if ( opts.pushState ) {

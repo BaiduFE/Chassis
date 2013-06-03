@@ -137,7 +137,7 @@ Chassis.mixin( Router.prototype, Events, {
 	 * @property pageOrder
 	 * @type array
 	 */
-    pageOrder: [/*'index', 'search', 'page'*/],
+    pageOrder: [],
 	
 	/**
 	 * 默认页面切换动画，合理选择配置
@@ -339,10 +339,16 @@ Chassis.mixin( Router.prototype, Events, {
         
         // 对routes支持数组的处理
         me._routeArray.call( me );
-        
+
         Chassis.$.each( me.routes, function( key, item ) {
             me.route( key, item );
         } );
+		
+		// 设定一个空的配置
+		if ( !me.routes[ '' ] ) {
+			me.route( '', me._index );
+		}
+		
         
         return me;
     },

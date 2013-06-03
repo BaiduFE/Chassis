@@ -34,7 +34,7 @@ History.Hash = History.extend({
         History.start = true;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         // 开始监听hashchange
@@ -45,7 +45,9 @@ History.Hash = History.extend({
             me._onHashChangeEvent();
             
             // 处理当前hash
-			me._triggerHandle.call( me, me._getHash() );
+			if ( opts.trigger ) {
+				me._triggerHandle.call( me, me._getHash() );
+			}
             
             return;
         }

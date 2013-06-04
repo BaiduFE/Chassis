@@ -2,6 +2,8 @@ $(document).ready(function() {
 
   module('Chassis.PageView');
 
+  var PageView = Chassis.PageView;
+
   test('pageview constructor arguments', 5, function() {
     var counter = 0;
     var PageView = Chassis.PageView.extend({
@@ -37,6 +39,24 @@ $(document).ready(function() {
     view.$el.show();
     ok(view.isActive());
   });
+
+  test( 'static methods', 4, function() {
+
+    PageView.define( 'home', {
+      id: 'home1',
+      className: 'home2'
+    } );
+
+    var homeView = PageView.create( 'home', { className: 'homeClass' }, 'home' );
+
+    equal( PageView.get( 'home' ), PageView.home );
+    equal( homeView.el.id, 'home1' );
+    equal( homeView.el.className, 'homeClass' );
+    equal( homeView.action, 'home' );
+
+    delete PageView[ 'home' ];
+
+  } );
 
   asyncTest('pageview save and restore position', 2, function(){
     var view = new Chassis.PageView();

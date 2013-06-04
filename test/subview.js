@@ -2,6 +2,9 @@ $(document).ready(function() {
   
   module('Chassis.SubView');
 
+  var PageView = Chassis.PageView;
+  var SubView = Chassis.SubView;
+
   test('subview constructor arguments', 6, function() {
 
     var counter = 0;
@@ -32,6 +35,32 @@ $(document).ready(function() {
     ok(!sub1.parent);
     equal( sub2.parent, sub1 );
   });
+
+  test( 'static methods', 3, function() {
+
+    PageView.define( 'home', {
+      id: 'home1',
+      className: 'home2',
+      init: function( opts ) {
+        this.banner = SubView.create( 'home.banner', { id: 'banner1' }, this );
+        this.append( this.banner );
+      }
+    } );
+
+    SubView.define( 'home.banner', {
+      className: 'banner'
+    } );
+
+    var homeView = PageView.create( 'home', { className: 'homeClass' }, 'home' );
+
+    equal( SubView.get( 'home.banner' ), SubView[ 'home.banner' ] );
+    equal( homeView.$( '.banner' )[ 0 ].id, 'banner1' );
+    equal( homeView.banner.parent, homeView );
+
+    delete PageView[ 'home' ];
+    delete SubView[ 'home.banner' ];
+
+  } );
 
   asyncTest('subview page change events', 10, function(){
 

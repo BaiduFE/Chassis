@@ -6,11 +6,9 @@
 
 // View构造函数中的opts参数中需要添加到View实例中的属性列表
 var viewOptions = [ 'model', 'el', 'id', 'attributes', 'className',
-		'tagName', 'events' ];
-
-var rDelegateEventSplitter = /^(\S+)\s*(.*)$/;
-
-var noop = function() {};
+		'tagName', 'events' ],
+    rDelegateEventSplitter = /^(\S+)\s*(.*)$/,
+    noop = function() {};
 
 /**
  * 视图类
@@ -438,5 +436,58 @@ Chassis.mixin( View.prototype, Events, {
  * @method hideGLoading
  */
 
+Chassis.mixin( View, {
 
-View.extend = Chassis.extend;
+    /**
+     * 创建自定义视图类，Chassis.View的子类中可用。
+     * @method define
+     * @param  {string} viewId      视图ID，确保在相同类型视图下是唯一的。
+     * @param  {object} protoProps  视图原型方法和属性。
+     * @param  {object} staticProps 视图静态方法和属性。
+     * @static
+     * @example
+     *     // 定义PageView
+     *     Chassis.PageView.define( 'home', {} );
+     *
+     *     // 定义PageView下面的SubView（SubView ID建议加上所属PageView的ID）
+     *     Chassis.SubView.define( 'home.banner', {} );
+     */
+    define: function( viewId, protoProps, staticProps ) {
+
+        if ( this[ viewId ] ) {
+            throw new Error( 'View ' + viewId + ' exists already.' );
+        }
+
+        this[ viewId ] = this.extend( protoProps, staticProps );
+
+    },
+
+    /**
+     * 获取自定义视图类，Chassis.View的子类中可用。
+     * @method get
+     * @static
+     * @param  {string} viewId 视图ID
+     * @return {view}
+     */
+    get: function( viewId ) {
+        return this[ viewId ];
+    },
+
+    /**
+     * 创建自定义视图类实例，Chassis.View的子类中可用。
+     * @method create
+     * @static
+     * @param  {string} viewId 视图ID
+     * @param  {object} opts1  创建实例参数（不同类型的视图类具有不同的参数）
+     * @param  {object} opts2  创建实例参数（不同类型的视图类具有不同的参数）
+     * @return {view}
+     */
+    create: function( viewId, opts1, opts2  ) {
+
+        var klass = this.get( viewId );
+
+        return klass ? (new klass( opts1, opts2 )) : null;
+    },
+
+    extend: Chassis.extend
+} );

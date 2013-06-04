@@ -3,24 +3,30 @@
  */
 
 /**
- * Chassis Events模块
- *
- * @module Events
- *
+ * Events
+ * @class Events
+ * @namespace __Chassis__
  */
 var Events = Chassis.Events = {
     
-    /**
-     * on
-     *
-     * @param {string} name
-     * @param {function} callback
-     * @param {object} context
-     * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.on("a b c",callback);
-     * obj.on({a:callback, b:callback, c:callback},obj);
-     */
+	/**
+	 * > 绑定 `callback` 函数到 `object` 对象。
+	 *
+	 * > 当事件触发时执行回调函数 callback 。
+	 *
+	 * @method on
+	 * @param {string} name
+	 * @param {function} callback
+	 * @param {object} context
+	 * @return {object}
+	 * @static
+	 * @example
+
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
+		obj.on("a b c",callback);
+		obj.on({a:callback, b:callback, c:callback},obj);
+
+	 */
     on: function( name, callback, context ) {
         var events;
         
@@ -44,16 +50,23 @@ var Events = Chassis.Events = {
     },
 
     /**
-     * once
-     *
+	 * > 绑定 只能运行一次的callback 函数到 object 对象。 
+	 *
+	 * > 当事件触发时执行回调函数 callback 。
+	 *
+	 * @method once
      * @param {string} name
      * @param {function} callback
      * @param {object} context
+	 * @return {object}
+	 * @static
      * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.once("a b c",callback);
-     * obj.once({a:callback, b:callback, c:callback},obj);
-     */
+	
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
+		obj.once("a b c",callback);
+		obj.once({a:callback, b:callback, c:callback},obj);
+	
+	 */
     once: function( name, callback, context ) {
         var me = this,
             once;
@@ -75,16 +88,21 @@ var Events = Chassis.Events = {
     },
 
     /**
-     * off
-     *
+	 * > 移除绑定的事件。 
+	 *
+	 * @method off
      * @param {string} name
      * @param {function} callback
      * @param {object} context
+	 * @return {object}
+	 * @static
      * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.off("a b c",callback);
-     * obj.off({a:callback, b:callback, c:callback},obj);
-     */
+	
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
+		obj.off("a b c",callback);
+		obj.off({a:callback, b:callback, c:callback},obj);
+	
+	 */
     off: function( name, callback, context ) {
         var me = this,
             retain, 
@@ -136,13 +154,18 @@ var Events = Chassis.Events = {
     },
 
     /**
-     * trigger
-     *
+	 * > 触发绑定的事件。 
+	 *
+	 * @method trigger
      * @param {string} name
+	 * @return {object}
+	 * @static
      * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.trigger("a b c");
-     */
+	
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
+		obj.trigger("a b c");
+	
+	 */
     trigger: function( name ) {
         var args,
             events,
@@ -173,15 +196,20 @@ var Events = Chassis.Events = {
     },
 
     /**
-     * stopListening
-     *
+	 * > 停止监听事件 
+	 *
+	 * @method stopListening
      * @param {string} name
      * @param {function} callback
      * @param {object} context
+	 * @return {object}
+	 * @static
      * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.stopListening("a b c",callback);
-     */
+	
+		var obj = __Chassis__.mixin({},__Chassis__.Events);
+		obj.stopListening("a b c",callback);
+	
+	 */
     stopListening: function( obj, name, callback ) {
 
         var listeners = this._listeners,
@@ -290,7 +318,18 @@ var triggerEvents = function( events, args ) {
 
 var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
 
-
+/**
+ * see [on](#method_on)
+ *
+ * @method listenTo
+ * @static
+ */
+/**
+ * see [once](#method_once)
+ *
+ * @method listenToOnce
+ * @static
+ */
 Chassis.$.each( listenMethods, function( method, implementation ) {
     Events[ method ] = function( obj, name, callback ) {
 
@@ -310,6 +349,20 @@ Chassis.$.each( listenMethods, function( method, implementation ) {
         return this;
     };
 } );
+
+/**
+ * see [on](#method_on)
+ *
+ * @method bind
+ * @static
+ */
+
+/**
+ * see [off](#method_off)
+ *
+ * @method unbind
+ * @static
+ */
 
 Events.bind   = Events.on;
 Events.unbind = Events.off;

@@ -9,15 +9,15 @@ h1,h2,h3,h4,h5,h6{font-size:inherit; font-weight:normal;}
 address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
 
 #wrapper {
-    width:80%;
+
+	height:450px;
     margin:0 auto;
     position: relative;
 }
 
 
 .example {
-    min-height:320px;
-    border: 1px solid #CCC;
+
     padding:5px;
     color:#666;
     width: 100%;
@@ -67,4 +67,14 @@ address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
 #list,#info{
     position: absolute;
     display: none;
+	height:450px;
+	width:100%;
+	overflow:hidden;
 }
+
+#list .link,
+#info .goback {
+	color:#ff3200;
+	cursor:pointer;
+}
+

@@ -1,23 +1,18 @@
 //创建Router
-var Router = Chassis.Router.extend( {
+var Router = {
     
     routes : [
-        '', 
+
         'info/:id'
     ]
 
-    
-} );
+};
 
-var router = new Router;
+
 
 /*INDEX*/
 var IndexModel = Chassis.Model.extend( {
 
-    init: function(attributes, options) {
-
-    },
-    
     url : function() {
         return 'lib/albums.php';
     },
@@ -32,12 +27,12 @@ Chassis.PageView.index = Chassis.PageView.extend( {
     el: '#list',
 
     events: {
-        'change model': 'onModelChange',
-        'error model': 'onModelError'
+          'change model'    : 'onModelChange'
+        , 'error model'     : 'onModelError'
+		, 'click span.link' : 'gotoInfo'
     },
 
     init: function( opts ) {
-        
         this.model = new IndexModel;
     },
 
@@ -57,16 +52,15 @@ Chassis.PageView.index = Chassis.PageView.extend( {
 
     onModelError: function() {
         this.$el.html( 'something is wrong' );
-    }
+    },
+	
+	gotoInfo : function(e){
+		Chassis.history.navigate( 'info/' + $(e.target).attr('data-id') );
+	}
 } );
 
 /*INFO*/
 var InfoModel = Chassis.Model.extend( {
-
-    init: function(attributes, options) {
-
-    },
-    
     url : function(){
         return 'lib/info.php';
     },
@@ -81,8 +75,9 @@ Chassis.PageView.info = Chassis.PageView.extend({
     el: '#info',
 
     events: {
-        'change model': 'onModelChange',
-        'error model' : 'onModelError'
+          'change model'  : 'onModelChange'
+        , 'error model'   : 'onModelError'
+		, 'click .goback' : 'goBack'
     },
 
     init: function( opts ) {
@@ -100,6 +95,7 @@ Chassis.PageView.info = Chassis.PageView.extend({
     },
 
     onModelChange: function() {
+		var me = this;
         this.$el.html( 
             baidu.template( $( '#albuminfo' ).html(), 
                 this.model.toJSON() )
@@ -108,8 +104,17 @@ Chassis.PageView.info = Chassis.PageView.extend({
 
     onModelError: function() {
         this.$el.html( 'something is wrong' );
-    }
+    },
+	
+	goBack : function( e ){
+		Chassis.history.navigate( '' );
+		
+		return false;
+	}
 } );
 
-Chassis.history.start({trigger:true});
+
+
+Chassis.history.start( {router:Router} );
+
 

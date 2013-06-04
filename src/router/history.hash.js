@@ -2,10 +2,21 @@
  * @fileOverview 浏览器历史管理
  */
 
+/**
+ * Hash
+ * > 用户不需要手动调用，当使用`history.start`时，会根据传递的参数自动实例化此类并覆盖之前的`history`实例。
+ *
+ * > 当用户调用destroy时，history将自动恢复至初始状态。
+ * @class Hash
+ * @namespace __Chassis__.History
+ * @constructor
+ * @param {object} handler
+ * @private
+ */
 History.Hash = History.extend({
     
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
+     * 当所有的路由创建并设置完毕，调用 `__Chassis__.history.start()` 监控 `hashchange` 事件并分配路由。
      *
      * @overwrite
      * @public
@@ -23,7 +34,7 @@ History.Hash = History.extend({
         History.start = true;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         // 开始监听hashchange
@@ -34,7 +45,9 @@ History.Hash = History.extend({
             me._onHashChangeEvent();
             
             // 处理当前hash
-            me.navigate( me._getHash(), { trigger: true }, true ); 
+			if ( opts.trigger ) {
+				me._triggerHandle.call( me, me._getHash() );
+			}
             
             return;
         }
@@ -50,35 +63,21 @@ History.Hash = History.extend({
      * @method navigate
      * @param {string} fragment
      * @param {object} opts
-     * @param {boolean} replace
      * @return 
      **/
-    navigate : function( fragment, opts, replace ) {
+    navigate : function( fragment, opts ) {
         var me = this;
-        
-        // 先取消监听，完成后再回来
-        me._offHashChangeEvent();
+
         
         if ( !opts ) {
             opts = { trigger : true };
         }
-        
-		if ( fragment.indexOf( '#' ) === 0 ) {
-			fragment = fragment.substring( 1 );
-		}
-        
+
         me._setHash( fragment );
-        
-        
+
         if ( opts.trigger ) {
             me._triggerHandle.call( me, fragment );
         }
-        
-        window.setTimeout( function() {
-            me._onHashChangeEvent();
-        }, 0 );
-        
-        
 
     },
     
@@ -91,12 +90,30 @@ History.Hash = History.extend({
      * @return 
      **/
     _setHash : function( fragment ) {
-
-        if ( this._getHash() !== fragment ) {
-            window.location.hash = '#' + fragment;              
+		var me = this,
+			folder = '';
+		
+		fragment = Chassis.$.trim( fragment ).replace( /^[#]+/, '' );
+		
+        if ( me._getHash() !== fragment ) {
+		
+			me._offHashChangeEvent(); 
+			
+			// 处理hash为空时页面回到顶部
+			// 因为不考虑webkit之外的浏览器，所以用此方法比较有效
+			if ( fragment === '' ) {
+				folder = location.href.split( '/' ).slice( 3 ).join( '/' );
+				folder = '/' + folder.replace( /#(.*?)$/, '' );
+                history.pushState( {}, document.title, folder );
+			} else {
+                location.hash = '#' + fragment; 
+			}
+			window.setTimeout( function() {
+				me._onHashChangeEvent();
+			}, 0 );
         }
 
-        return this;
+        return me;
     },
     
     /**
@@ -107,7 +124,7 @@ History.Hash = History.extend({
      * @return 
      **/
     _getHash : function() {
-        var match = window.location.href.match( /#(.*)$/ );
+        var match = location.href.match( /#(.*)$/ );
         return match ? match[ 1 ] : '';
     },
     
@@ -115,13 +132,10 @@ History.Hash = History.extend({
     _onHashChangeEvent : function() {
         var me = this;
         $( window ).on( 'hashchange', function( e ) {
-
-            me.navigate( me._getHash(), { trigger: true }, true );
-            
+			me._triggerHandle.call( me, me._getHash() );
         } );
     },
     _offHashChangeEvent : function() {
-        var me = this;
         $( window ).off( 'hashchange' );
     }
 });

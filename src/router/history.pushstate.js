@@ -3,10 +3,21 @@
  * @requires Router.History
  */
 
+/**
+ * Pushstate
+ * > 用户不需要手动调用，当使用history.start时，会根据传递的参数自动实例化此类并覆盖之前的history实例。
+ *
+ * > 当用户调用destroy时，history将自动恢复至初始状态。
+ * @class Pushstate
+ * @namespace __Chassis__.History
+ * @constructor
+ * @param {object} handler
+ * @private
+ */
 History.Pushstate = History.extend({
     
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
+     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 Pushstate 事件并分配路由。
      *
      * @overwrite
      * @public
@@ -24,7 +35,7 @@ History.Pushstate = History.extend({
         History.start = true;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         
@@ -38,7 +49,9 @@ History.Pushstate = History.extend({
         } );
         
         // 处理当前pushState
-        me._triggerHandle.call( me, me._getFragment() );
+        if ( opts.trigger ) {
+			me._triggerHandle.call( me, me._getHash() );
+		}
         
         return;
        
@@ -59,7 +72,7 @@ History.Pushstate = History.extend({
         var me = this;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         

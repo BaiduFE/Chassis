@@ -5,7 +5,7 @@
 /**
  * Loading管理
  * @class Loading
- * @namespace View
+ * @namespace __Chassis__.View
  */
 var Loading = View.Loading = Chassis.Loading = (function() {
 
@@ -46,7 +46,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 		/**
 		 * 全局Loading
 		 * @class Global
-		 * @namespace Loading
+		 * @namespace __Chassis__.View.Loading
 		 */
 		Global: {
 
@@ -80,7 +80,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 		/**
 		 * 视图Loading
 		 * @class View
-		 * @namespace Loading
+		 * @namespace __Chassis__.View.Loading
 		 */
 		View: {
 
@@ -155,3 +155,4 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 })();
 
 Loading.mixToView();
+

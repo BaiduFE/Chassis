@@ -1,9 +1,6 @@
 Chassis
 =======
 
-npm uninstall -g grunt
+[入门文档](https://github.com/BaiduFE/Chassis/issues/28)
 
-npm install -g grunt-cli
-
-npm install
 

@@ -1,18 +1,28 @@
 /**
  * @fileOverview Router核心实现
- * @requires Router.History
+ * @requires Router.History || Router.Pushstate
  */
 
+/**
+ * 路由
+ * @class Router
+ * @namespace __Chassis__
+ * @constructor
+ * @param {object} opts
+ */
 var Router = Chassis.Router = function( opts ) {
     
     if ( !opts ) {
         opts = {};
     }
     
-    /**
-     * @property {array|object} routes 路由规则
+	/**
+	 * 路由规则
+	 * @property routes
      * @description
+	 *
      *      路由规则包括两种配置方式
+	 *
      *      1. 键值对配置，例如：
      *      {
      *          '': 'index',
@@ -31,7 +41,10 @@ var Router = Chassis.Router = function( opts ) {
      *      这种配置方式会使用默认的路由行为：路由目标为`__Chassis__.PageView.info`;
      *      使用这种配置方式时如果路由action为空时会默认路由到`__Chassis__.PageView.index`,
      *      可以通过`opts.index`来重新设置;
-     */
+	 * @type object
+	 */
+	 
+
     if ( opts.routes ) {
         this.routes = opts.routes;
     }
@@ -49,6 +62,10 @@ var Router = Chassis.Router = function( opts ) {
     this._bindRoutes();
     
     this.init.apply( this, arguments );
+	
+	if ( opts.start ) {
+        Chassis.history.start();
+    }
 };
 
 Chassis.mixin( Router.prototype, Events, {
@@ -58,13 +75,16 @@ Chassis.mixin( Router.prototype, Events, {
      *
      * @public
      * @method init
+	 * @optional
      * @return 
      **/
     init : function() {},
     
     /**
-     * 为路由对象手动创建路由，route 参数可以是 路由字符串 或 正则表达式。 
-     * 每个捕捉到的被传入的路由或正则表达式，都将作为参数传入回调函数（callback）。
+     * 
+  为路由对象手动创建路由，route 参数可以是 路由字符串 或 正则表达式。 
+
+  每个捕捉到的被传入的路由或正则表达式，都将作为参数传入回调函数（callback）。
      *
      * @public
      * @method route
@@ -112,23 +132,28 @@ Chassis.mixin( Router.prototype, Events, {
         return Chassis.history.navigate( fragment, opts );
     },
 
-    /** 
-     * @property {array} [pageOrder] 页面切换顺序配置
-     * 产品线按以下格式配置，使用action名称
-     */
-    pageOrder: [/*'index', 'search', 'page'*/],
-
-    /**
-     * @property {string} [defaultTransition] 默认页面切换动画，合理选择配置
-     * @note: slide比较适用于固高切换
+	/**
+	 * 页面切换顺序配置
+	 * @property pageOrder
+	 * @type array
+	 */
+    pageOrder: [],
+	
+	/**
+	 * 默认页面切换动画，合理选择配置
+	 * @property defaultTransition
+     * @note: slide比较适用于固高切换(默认)
      * @note: fade比较适用DOM树较小的两个页面切换
      * @note: simple性能最好，但效果最一般
      * @note: dropdown只能用于固高切换
-     */
+	 * @type string
+	 */
     defaultTransition: 'slider',
 
-    /**
-     * @property {object} [pageTransition] 页面切换动画配置
+
+	/**
+	 * 页面切换动画配置
+	 * @property pageTransition
      * @key {string} actionname-actionname，"-"号分隔的action名称串，不分先后，但支持精确设定
      * @value {string} animation name
      * @note: 以index和search为例，有两种可设定的值：index-search和search-index：
@@ -137,7 +162,8 @@ Chassis.mixin( Router.prototype, Events, {
      *     2. 如果两个都设定了，则分别生效。比如'index-search':'fade'，'search-index':
      *     'slide'，那么index->search使用fade动画，search->index使用slide动画
      *     3. 如果两个都没有设定，则都是用默认动画
-     */
+	 * @type object
+	 */
     pageTransition: {
         
         // 'index-search': 'fade'
@@ -313,10 +339,16 @@ Chassis.mixin( Router.prototype, Events, {
         
         // 对routes支持数组的处理
         me._routeArray.call( me );
-        
+
         Chassis.$.each( me.routes, function( key, item ) {
             me.route( key, item );
         } );
+		
+		// 设定一个空的配置
+		if ( !me.routes[ '' ] ) {
+			me.route( '', me._index );
+		}
+		
         
         return me;
     },

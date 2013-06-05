@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Music</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/all.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Application loading -->
+<div class="global-loading">
+    <div class="global-loading-logo">
+        <div class="global-loading-anim"></div>
+    </div>
+    <div class="global-loading-text">正在努力为您加载应用</div>
+</div>
+<!-- Page loading -->
+<div class="page-loading" style="display:none">
+    <div class="page-loading-logo">
+        <div class="page-loading-anim"></div>
+    </div>
+    <div class="page-loading-text">数据加载中，请稍候...</div>
+</div>
+<div class="route-topic">
+    <div id="album-detail" class="songs mod-2 pageview">
+    </div>
+</div>
+<script id="detail-template" type="text/x-template">
+    <header id="header" class="">
+        <div class="bar">
+            <div class="left">
+                <a href="#"><span class="btn need-active btn-back"></span></a>
+            </div>
+             <h1 class="">{{albumInfo.title}}</h1>
+             <div class="right"></div>
+        </div>
+    </header>
+    <section class="content">
+        <div class="topic">
+            <div class="mod">
+                <div class="pic">
+                    <img alt="{{albumInfo.title}}" src="{{albumInfo.pic_small}}">
+                </div>
+                <div class="info">
+                    <p data-info="{{albumInfo.info}}">
+                        {{albumInfo.simpleinfo}}
+                        <a class="expand">展开</a>
+                    </p>
+                    <time class="txt">创建时间：{{albumInfo.publishtime}}</time>
+                </div>
+            </div>
+            <ul class="list withbar">
+                <li class="hd">{{albumInfo.title}}</li>
+                <ul class="list">
+                    {{#songlist}}
+                    <li class="song url log song-50902704">
+                        <div class="left">
+                            <div class="rank">{{rank}}</div>
+                            <div class="info">
+                                <b>{{title}}</b>
+                                <br>
+                                <span class="txt">{{author}}</span>
+                            </div>
+                        </div>
+                        <div class="download need-active">下载</div>
+                    </li>
+                    {{/songlist}}
+                </ul>
+            </ul>
+        </div>
+    </section>
+</script>
+<div class="route-home">
+    <div id="album-list" class="songs mod-2 pageview">
+    </div>
+</div>
+<script id="index-template" type="text/x-template">
+    <div class="hd log url  need-active">   
+        <h2>专辑热榜</h2>
+        <div></div>
+    </div>
+    <ul class="list">
+        {{#list}}
+        <li class="song url log song-40153340">
+                <div class="left">
+                    <div class="rank equal">{{rank}}</div>
+                    <div class="info">
+                        <a href="#detail/{{album_id}}">
+                            <b>{{title}}</b>
+                            <span class="txt">{{author}}</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="download need-active">下载</div>
+        </li>
+        {{/list}}
+    </ul>
+</script>
+
+        <script src="js/all.js"></script>
+    </body>
+</html>

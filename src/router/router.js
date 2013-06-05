@@ -445,6 +445,13 @@ Chassis.mixin( Router.prototype, Events, {
         this._decodeRequest( request );
         
         if ( !view ) {
+			
+			// 系统预定义定义了首页路由，但是没有实现就不执行。
+			if ( (action === me._index) && (!Chassis.PageView[ action ]) ) {
+				
+				return;
+				
+			}
             view = me.views[ action ]  =
                     new Chassis.PageView[ action ]( request, action ); 
         } 

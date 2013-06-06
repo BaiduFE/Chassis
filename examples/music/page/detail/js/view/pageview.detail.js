@@ -19,22 +19,17 @@ Chassis.PageView.define( 'detail', {
     // 在APP路由到当前页面之前会调用该方法
     onBeforePageIn: function( e ) {
 
-        if ( !this.model.fetched ) {
+        this.$el.html( '' );
 
-            this.$el.html( '' );
+        this.showLoading();
 
-            this.showLoading();
-
-            // 获取数据
-            this.model.fetch({
-                data : {
-                    id : e.params.albumId
-                }
-            });
-
-            this.model.fetched = true;
-
-        }
+        // 获取数据
+        this.model.fetch({
+            data : {
+                id : e.params.albumId
+            }
+        });
+        
     },
 
     onModelChange: function( ) {

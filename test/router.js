@@ -50,6 +50,37 @@ $(document).ready(function() {
     start();
 
   });
+  test("test init with object", 2, function() {
+    var Router;
+    stop();
+
+    Router = {
+
+        routes : {
+            'index/:id' : 'index'
+        },
+        
+        index : function(){
+            ok(false, "hashchange handle has not be destroy");
+            return false;
+        }
+        
+    };
+    
+    
+
+    Chassis.history.start( {router : Router, trigger:false} );
+    Chassis.history.navigate( 'index/2',{trigger:false} );
+    Chassis.history.navigate( '', {trigger:false} );
+    
+    Chassis.history.destroy();
+    
+    strictEqual(Chassis.History.start, false);
+    strictEqual(Chassis.history.handler.length, 0);
+    
+    start();
+
+  });
   
   test("test init with routes", 2, function() {
     var Router,router;

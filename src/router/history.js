@@ -94,7 +94,7 @@ Chassis.mixin( History.prototype, Events, {
 			router = Chassis.Router.extend( opts.router );
 			new router();
 		}
-        
+        opts.trigger = (opts.trigger === false) ? false : true;
 		handler = Chassis.clone( this.handler );
 		
         this.destroy();

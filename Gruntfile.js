@@ -32,8 +32,7 @@ module.exports = function(grunt) {
           'src/view/subpagemanager.js',
           'src/view/globalview.js',
           'src/view/view.fx.slider.js',
-          'src/view/view.loading.js',
-		  'src/view/pageview.index.js'
+          'src/view/view.loading.js'
         ],
         dest: 'build/<%= pkg.name %>.js'
       },
@@ -54,7 +53,6 @@ module.exports = function(grunt) {
           // 'src/view/subpagemanager.js',
           // 'src/view/globalview.js',
           // 'src/view/view.loading.js'
-		  'src/view/pageview.index.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       }

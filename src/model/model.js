@@ -201,7 +201,10 @@ Chassis.mixin( Model.prototype, Events, {
             }   
         } );
         
-        me.trigger( 'change', me );
+		if ( !opts.silent ) {
+			me.trigger( 'change', me );
+		}
+        
     },
     
     /**

@@ -1,0 +1,22 @@
+<script id="index-template" type="text/x-template">
+    <div class="hd log url  need-active">   
+        <h2>专辑热榜</h2>
+        <div></div>
+    </div>
+    <ul class="list">
+        {{#list}}
+        <li class="song url log song-40153340">
+                <div class="left">
+                    <div class="rank equal">{{rank}}</div>
+                    <div class="info">
+                        <a href="#detail/{{album_id}}">
+                            <b>{{title}}</b>
+                            <span class="txt">{{author}}</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="download need-active">下载</div>
+        </li>
+        {{/list}}
+    </ul>
+</script>

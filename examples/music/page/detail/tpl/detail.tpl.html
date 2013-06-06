@@ -1,0 +1,45 @@
+<script id="detail-template" type="text/x-template">
+    <header id="header" class="">
+        <div class="bar">
+            <div class="left">
+                <a href="#"><span class="btn need-active btn-back"></span></a>
+            </div>
+             <h1 class="">{{albumInfo.title}}</h1>
+             <div class="right"></div>
+        </div>
+    </header>
+    <section class="content">
+        <div class="topic">
+            <div class="mod">
+                <div class="pic">
+                    <img alt="{{albumInfo.title}}" src="{{albumInfo.pic_small}}">
+                </div>
+                <div class="info">
+                    <p data-info="{{albumInfo.info}}">
+                        {{albumInfo.simpleinfo}}
+                        <a class="expand">展开</a>
+                    </p>
+                    <time class="txt">创建时间：{{albumInfo.publishtime}}</time>
+                </div>
+            </div>
+            <ul class="list withbar">
+                <li class="hd">{{albumInfo.title}}</li>
+                <ul class="list">
+                    {{#songlist}}
+                    <li class="song url log song-50902704">
+                        <div class="left">
+                            <div class="rank">{{rank}}</div>
+                            <div class="info">
+                                <b>{{title}}</b>
+                                <br>
+                                <span class="txt">{{author}}</span>
+                            </div>
+                        </div>
+                        <div class="download need-active">下载</div>
+                    </li>
+                    {{/songlist}}
+                </ul>
+            </ul>
+        </div>
+    </section>
+</script>

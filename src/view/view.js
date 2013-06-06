@@ -453,10 +453,12 @@ Chassis.mixin( View, {
      *     Chassis.SubView.define( 'home.banner', {} );
      */
     define: function( viewId, protoProps, staticProps ) {
-
+        
+        /*
         if ( this[ viewId ] ) {
             throw new Error( 'View ' + viewId + ' exists already.' );
         }
+        */
 
         this[ viewId ] = this.extend( protoProps, staticProps );
 

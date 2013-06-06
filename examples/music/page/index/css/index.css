@@ -1,0 +1,96 @@
+.route-home.mod-2 {
+    margin: 15px 15px 20px;
+}
+.route-home.mod-2 .hd {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    box-direction: normal;
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    box-pack: justify;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+    padding: 10px 0;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+}
+.route-home.mod-2 .hd h2, .route-home.mod-2 .hd div {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+}
+.route-home.mod-2 .hd h2 {
+    font-size: 22px;
+    font-weight: bold;
+    padding: 0 15px;
+    line-height: 25px;
+}
+.route-home.mod-2 .hd div {
+    width: 75px;
+    height: 25px;
+    font-size: 13px;
+    text-align: right;
+    padding-right: 28px;
+    line-height: 26px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background: url("//mu5.bdstatic.com/st/i/WTDhAbqc.png") no-repeat right 2px;
+    background-size: 20px 20px;
+    margin-right: 10px;
+}
+.route-home.mod-2.songs {
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.route-home.mod-2.songs .hd {
+    background-color: rgb(204, 51, 51);
+    position: relative;
+}
+.route-home.mod-2.songs .hd.active:after {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    width: 100%;
+    height: 100%;
+    content:"";
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.list {word-wrap: break-word;-webkit-hyphens: auto;-moz-hyphens: auto;-ms-hyphens: auto;-o-hyphens: auto;hyphens: auto;word-break: break-all;border-bottom: 1px solid rgb(229,229,229);border-top: 1px solid rgb(229,229,229);background: rgb(250,250,250);}
+.list.withbar {-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;margin-bottom: 20px;background: rgb(243,243,243);}
+.list.withbar li.hd, .list.withbar .item.hd {height: 34px;line-height: 34px;overflow: hidden;-webkit-box-shadow: 0 1px rgba(35,24,21,0.1);-moz-box-shadow: 0 1px rgba(35,24,21,0.1);box-shadow: 0 1px rgba(35,24,21,0.1);background-color: rgba(163,163,161,0.05);background-image: -moz-linear-gradient(top,rgba(255,255,255,0.05),rgba(25,24,21,0.05));background-image: -webkit-gradient(linear,0 0,0 100%,from(rgba(255,255,255,0.05)),to(rgba(25,24,21,0.05)));background-image: -webkit-linear-gradient(top,rgba(255,255,255,0.05),rgba(25,24,21,0.05));background-image: -o-linear-gradient(top,rgba(255,255,255,0.05),rgba(25,24,21,0.05));background-image: linear-gradient(to bottom,rgba(255,255,255,0.05),rgba(25,24,21,0.05));background-repeat: repeat-x;color: rgb(102,102,102);text-shadow: none;font-size: 14px;min-height: auto;}
+.list li, .list .item {display: -webkit-box;display: -moz-box;display: box;-webkit-box-orient: horizontal;-moz-box-orient: horizontal;box-orient: horizontal;-webkit-box-direction: normal;-moz-box-direction: normal;box-direction: normal;-webkit-box-pack: start;-moz-box-pack: start;box-pack: start;-webkit-box-align: center;-moz-box-align: center;box-align: center;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-weight: bold;min-height: 50px;border-bottom: 1px solid rgb(218,218,218);border-top: 1px solid rgb(255,255,255);padding-left: 10px;}
+.list li em, .list .item em {color: rgb(40,168,234);font-style: normal;}
+.list li .info, .list .item .info {-webkit-box-flex: 1;-moz-box-flex: 1;box-flex: 1;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.list li:last-child, .list .item:last-child {border: none;}
+.list li.active, .list .item.active {background-color: rgba(0,0,0,0.1) !important;border-color: transparent !important;}
+.list li.load-more, .list .item.load-more {-webkit-box-pack: center;-moz-box-pack: center;box-pack: center;}
+.list li.load-more.loading, .list .item.load-more.loading {background: url("/st/assets/img/icon/loading.gif") no-repeat 30% center;background-size: 13px;}
+.list li.arrow, .list .item.arrow {padding-right: 20px !important;background: url("//mu7.bdstatic.com/st/i/hSN5XTQ4.png") no-repeat right center;background-size: 22px;}
+.list li.song, .list .item.song {-webkit-box-pack: justify;-moz-box-pack: justify;box-pack: justify;min-height: 55px;text-align: left;}
+.list li.song .left, .list .item.song .left {display: -webkit-box;display: -moz-box;display: box;-webkit-box-orient: horizontal;-moz-box-orient: horizontal;box-orient: horizontal;-webkit-box-direction: normal;-moz-box-direction: normal;box-direction: normal;-webkit-box-pack: start;-moz-box-pack: start;box-pack: start;-webkit-box-align: center;-moz-box-align: center;box-align: center;-webkit-box-flex: 1;-moz-box-flex: 1;box-flex: 1;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.list li.song .rank, .list .item.song .rank {color: rgb(153,153,153);margin-right: 10px;font-size: 22px;}
+.list li.song:first-child .rank, .list .item.song:first-child .rank {color: rgb(204,102,102);}
+.list li.song .download, .list .item.song .download {font: 0/0 a;color: transparent;text-shadow: none;background-color: transparent;border: 0;width: 48px;height: 48px;background: url("//mu7.bdstatic.com/st/i/gcaKMHqy.png") no-repeat -131px -1081px;background-size: 174px 2388px;}
+.list li.song .download.active, .list .item.song .download.active {background-color: rgba(0,0,0,0.1) !important;border-color: transparent !important;}
+.list li.song.pre-buffer-state .info, .list .item.song.pre-buffer-state .info, .list li.song.buffer-state .info, .list .item.song.buffer-state .info, .list li.song.play-state .info, .list .item.song.play-state .info, .list li.song.pause-state .info, .list .item.song.pause-state .info {padding-left: 24px;background: url("//mu7.bdstatic.com/st/i/3u2oRw6P.png") no-repeat -229px -1181px;background-size: 264px 1806px;}
+.list li.song.pause-state .info, .list .item.song.pause-state .info {background: url("//mu7.bdstatic.com/st/i/3u2oRw6P.png") no-repeat -231px -1241px;background-size: 264px 1806px;}
+.list li.artist, .list .item.artist, .list li.topic, .list .item.topic, .list li.album, .list .item.album {display: -webkit-box;display: -moz-box;display: box;-webkit-box-orient: horizontal;-moz-box-orient: horizontal;box-orient: horizontal;-webkit-box-direction: normal;-moz-box-direction: normal;box-direction: normal;-webkit-box-pack: start;-moz-box-pack: start;box-pack: start;-webkit-box-align: center;-moz-box-align: center;box-align: center;min-height: 60px;}
+.list li.artist .pic, .list .item.artist .pic, .list li.topic .pic, .list .item.topic .pic, .list li.album .pic, .list .item.album .pic {width: 54px;height: 54px;margin-right: 15px;}
+.list li.artist .info, .list .item.artist .info, .list li.topic .info, .list .item.topic .info, .list li.album .info, .list .item.album .info {-webkit-box-flex: 1;-moz-box-flex: 1;box-flex: 1;}
+.list.search li.artist .info b, .list.search .item.artist .info b {color: rgb(40,168,234);}

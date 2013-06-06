@@ -2,4 +2,5 @@ _Store
 /dist
 /build
 /node_modules
+/examples/music/node_modules
 /docs/api

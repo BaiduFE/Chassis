@@ -1,4 +1,4 @@
-.pageview{
+.pageview, #wrapper{
     /*默认不展示*/
     display:none;
 
@@ -12,9 +12,15 @@
     bottom:0;
 
     /*最低高度，确保即使没内容，loading也可以展示，同时能遮住下方内容*/
-    min-height:600px;
+    /*min-height:960px;*/
 
     /*阻止文本选中*/
     -webkit-user-select: none;
     -moz-user-select: none;
+}
+
+#wrapper{
+    display: block;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }

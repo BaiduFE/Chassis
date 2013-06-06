@@ -1,7 +1,7 @@
-.route-home .mod-2 {
+.route-home.mod-2 {
     margin: 15px 15px 20px;
 }
-.route-home .mod-2 .hd {
+.route-home.mod-2 .hd {
     display: -webkit-box;
     display: -moz-box;
     display: box;
@@ -24,18 +24,18 @@
     box-sizing: border-box;
     color: rgb(255, 255, 255);
 }
-.route-home .mod-2 .hd h2, .route-home .mod-2 .hd div {
+.route-home.mod-2 .hd h2, .route-home.mod-2 .hd div {
     -webkit-box-flex: 1;
     -moz-box-flex: 1;
     box-flex: 1;
 }
-.route-home .mod-2 .hd h2 {
+.route-home.mod-2 .hd h2 {
     font-size: 22px;
     font-weight: bold;
     padding: 0 15px;
     line-height: 25px;
 }
-.route-home .mod-2 .hd div {
+.route-home.mod-2 .hd div {
     width: 75px;
     height: 25px;
     font-size: 13px;
@@ -49,19 +49,19 @@
     background-size: 20px 20px;
     margin-right: 10px;
 }
-.route-home .mod-2.songs {
+.route-home.mod-2.songs {
     margin: 0;
     margin-bottom: 20px;
-    padding: 15px;
+    padding: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.route-home .mod-2.songs .hd {
+.route-home.mod-2.songs .hd {
     background-color: rgb(204, 51, 51);
     position: relative;
 }
-.route-home .mod-2.songs .hd.active:after {
+.route-home.mod-2.songs .hd.active:after {
     background-color: rgba(0, 0, 0, 0.3) !important;
     width: 100%;
     height: 100%;

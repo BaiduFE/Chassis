@@ -18,7 +18,8 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- Application loading -->
+        <!-- <div id="wrapper"> -->
+            <!-- Application loading -->
 <div class="global-loading">
     <div class="global-loading-logo">
         <div class="global-loading-anim"></div>
@@ -32,9 +33,7 @@
     </div>
     <div class="page-loading-text">数据加载中，请稍候...</div>
 </div>
-<div class="route-topic">
-    <div id="album-detail" class="songs mod-2 pageview">
-    </div>
+<div id="album-detail" class="route-topic songs mod-2 pageview">
 </div>
 <script id="detail-template" type="text/x-template">
     <header id="header" class="">
@@ -81,10 +80,9 @@
         </div>
     </section>
 </script>
-<div class="route-home">
-    <div id="album-list" class="songs mod-2 pageview">
-    </div>
+<div id="album-list" class="route-home songs mod-2 pageview">
 </div>
+
 <script id="index-template" type="text/x-template">
     <div class="hd log url  need-active">   
         <h2>专辑热榜</h2>
@@ -107,7 +105,8 @@
         {{/list}}
     </ul>
 </script>
-
+        <!-- </div> -->
+        
         <script src="js/all.js"></script>
     </body>
 </html>

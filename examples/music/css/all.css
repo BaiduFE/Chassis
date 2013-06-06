@@ -451,7 +451,7 @@ textarea {
     background: url("../img/loading-logo-news.png") 0 0 no-repeat;
     background-size: 65px 65px;
 }
-.pageview{
+.pageview, #wrapper{
     /*默认不展示*/
     display:none;
 
@@ -465,11 +465,17 @@ textarea {
     bottom:0;
 
     /*最低高度，确保即使没内容，loading也可以展示，同时能遮住下方内容*/
-    min-height:600px;
+    /*min-height:960px;*/
 
     /*阻止文本选中*/
     -webkit-user-select: none;
     -moz-user-select: none;
+}
+
+#wrapper{
+    display: block;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 .mod {display: -webkit-box;display: -moz-box;display: box;-webkit-box-orient: horizontal;-moz-box-orient: horizontal;box-orient: horizontal;-webkit-box-direction: normal;-moz-box-direction: normal;box-direction: normal;-webkit-box-pack: start;-moz-box-pack: start;box-pack: start;-webkit-box-align: start;-moz-box-align: start;box-align: start;margin: 15px;}
 .mod .pic {margin-right: 20px;}
@@ -504,10 +510,10 @@ a.expand.on:after {top: -9px;border-color: transparent transparent rgb(40,168,23
 #header .bar h1.can-drop {width: 145px;height: 43px;line-height: 43px;background: url("//mu7.bdstatic.com/st/i/gcaKMHqy.png") no-repeat -60px -2485px;background-size: 187px 2653px;}
 #header .bar h1.can-drop.on {-webkit-border-top-right-radius: 1px;-moz-border-radius-topright: 1px;border-top-right-radius: 1px;-webkit-border-top-left-radius: 1px;-moz-border-radius-topleft: 1px;border-top-left-radius: 1px;-webkit-border-bottom-right-radius: 3px;-moz-border-radius-bottomright: 3px;border-bottom-right-radius: 3px;-webkit-border-bottom-left-radius: 3px;-moz-border-radius-bottomleft: 3px;border-bottom-left-radius: 3px;border: 1px solid rgb(20,20,25);border-bottom: 2px solid rgb(43,43,58);background-color: rgba(0,0,0,0.5);}
 
-.route-home .mod-2 {
+.route-home.mod-2 {
     margin: 15px 15px 20px;
 }
-.route-home .mod-2 .hd {
+.route-home.mod-2 .hd {
     display: -webkit-box;
     display: -moz-box;
     display: box;
@@ -530,18 +536,18 @@ a.expand.on:after {top: -9px;border-color: transparent transparent rgb(40,168,23
     box-sizing: border-box;
     color: rgb(255, 255, 255);
 }
-.route-home .mod-2 .hd h2, .route-home .mod-2 .hd div {
+.route-home.mod-2 .hd h2, .route-home.mod-2 .hd div {
     -webkit-box-flex: 1;
     -moz-box-flex: 1;
     box-flex: 1;
 }
-.route-home .mod-2 .hd h2 {
+.route-home.mod-2 .hd h2 {
     font-size: 22px;
     font-weight: bold;
     padding: 0 15px;
     line-height: 25px;
 }
-.route-home .mod-2 .hd div {
+.route-home.mod-2 .hd div {
     width: 75px;
     height: 25px;
     font-size: 13px;
@@ -555,19 +561,19 @@ a.expand.on:after {top: -9px;border-color: transparent transparent rgb(40,168,23
     background-size: 20px 20px;
     margin-right: 10px;
 }
-.route-home .mod-2.songs {
+.route-home.mod-2.songs {
     margin: 0;
     margin-bottom: 20px;
-    padding: 15px;
+    padding: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.route-home .mod-2.songs .hd {
+.route-home.mod-2.songs .hd {
     background-color: rgb(204, 51, 51);
     position: relative;
 }
-.route-home .mod-2.songs .hd.active:after {
+.route-home.mod-2.songs .hd.active:after {
     background-color: rgba(0, 0, 0, 0.3) !important;
     width: 100%;
     height: 100%;

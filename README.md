@@ -70,7 +70,263 @@ Chassis在实现上采用了多种组件化方案，开发者可以根据需求�
 
 ##### 开发首页
 
-在路由确定后我们就可以正式进行视图开发了，让我们先完成首页的开发。
+在路由确定后我们就可以正式进行视图开发了，让我们先来完成首页。
+
+首先，我们需要为页面数据的显示准备相应的模板，这里使用`Mustache`语法，如下。
+
+*模板*
+
+    <script id="index-template" type="text/x-template">
+        <div class="hd log url  need-active">   
+            <h2>专辑热榜</h2>
+            <div></div>
+        </div>
+        <ul class="list">
+            {{#list}}
+            <li class="song url log song-40153340">
+                    <div class="left">
+                        <div class="rank equal">{{rank}}</div>
+                        <div class="info">
+                            <a href="#detail/{{album_id}}">
+                                <b>{{title}}</b>
+                                <span class="txt">{{author}}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="download need-active">下载</div>
+            </li>
+            {{/list}}
+        </ul>
+    </script>
+
+现在我们需要定义视图对应的数据。
+
+*Model*
+
+    Chassis.Model.define( 'index', {
+        url : function() {
+            return 'data/albums.php';
+        },
+        parse : function( resp ) {
+            var album_list = resp.plaze_album_list.RM.album_list,
+                list = album_list.list;
+            for( var i = 0, len = list.length; i < len; i++ ) {
+                list[ i ].rank = i + 1;
+            }
+            return album_list;
+        }
+    } );
+
+通过`Chassis.Model.define`接口可以定义数据Model， 第一个参数为Model的ID， 建议和对应视图的ID保持一致，第二个参数为Model原型方法和属性。
+
+这里使用了`url`和`parse`方法，`url`返回的结果会作为获取数据的目标路径；`parse`返回的结果会作为Model的最终数据。
+
+这之后就是视图的定义了。
+
+*视图*
+
+    Chassis.PageView.define( 'index', {
+        // 设置PageView所在的DOM
+        el: '#album-list',
+        // 配置事件
+        events: {
+            // 监听model change
+            'change model': 'onModelChange'
+        },
+        init: function( opts ) {
+            this.model = Chassis.Model.create( 'index' );
+        },
+        // 在APP路由到当前页面之前会调用该方法
+        onBeforePageIn: function() {
+            // 获取数据
+            if ( !this.model.fetched ) {
+                this.showLoading();
+                this.model.fetch();
+                this.model.fetched = true;
+            }
+        },
+        onModelChange: function( ) {
+            // 渲染模板并输出
+            this.$el.html( 
+                Mustache.render( $( '#index-template' ).html(), 
+                    this.model.toJSON() )
+            );
+            // 隐藏Loading
+            this.hideLoading();
+        }
+    } );
+
+接下来详细介绍一下如何定义一个视图。
+
+首先你需要了解`Chassis.PageView.define`接口。该接口接收两个参数，第一个参数为页面的ID，与路由规则中的ID一一对应；第二个参数则为视图原型的属性和方法。
+
+在原型上：
+
+    el: '#album-list',
+
+设置视图所关联的DOM结点，在视图中`this.$el`可以获得DOM的jQuery封装对象。 它是整个视图的宿主DOM结点，视图的切换、显示、隐藏以及默认的事件等都作用在结点上。
+
+    events: {
+        // 监听model change
+        'change model': 'onModelChange',
+        // 监听model error
+        'error model': 'onModelError'
+    },
+
+通过`events`对象可以统一配置各种事件的处理方法，这里不仅仅能配置内部DOM结点的事件，还包括了view、model以及document和window。
+
+ * `'click .btn': handler` ：点击`this.$el`上class为`.btn`的DOM结点；
+ * `'change model: handler'` ：监听`this.model`的`change`事件；
+ * `'beforepagein view': handler` ：监听当前视图的`beforepagein`事件；
+ * `'click window': handler` ：点击window；
+ * `'click document': handler` ：点击document；
+
+通过`events`对象配置的事件，在调用视图的`destroy`方法后都能被正确移除， 因此建议事件统一在此配置。
+
+    init: function( opts ) {
+        this.model = Chassis.Model.create( 'index' );
+    },
+
+定义初始化操作，这里在初始化时创建了视图对应的数据Model。
+
+    onBeforePageIn: function() {
+        // 获取数据
+        if ( !this.model.fetched ) {
+            this.showLoading();
+            this.model.fetch();
+            this.model.fetched = true;
+        }
+    },
+
+`onBeforePageIn`方法在视图即将切换到当前视图之前会自动调用， 你可以在此进行视图展示前的预处理，比如此处会提前显示loading效果并请求数据。对应的还有`onAfterPageIn`、`onBeforePageOut`以及`onAfterPageOut`方法。
+
+    onModelChange: function( ) {
+        // 渲染模板并输出
+        this.$el.html( 
+            Mustache.render( $( '#index-template' ).html(), 
+                this.model.toJSON() )
+        );
+        // 隐藏Loading
+        this.hideLoading();
+    }
+
+此处监听Model数据，在数据返回后会获取页面模板进行渲染，最后因此loading。
+
+至此，首页的代码就完成了。
+
+##### 开发详情页
+
+*模板*
+
+    <script id="detail-template" type="text/x-template">
+        <header id="header" class="">
+            <div class="bar">
+                <div class="left">
+                    <a href="#"><span class="btn need-active btn-back"></span></a>
+                </div>
+                 <h1 class="">{{albumInfo.title}}</h1>
+                 <div class="right"></div>
+            </div>
+        </header>
+        <section class="content">
+            <div class="topic">
+                <div class="mod">
+                    <div class="pic">
+                        <img alt="{{albumInfo.title}}" src="{{albumInfo.pic_small}}">
+                    </div>
+                    <div class="info">
+                        <p data-info="{{albumInfo.info}}">
+                            {{albumInfo.simpleinfo}}
+                            <a class="expand">展开</a>
+                        </p>
+                        <time class="txt">创建时间：{{albumInfo.publishtime}}</time>
+                    </div>
+                </div>
+                <ul class="list withbar">
+                    <li class="hd">{{albumInfo.title}}</li>
+                    <ul class="list">
+                        {{#songlist}}
+                        <li class="song url log song-50902704">
+                            <div class="left">
+                                <div class="rank">{{rank}}</div>
+                                <div class="info">
+                                    <b>{{title}}</b>
+                                    <br>
+                                    <span class="txt">{{author}}</span>
+                                </div>
+                            </div>
+                            <div class="download need-active">下载</div>
+                        </li>
+                        {{/songlist}}
+                    </ul>
+                </ul>
+            </div>
+        </section>
+    </script>
+
+*Model*
+
+    Chassis.Model.Detail = Chassis.Model.extend( {
+        url : function() {
+            return 'data/info.php';
+        },
+        
+        parse : function( resp ) {
+            var list = resp.songlist;
+            resp.albumInfo.simpleinfo = resp.albumInfo.info.substring(0, 70) + '...';
+            for( var i = 0, len = list.length; i < len; i++ ) {
+                list[ i ].rank = i + 1;
+            }
+            return resp;
+        }
+    } );
+
+*视图*
+
+    Chassis.PageView.define( 'detail', {
+        // 设置PageView所在的DOM
+        el: '#album-detail',
+        // 配置事件
+        events: {
+            // 监听model change
+            'change model': 'onModelChange',
+            // expand
+            'click .expand': 'onExpand'
+        },
+        init: function( opts ) {
+            this.model = new Chassis.Model.Detail();
+        },
+        // 在APP路由到当前页面之前会调用该方法
+        onBeforePageIn: function( e ) {
+            this.$el.html( '' );
+            this.showLoading();
+            // 获取数据
+            this.model.fetch({
+                data : {
+                    id : e.params.albumId
+                }
+            });
+            
+        },
+        onModelChange: function( ) {
+            // 渲染模板并输出
+            this.$el.html( 
+                Mustache.render( $( '#detail-template' ).html(), 
+                    this.model.toJSON() )
+            );
+            // 隐藏Loading
+            this.hideLoading();
+        },
+        onExpand: function( e ) {
+            e.preventDefault();
+            var $info = this.$( '.mod .info p' );
+            $info.html( $info.attr( 'data-info' ) );
+        }
+    } );
+
+
+
+
 
 
 

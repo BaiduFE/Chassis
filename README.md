@@ -324,7 +324,9 @@ Chassis在实现上采用了多种组件化方案，开发者可以根据需求�
         }
     } );
 
+到此一个最简单的Chassis应用就开发完了，关于Chassis的更多细节请参考：
 
+[入门文档](https://github.com/BaiduFE/Chassis/issues/28)
 
 
 

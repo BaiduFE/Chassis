@@ -45,6 +45,10 @@ History.Pushstate = History.extend({
         
         // 当浏览器前进后退时触发
         $( window ).on( 'popstate', function() {
+			if ( !me._load ) {
+				me._load  = true;
+				return;
+			}
             me._triggerHandle.call( me, me._getFragment() );
         } );
         
@@ -115,7 +119,7 @@ History.Pushstate = History.extend({
                 .split( /\// )
                 .slice( 3 )
                 .join( '/' )
-                .substring( this.root.length );
+                .substring( this.root.length - 1 );
     }
     
     

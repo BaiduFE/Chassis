@@ -12,7 +12,7 @@ Chassis.PageView.define( 'index', {
     },
 
     init: function( opts ) {
-        this.model = new Chassis.Model.Index();
+        this.model = Chassis.Model.create( 'index' );
     },
 
     // 在APP路由到当前页面之前会调用该方法

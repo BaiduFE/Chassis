@@ -1,4 +1,4 @@
-Chassis.Model.Index = Chassis.Model.extend( {
+Chassis.Model.define( 'index', {
 
     url : function() {
         return 'data/albums.php';

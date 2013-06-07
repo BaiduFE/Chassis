@@ -1,4 +1,4 @@
-Chassis.Model.Detail = Chassis.Model.extend( {
+Chassis.Model.define( 'detail', {
 
     url : function() {
         return 'data/info.php';

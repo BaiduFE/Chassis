@@ -1441,7 +1441,10 @@ Chassis.mixin( Model.prototype, Events, {
             }   
         } );
         
-        me.trigger( 'change', me );
+		if ( !opts.silent ) {
+			me.trigger( 'change', me );
+		}
+        
     },
     
     /**
@@ -1807,8 +1810,63 @@ Chassis.mixin( Model.prototype, Events, {
     
 } );
 
+Chassis.mixin( Model, {
 
-Model.extend = Chassis.extend;
+    /**
+     * 创建自定义Model类
+     * @method define
+     * @param  {string} modelId     数据模型ID，确保唯一性。
+     * @param  {object} protoProps  原型方法和属性。
+     * @param  {object} staticProps 静态方法和属性。
+     * @static
+     * @example
+     *     // 定义Model
+     *     Chassis.Model.define( 'home', {
+     *         url: function() {},
+     *         parse: function() {}
+     *     } );
+     */
+    define: function( modelId, protoProps, staticProps ) {
+        
+        /*
+        if ( this[ modelId ] ) {
+            throw new Error( 'View ' + modelId + ' exists already.' );
+        }
+        */
+
+        this[ modelId ] = this.extend( protoProps, staticProps );
+
+    },
+
+    /**
+     * 获取自定义Model类
+     * @method get
+     * @static
+     * @param  {string} modelId Model ID
+     * @return {model}
+     */
+    get: function( modelId ) {
+        return this[ modelId ];
+    },
+
+    /**
+     * 创建自定义Model类实例
+     * @method create
+     * @static
+     * @param  {string} modelId     Model ID
+     * @param  {object} attributes  创建实例参数
+     * @param  {object} opts        创建实例参数
+     * @return {model}
+     */
+    create: function( modelId, attributes, opts  ) {
+
+        var klass = this.get( modelId );
+
+        return klass ? (new klass( attributes, opts )) : null;
+    },
+
+    extend: Chassis.extend
+} );
 /**
  * @fileOverview 数据缓存
  */
@@ -2259,6 +2317,13 @@ Chassis.mixin( Router.prototype, Events, {
         this._decodeRequest( request );
         
         if ( !view ) {
+			
+			// 系统预定义定义了首页路由，但是没有实现就不执行。
+			if ( (action === me._index) && (!Chassis.PageView[ action ]) ) {
+				
+				return;
+				
+			}
             view = me.views[ action ]  =
                     new Chassis.PageView[ action ]( request, action ); 
         } 
@@ -2392,7 +2457,7 @@ Chassis.mixin( History.prototype, Events, {
 			router = Chassis.Router.extend( opts.router );
 			new router();
 		}
-        
+        opts.trigger = (opts.trigger === false) ? false : true;
 		handler = Chassis.clone( this.handler );
 		
         this.destroy();
@@ -2622,12 +2687,16 @@ History.Pushstate = History.extend({
         
         // 当浏览器前进后退时触发
         $( window ).on( 'popstate', function() {
+			if ( !me._load ) {
+				me._load  = true;
+				return;
+			}
             me._triggerHandle.call( me, me._getFragment() );
         } );
         
         // 处理当前pushState
         if ( opts.trigger ) {
-			me._triggerHandle.call( me, me._getHash() );
+			me._triggerHandle.call( me, me._getFragment() );
 		}
         
         return;
@@ -2692,7 +2761,7 @@ History.Pushstate = History.extend({
                 .split( /\// )
                 .slice( 3 )
                 .join( '/' )
-                .substring( this.root.length );
+                .substring( this.root.length - 1 );
     }
     
     
@@ -4043,12 +4112,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 Loading.mixToView();
 
 
-/**
- * @fileOverview  默认的index
- * 为默认路由为空的情况指定默认pageview
- */
-Chassis.PageView.index  = Chassis.PageView.extend({});
-})();Chassis.Model.Detail = Chassis.Model.extend( {
+})();Chassis.Model.define( 'detail', {
 
     url : function() {
         return 'data/info.php';
@@ -4080,7 +4144,7 @@ Chassis.PageView.index  = Chassis.PageView.extend({});
     },
 
     init: function( opts ) {
-        this.model = new Chassis.Model.Detail();
+        this.model = Chassis.Model.create( 'detail' );
     },
 
     // 在APP路由到当前页面之前会调用该方法
@@ -4124,7 +4188,7 @@ Chassis.PageView.index  = Chassis.PageView.extend({});
         var $info = this.$( '.mod .info p' );
         $info.html( $info.attr( 'data-info' ) );
     }
-} );;Chassis.Model.Index = Chassis.Model.extend( {
+} );;Chassis.Model.define( 'index', {
 
     url : function() {
         return 'data/albums.php';
@@ -4155,7 +4219,7 @@ Chassis.PageView.index  = Chassis.PageView.extend({});
     },
 
     init: function( opts ) {
-        this.model = new Chassis.Model.Index();
+        this.model = Chassis.Model.create( 'index' );
     },
 
     // 在APP路由到当前页面之前会调用该方法

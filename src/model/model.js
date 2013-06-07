@@ -570,5 +570,60 @@ Chassis.mixin( Model.prototype, Events, {
     
 } );
 
+Chassis.mixin( Model, {
 
-Model.extend = Chassis.extend;
+    /**
+     * 创建自定义Model类
+     * @method define
+     * @param  {string} modelId     数据模型ID，确保唯一性。
+     * @param  {object} protoProps  原型方法和属性。
+     * @param  {object} staticProps 静态方法和属性。
+     * @static
+     * @example
+     *     // 定义Model
+     *     Chassis.Model.define( 'home', {
+     *         url: function() {},
+     *         parse: function() {}
+     *     } );
+     */
+    define: function( modelId, protoProps, staticProps ) {
+        
+        /*
+        if ( this[ modelId ] ) {
+            throw new Error( 'View ' + modelId + ' exists already.' );
+        }
+        */
+
+        this[ modelId ] = this.extend( protoProps, staticProps );
+
+    },
+
+    /**
+     * 获取自定义Model类
+     * @method get
+     * @static
+     * @param  {string} modelId Model ID
+     * @return {model}
+     */
+    get: function( modelId ) {
+        return this[ modelId ];
+    },
+
+    /**
+     * 创建自定义Model类实例
+     * @method create
+     * @static
+     * @param  {string} modelId     Model ID
+     * @param  {object} attributes  创建实例参数
+     * @param  {object} opts        创建实例参数
+     * @return {model}
+     */
+    create: function( modelId, attributes, opts  ) {
+
+        var klass = this.get( modelId );
+
+        return klass ? (new klass( attributes, opts )) : null;
+    },
+
+    extend: Chassis.extend
+} );

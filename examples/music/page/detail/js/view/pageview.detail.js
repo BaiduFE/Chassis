@@ -13,7 +13,7 @@ Chassis.PageView.define( 'detail', {
     },
 
     init: function( opts ) {
-        this.model = new Chassis.Model.Detail();
+        this.model = Chassis.Model.create( 'detail' );
     },
 
     // 在APP路由到当前页面之前会调用该方法

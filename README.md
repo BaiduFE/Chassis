@@ -38,7 +38,7 @@ Chassis在实现上采用了多种组件化方案，开发者可以根据需求�
 
 假设我们需要开发一个非常简单的APP，由两个页面组成：一个列表页以及一个详情页。APP默认页面为列表页，点击列表页会切换到详情页。
 
-[PC请点击此处查看效果](http://responsivepx.com/?chassis.duapp.com%2Fexamples%2Fmusic%2F#320x640&scrollbars) 
+[PC请点击此处查看效果](http://responsivepx.com/?chassis.duapp.com%2Fexamples%2Fmusic%2F#320x640&scrollbars) [source](https://github.com/BaiduFE/Chassis/tree/master/examples/music)
 
 手机请访问 `t.cn/zH0WkZn`
 

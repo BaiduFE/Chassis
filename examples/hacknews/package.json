@@ -1,0 +1,35 @@
+{
+  "name": "hacknews",
+  "version": "0.1.0",
+  "description": "记录、分享有趣、高质量的技术文档",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xspider/Chassis.git"
+  },
+  "keywords": [
+    "mvc",
+    "webapp",
+    "framework",
+    "javascript",
+	"hacknews"
+  ],
+  "devDependencies": {
+    "jsbint": "https://github.com/gmuteam/jsbint/tarball/master",
+    "grunt": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.1"
+  },
+  "author": "xspider,miller",
+  "license": "BSD",
+  "gitHead": "bfa1d9a28aff3eb8749287cedad5c3378d949a4f",
+  "readmeFilename": "README.md",
+  "build": {
+    "export": "hacknews",
+    "pushstate": false,
+    "useloading": false,
+    "usesubpage": false,
+    "usecache": false,
+    "useglobalview": false
+  }
+}

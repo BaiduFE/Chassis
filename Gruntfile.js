@@ -21,38 +21,56 @@ module.exports = function(grunt) {
           'src/base/lang.js',
           'src/base/event.js',
           'src/model/model.js',
-          'src/model/cache.js',
           'src/router/router.js',
           'src/router/history.js',
           'src/router/history.hash.js',
-          'src/router/history.pushstate.js',
-          'src/view/view.js',
-          'src/view/subview.js',
-          'src/view/pageview.js',
-          'src/view/subpagemanager.js',
-          'src/view/globalview.js',
-          'src/view/view.fx.slider.js',
-          'src/view/view.loading.js'
+          'src/view/view.js'
         ],
         dest: 'build/<%= pkg.name %>.js'
       },
+      // {{TMEP
+      replace: {
+        src: [
+          'src/base/base.js',
+          'src/base/lang.js',
+          'src/base/event.js',
+          'src/model/model.js',
+          'src/router/router.js',
+          'src/router/history.js',
+          'src/router/history.hash.js',
+          'src/view/view.js'
+        ],
+        dest: '../../fisprojects/map_webapp/common/ui/libs/backbone/backbone/backbone.js'
+      },
+      back: {
+        src: [
+          'build/backbone.js'
+        ],
+        dest: '../../fisprojects/map_webapp/common/ui/libs/backbone/backbone/backbone.js'
+      },
+      replaceu: {
+        src: [
+          'src/base/underscore_adapter.js'
+        ],
+        dest: '../../fisprojects/map_webapp/common/ui/libs/backbone/underscore/underscore.js'
+      },
+      backu: {
+        src: [
+          'build/underscore.js'
+        ],
+        dest: '../../fisprojects/map_webapp/common/ui/libs/backbone/underscore/underscore.js'
+      },
+      // TEMP}}
       dist: {
         src: [
           'src/base/base.js',
           'src/base/lang.js',
           'src/base/event.js',
           'src/model/model.js',
-          // 'src/model/cache.js',
           'src/router/router.js',
           'src/router/history.js',
           'src/router/history.hash.js',
-          // 'src/router/history.pushstate.js',
-          'src/view/view.js',
-          'src/view/subview.js',
-          'src/view/pageview.js',
-          // 'src/view/subpagemanager.js',
-          // 'src/view/globalview.js',
-          // 'src/view/view.loading.js'
+          'src/view/view.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       }

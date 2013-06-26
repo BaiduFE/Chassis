@@ -22,7 +22,7 @@ var View = Chassis.View = function( opts ) {
 	this.cid = Chassis.uniqueId( 'view' );
 	this._configure( opts );
 	this._ensureElement();
-    this._initialize.apply( this, arguments );
+    this._init.apply( this, arguments );
     this.delegateEvents();
 };
 
@@ -51,51 +51,23 @@ Chassis.mixin( View.prototype, Events, {
 
     /**
      * 移除DOM元素以及清除事件监听
-     * @method destroy
+     * @method remove
      */
-    destroy: function() {
-
-        var cld = this.children,
-            cid;
-
-        this.onDestroy();
-
-        /**
-         * View销毁前触发事件
-         * @event beforedestroy
-         */
-        this.trigger( 'beforedestroy', this );
-
-        // 销毁子视图
-        for ( cid in cld ) {
-            if ( cld.hasOwnProperty( cid ) ) {
-                cld[ cid ].destroy();
-                delete cld[ cid ];
-            }
-        }
+    remove: function() {
+        var me = this;
 
         // 解除事件绑定
-        this.undelegateEvents();
+        me.undelegateEvents();
+
+        me.stopListening();
 
         // 移除DOM
-        this.$el.remove();
+        me.$el.remove();
 
         // 移除引用
-        this.$el = this.el = null;
+        me.$el = me.el = null;
 
-        // 如果是子视图则从父视图中删除
-        if ( this.parent ) {
-            delete this.parent.children[ this.cid ];
-        }
-
-        // TODO subpages清除
-        /**
-         * View销毁后触发事件
-         * @event afterdestroy
-         */
-        this.trigger( 'afterdestroy', this );
-
-        return this;
+        return me;
     },
 
     /**
@@ -105,18 +77,20 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {boolean} delegate 是否需要重新绑定事件
      */
     setElement: function( el, delegate ) {
-        if ( this.$el ) {
-            this.undelegateEvents();
+        var me = this;
+
+        if ( me.$el ) {
+            me.undelegateEvents();
         }
 
-        this.$el = el instanceof Chassis.$ ? el : Chassis.$( el );
-        this.el = this.$el[ 0 ];
+        me.$el = el instanceof Chassis.$ ? el : Chassis.$( el );
+        me.el = me.$el[ 0 ];
 
         if ( delegate !== false ) {
-            this.delegateEvents();
+            me.delegateEvents();
         }
 
-        return this;
+        return me;
     },
 
     /**
@@ -132,29 +106,25 @@ Chassis.mixin( View.prototype, Events, {
      *          'mousedown .title': 'edit',
      *          'click .button': 'save',
      *          'click .open': function( e ){},
-     *          'orientationchange window': 'refresh',
-     *          'click document': 'close',
-     *          'beforepagein view': 'onBeforePageIn',
-     *          'change model': 'render'
+     *          'orientationchange window': 'refresh'
      *      }
      */
     delegateEvents: function( events ) {
 
-        var key,
+        var me = this,
+            key,
             method,
             match,
             eventName,
             selector,
             fullEventName;
 
-        if ( !(events || (events = this.events)) ) {
-            return this;
+        if ( !(events || (events = me.events)) ) {
+            return me;
         }
 
-        // 默认undelegate时，对于view/model的事件不好处理，如果view/model的事件直接
-        // 解绑定的话将会使外界注册的以及beforepagein/afterpagein失效；因此暂时去掉
-        // 自动解绑定功能。
-        // this.undelegateEvents();
+        
+        me.undelegateEvents();
 
         for ( key in events ) {
 
@@ -162,179 +132,60 @@ Chassis.mixin( View.prototype, Events, {
                 method = events[ key ];
 
                 if ( !Chassis.isFunction( method ) ) {
-                    method = this[ events[ key ] ];
+                    method = me[ events[ key ] ];
                 }
 
                 if ( !method ) {
-                    throw new Error(
-                        'Method "' + events[ key ] + '" does not exist' );
+                    continue;
                 }
 
                 match = key.match( rDelegateEventSplitter );
                 eventName = match[ 1 ];
                 selector = match[ 2 ];
 
-                method = Chassis.proxy( method, this );
+                method = Chassis.proxy( method, me );
 
-                fullEventName = eventName + '.delegateEvents' + this.cid;
+                fullEventName = eventName + '.delegateEvents' + me.cid;
 
                 switch ( selector ) {
-                    case 'window':
-                    case 'document':
-                        Chassis.$(window[ selector ])
-                                .on( fullEventName, method );
-                        break;
-                    case 'view':
-                        this.listenTo( this, eventName, method );
-                        break;
-                    case 'model':
-                        if ( this.model ) {
-                            this.listenTo( this.model, eventName, method );
-                        }
-                        break;
                     case '':
-                        this.$el.on( fullEventName, method );
+                        me.$el.on( fullEventName, method );
                         break;
                     default:
-                        this.$el.on( fullEventName, selector, method );
+                        me.$el.on( fullEventName, selector, method );
                 }
             }
         }
 
-        return this;
+        return me;
     },
 
     /**
      * 解除view的所有事件绑定
      */
     undelegateEvents: function() {
-        var eventName = '.delegateEvents' + this.cid;
-        this.$el.off( eventName );
+        var me = this,
+            eventName = '.delegateEvents' + me.cid;
 
-        Chassis.$( window ).off( eventName );
-        Chassis.$( document ).off( eventName );
+        me.$el.off( eventName );
 
-        this.stopListening();
-
-        return this;
-    },
-
-    /**
-     * 将view作为当前视图的子视图，并将view所属dom元素append父视图所属dom元素
-     * @param  {[type]} view
-     * @return {[type]}
-     */
-    append: function( view ) {
-        this._addSubview( view );
-    },
-
-    /**
-     * 将view作为当前视图的子视图，并将view所属dom元素prepend父视图所属dom元素
-     * @param  {[type]} view
-     * @return {[type]}
-     */
-    prepend: function( view ) {
-        this._addSubview( view, 'PREPEND' );
-    },
-
-    /**
-     * 将view作为当前视图的子视图（不涉及dom元素的处理）
-     * @param  {[type]} view
-     * @return {[type]}
-     */
-    setup: function( view ) {
-        this._addSubview( view, 'SETUP' );
+        return me;
     },
 
     /**
      * 子类初始化
      */
-    init: noop,
-
-    /**
-     * View销毁时调用，需子类实现。
-     * @method onDestroy
-     * @override
-     */
-    onDestroy: noop,
-
-    /**
-     * View所在Page即将显示前调用，需子类实现。
-     * @method onBeforePageIn
-     * @param {object} params
-     *      params.from: 当前显示但是即将被替换的视图
-     *      params.to: 即将显示的视图
-     *      params.params: 路由参数
-     * @override
-     */
-    onBeforePageIn: noop,
-
-    /**
-     * View所在Page显示后前调用，需子类实现。
-     * @method onAfterPageIn
-     * @param {object} params
-     *      params.from: 被当前显示视图替换的视图
-     *      params.to: 当前显示视图
-     *      params.params: 路由参数
-     * @override
-     */
-    onAfterPageIn: noop,
-
-    /**
-     * View所在PageView显示前触发
-     * @event beforepagein
-     * @param {object} params
-     *      params.from: 即将被隐藏的视图
-     *      params.to: 即将显示的视图
-     *      params.params: 路由参数
-     */
-    _onBeforePageIn: function( params ) {
-
-        this.onBeforePageIn( params );
-        
-    },
-
-    /**
-     * View所在PageView显示后触发
-     * @event afterpagein
-     * @param {object} params
-     *      params.from: 已隐藏的视图
-     *      params.to: 当前显示的视图
-     *      params.params: 路由参数
-     */
-    _onAfterPageIn: function( params ) {
-
-        this.onAfterPageIn( params );
-    },
+    initialize: noop,
 
     /**
      * 初始化
      * @method initialize
      * @param {object} opts
      */
-    _initialize: function( opts ) {
-
-        this.root = this._getRoot();
-        this.children = {};
+    _init: function( opts ) {
 
         // 子类初始化
-        this.init( opts );
-
-        var listenTarget = this.root || this;
-
-        // 自动监听常用事件
-        this.listenTo( listenTarget, 'beforepagein', this._onBeforePageIn );
-        this.listenTo( listenTarget, 'afterpagein', this._onAfterPageIn );
-    },
-
-    _getRoot: function() {
-        var pointer = this;
-
-        while ( pointer.parent ) {
-            pointer = pointer.parent;
-        }
-
-        return pointer;
+        this.initialize( opts );
     },
 
 	_configure: function( opts ) {
@@ -361,135 +212,32 @@ Chassis.mixin( View.prototype, Events, {
 
 	_ensureElement: function() {
 
-        var attrs,
+        var me = this,
+            attrs,
             $el;
 
         // 如果未指定DOM元素则自动创建并设置id/className
-		if ( !this.el ) {
+		if ( !me.el ) {
 
             // attributes有可能来自原型属性因此需要复制
-			attrs = Chassis.mixin( {}, this.attributes || {} );
+			attrs = Chassis.mixin( {}, me.attributes || {} );
 
-			if ( this.id ) {
-				attrs.id = this.id;
+			if ( me.id ) {
+				attrs.id = me.id;
 			}
 
-			if ( this.className ) {
-				attrs[ 'class' ] = this.className;
+			if ( me.className ) {
+				attrs[ 'class' ] = me.className;
 			}
 
-			$el = Chassis.$( '<' + this.tagName + '>' ).attr( attrs );
-			this.setElement( $el, false );
+			$el = Chassis.$( '<' + me.tagName + '>' ).attr( attrs );
+			me.setElement( $el, false );
 
         // 如果已经指定DOM元素则不会设置id/className
 		} else {
-			this.setElement( this.el, false );
-		}
-	},
-
-	_addSubview: function( view, action ) {
-
-		if ( view instanceof Chassis.View ) {
-			this.children[ view.cid ] = view;
-			view.parent = this;
-
-			switch ( action ) {
-
-				// 不进行DOM处理
-				case 'SETUP': 
-					break;
-				case 'PREPEND':
-					this.$el.prepend( view.$el );
-					break;
-				default:
-					this.$el.append( view.$el );
-					break;
-			}
-
-			view.$el.hide();
-
-		} else {
-			throw new Error( 'view is not an instance of Chassis.View.' );
+			me.setElement( me.el, false );
 		}
 	}
 } );
 
-// 引入view.loading.js后会在view的原型增加以下方法
-
-/**
- * 显示页面Loading
- * @method showLoading
- */
-
-/**
- * 隐藏页面Loading
- * @method hideLoading
- */
-
-/**
- * 显示全局Loading
- * @method showGLoading
- */
-
-/**
- * 隐藏全局Loading
- * @method hideGLoading
- */
-
-Chassis.mixin( View, {
-
-    /**
-     * 创建自定义视图类，Chassis.View的子类中可用。
-     * @method define
-     * @param  {string} viewId      视图ID，确保在相同类型视图下是唯一的。
-     * @param  {object} protoProps  视图原型方法和属性。
-     * @param  {object} staticProps 视图静态方法和属性。
-     * @static
-     * @example
-     *     // 定义PageView
-     *     Chassis.PageView.define( 'home', {} );
-     *
-     *     // 定义PageView下面的SubView（SubView ID建议加上所属PageView的ID）
-     *     Chassis.SubView.define( 'home.banner', {} );
-     */
-    define: function( viewId, protoProps, staticProps ) {
-        
-        /*
-        if ( this[ viewId ] ) {
-            throw new Error( 'View ' + viewId + ' exists already.' );
-        }
-        */
-
-        this[ viewId ] = this.extend( protoProps, staticProps );
-
-    },
-
-    /**
-     * 获取自定义视图类，Chassis.View的子类中可用。
-     * @method get
-     * @static
-     * @param  {string} viewId 视图ID
-     * @return {view}
-     */
-    get: function( viewId ) {
-        return this[ viewId ];
-    },
-
-    /**
-     * 创建自定义视图类实例，Chassis.View的子类中可用。
-     * @method create
-     * @static
-     * @param  {string} viewId 视图ID
-     * @param  {object} opts1  创建实例参数（不同类型的视图类具有不同的参数）
-     * @param  {object} opts2  创建实例参数（不同类型的视图类具有不同的参数）
-     * @return {view}
-     */
-    create: function( viewId, opts1, opts2  ) {
-
-        var klass = this.get( viewId );
-
-        return klass ? (new klass( opts1, opts2 )) : null;
-    },
-
-    extend: Chassis.extend
-} );
+View.extend = Chassis.extend;

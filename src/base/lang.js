@@ -88,44 +88,6 @@ Chassis._once = function( func ) {
 };
 
 /**
- * 判断一个对象是否有你给出名称的属性或对象。
- * > 需要注意的是，此方法无法检查该对象的原型链中是否具有该属性，该属性必须是对象本身的一个成员。
- *
- * @method has
- * @static
- * @param  {object} obj 目标对象
- * @param {string} key 属性
- * @return {boolean} key 属性
- */
-Chassis.has = function( obj, key ) {
-    return hasOwnProperty.call( obj, key );
-};
-
-/**
- * 检索object的所有的属性名称。
- *
- * @method keys
- * @static
- * @param  {object} obj 目标对象
- * @return {array} 所有的属性名称
- */
-Chassis.keys = function( obj ) {
-    var keys = [];
-    
-    if ( obj !== Object( obj ) ) {
-        throw new TypeError( 'Invalid object' );
-    }
-    
-    Chassis.$.each( obj, function( key, item ) {
-        if ( Chassis.has( obj, key ) ) {
-            keys[ keys.length ] = key;
-        }
-    } );
-    
-    return keys;
-};
-
-/**
  * 为需要的客户端模型或DOM元素生成一个全局唯一的id。
  * > 如果prefix参数存在， id 将附加给它
  *
@@ -188,80 +150,12 @@ Chassis.clone = function( obj ) {
 };
 
 /**
- * 返回对象属性的运行结果
- * > 如果该属性是一个方法，则返回该方法的运算结果
- *
- * @method result
- * @static
- * @param  {object} obj 目标对象
- * @param  {object} property 目标属性
- * @return {object}
- */
-Chassis.result = function( object, property ) {
-    var value;
-
-    if ( object === null ) {
-        return null;
-    }
-    
-    value = object[ property ];
-    return Chassis.isFunction( value ) ? value.call( object ) : value;
-};
-
-/**
- * 转义HTML字符串，替换&, <, >, ", ', /字符
- *
- * @method escape
- * @static
- * @param  {string} str 目标字符串
- * @return {string}
- */
-Chassis.escape = function( str ) {
-    return str ?
-        str.replace( /\&/g, '&amp;' )
-            .replace( /</g, '&lt;' )
-            .replace( /\>/g, '&gt;' )
-            .replace( /\"/g, '&quot;' )
-            .replace( /\'/g, '&#x27' )
-            .replace( /\//g, '&#x2F' ):
-        str;
-
-};
-
-/**
  * see [$.proxy](http://zeptojs.com/#$.proxy)
  *
  * @method proxy
  * @static
  */
 Chassis.proxy = $.proxy;
-
-/**
- * 将两个数组转换为名称-值对的对象
- *
- * @method object
- * @param  {array} list 目标数组(key)
- * @param  {array} values 目标数组(value)
- * @return {object}
- * @static
- */
-Chassis.object = function( list, values ) {
-    var result = {};
-
-    if ( list === null ) {
-        return {};
-    }
-    
-    Chassis.$.each( list, function( key, item ) {
-        if ( values ) {
-            result[ item ] = values[ key ];
-        } else {
-            result[ item[ 0 ] ] = item[ 1 ];
-        }
-    } );
-
-    return result;
-};
 
 $.support = Chassis.mixin( $.support || {}, {
     has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()

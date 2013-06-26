@@ -26,14 +26,6 @@ if ( typeof exports !== 'undefined' ) {
 Chassis.VERSION = '0.1.0';
 
 /**
- * 页面切换动画命名空间
- * @property FX
- * @static
- * @type string
- */
-Chassis.FX = {}; 
-
-/**
  * see [jQuery](http://api.jquery.com/),
  * [Zepto](http://zeptojs.com/),[GMU](http://gmu.baidu.com/)
  * or [ender](https://ender.no.de)
@@ -41,15 +33,3 @@ Chassis.FX = {};
  * @type object
  */
 Chassis.$ = root.jQuery || root.Zepto || root.ender;
-
-
-/**
- * 获取无冲突命名空间
- * @method noConflict
- * @static
- * @return __Chassis__
- */
-Chassis.noConflict = function() {
-	root[ exportName ] = _Chassis;
-	return this;
-};

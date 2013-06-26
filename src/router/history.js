@@ -28,7 +28,7 @@ Chassis.mixin( History.prototype, Events, {
      * @return 
      **/
     route: function( routeRe, callback ) {
-        this.handler.push({
+        this.handler.unshift({
             reg : routeRe,
             callback : callback
         });
@@ -55,6 +55,7 @@ Chassis.mixin( History.prototype, Events, {
      * @param {string} fragment
      * @return 
      **/
+    /*
     _triggerHandle : function( fragment ) {
         var me = this;
 		
@@ -66,61 +67,54 @@ Chassis.mixin( History.prototype, Events, {
             item.callback.call( me, fragment );
         } );
     },
+    */
     
     /**
      * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控路由变化事件并分发事件。
      * @public
      * @method start
-     * @param {object} opts (optional) 
-	 * opts.trigger 是否触发事件;
-	 * opts.pushState 是否使用pushState;
-	 * opts.root 使用pushState时配置的相对路径;
      * @return 
      **/
-    start : function( opts ) {
+    start : function() {
         var handler = {},
             type = 'Hash',
 			router;
-        
-        if ( !opts ) {
-            opts = {};
-        }
-		
-		
-		
-		if ( opts.router ) {
-			
-			opts.trigger = (opts.trigger === false) ? false : true;
-			router = Chassis.Router.extend( opts.router );
-			new router();
-		}
-        opts.trigger = (opts.trigger === false) ? false : true;
+
 		handler = Chassis.clone( this.handler );
 		
         this.destroy();
-        
-        if ( opts.pushState ) {
-            type = 'Pushstate';
-        }
         
         if ( !History[ type ] ) {
             throw new Error( 'History.' + type + ' is not found' );
         }
         Chassis.history = new History[ type ]( handler );
-        return Chassis.history.start( opts );
+        return Chassis.history.start();
+    },
+
+    loadUrl: function( fragmentOverride ) {
+        var i = 0,
+            fragment = this.getFragment( fragmentOverride ),
+            len = this.handler.length,
+            handler;
+
+        for ( ; i < len; i++ ) {
+            handler = this.handler[ i ];
+
+            if ( handler.reg.test( fragment ) ) {
+                handler.callback.call( this, fragment );
+                break;
+            }
+        }
     },
 
     /**
      * 销毁当前的history实例，并重新生成新的History实例。
-     * > 当应用的路由配置在hash和pushState之间来回切换时尤其有用。
      *
      * @public
      * @method destroy
      * @return 
      **/
     destroy : function() {
-        this.pushState = false;
-        this.root = '/';
         this.handler = [];
         this.cacheOptions = null;
         $( window ).off( 'hashchange' );

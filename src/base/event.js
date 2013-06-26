@@ -124,14 +124,15 @@ var Events = Chassis.Events = {
             return this;
         }
 
-        names = name ? [ name ] : Chassis.keys( this._events );
+        names = name ? [ name ] : this._events;
         
         Chassis.$.each( names, function( nKey, nItem ) {
-            name = nItem;
-            events = me._events[ name ];
+            var evtName = name ? nItem : nKey;
+
+            events = me._events[ evtName ];
 
             if ( events ) {
-                me._events[ name ] = retain = [];
+                me._events[ evtName ] = retain = [];
 
                 if ( callback || context ) {
                     Chassis.$.each( events, function( eKey, eItem ) {
@@ -145,7 +146,7 @@ var Events = Chassis.Events = {
                     
                 }
                 if ( !retain.length ) {
-                    delete me._events[ name ];
+                    delete me._events[ evtName ];
                 }
             }
         } );

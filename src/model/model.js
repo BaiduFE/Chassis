@@ -160,8 +160,7 @@ Chassis.mixin( Model.prototype, Events, {
             silent, 
             changing, 
             prev, 
-            current,
-            validateResult;
+            current;
             
         if ( key === null ) {
             return me;
@@ -176,15 +175,6 @@ Chassis.mixin( Model.prototype, Events, {
         
         if ( !opts ) {
             opts = {};
-        }
-
-        
-        // 变更之前先做校验
-        validateResult = me.validate.call( me, attrs );
-        
-        if ( validateResult !== true ) {
-            me.trigger( 'error', validateResult );
-            return;
         }
         
         me._previousAttributes = Chassis.clone( me.attributes );
@@ -205,57 +195,6 @@ Chassis.mixin( Model.prototype, Events, {
 			me.trigger( 'change', me );
 		}
         
-    },
-    
-    /**
-     * 从内部属性散列表中删除指定属性。 
-	 * > 如果未设置 `silent` 选项，会触发 `change` 事件。
-     *
-     * @method clear
-     * @param {string} attr
-     * @param {object} opts
-     * @return 
-	 * @example
-
-		var model = __Chassis__.Model.extend( {
-			defaults : {
-				title : '__Chassis__'
-			}
-		} );
-		
-        var m = new model();
-		m.unset( 'title' )
-     **/
-    unset : function( attr, opts ) {
-        return this.set( attr, Chassis.Undefined,
-                Chassis.mixin( {}, opts, { unset: true } ) );
-    },
-    
-    /**
-     * 从模型中删除所有属性。 
-	 * > 如果未设置 `silent` 选项，会触发 `change` 事件。
-     *
-     * @method clear
-     * @param {object} opts
-     * @return
-	 * @example
-
-		var model = __Chassis__.Model.extend( {
-			defaults : {
-				title : '__Chassis__'
-			}
-		} );
-		
-        var m = new model();
-		m.clear();
-     **/
-    clear : function( opts ) {
-        var attrs = {};
-        Chassis.$.each( this.attributes, function( key, item ) {
-            attrs[ key ] = Chassis.Undefined;
-        } );
-        
-        return this.unset( attrs, opts );
     },
     
     /**
@@ -280,136 +219,6 @@ Chassis.mixin( Model.prototype, Events, {
      **/
     toJSON : function() {
         return Chassis.clone( this.attributes );
-    },
-    
-    /**
-     * 返回与模型属性一致的新的实例。
-     *
-     * @method clone
-     * @return
-	 * @example
-
-		var model = __Chassis__.Model.extend( {
-			defaults : {
-				title : '__Chassis__'
-			},
-			init : function(){
-				//
-			}
-		} );
-		
-        var m = new model();
-        m.clone();	
-     **/
-    clone : function() {
-        return new this.constructor( this.attributes );
-    },
-    
-    /**
-     * 与 get 类似, 但返回模型属性值的 HTML 转义后的版本。 
-     * > 如果将数据从模型插入 HTML，使用 escape 取数据可以避免 XSS 攻击.
-     *
-     * @method escape
-     * @param {string} attr
-     * @return
-	 * @example
-
-		var model = __Chassis__.Model.extend( {
-			defaults : {
-				title : '__Chassis__'
-			},
-			init : function(){
-				//
-			}
-		} );
-		
-        var m = new model();
-        m.escape( 'title' );		 
-     **/
-    escape : function( attr ) {
-        return Chassis.escape( this.get( attr ) );
-    },
-    
-    /**
-     *在 `change` 事件发生的过程中，本方法可被用于获取已改变属性的旧值。
-     *
-     * @method previous
-     * @param {string} attr
-     * @return
-	 * @example
-
-		var model = __Chassis__.Model.extend( {
-			defaults : {
-				title : '__Chassis__'
-			},
-			init : function(){
-				//
-			}
-		} );
-		
-        var m = new model();
-		m.on( 'change', function(){
-			this.previous( 'title' );
-		} );
-		
-        m.set( 'tile', '' );	 
-     **/
-    previous : function( attr ) {
-        return (attr === null || !this._previousAttributes) ?
-                null : this._previousAttributes[ attr ];
-    },
-    
-    /**
-     * 返回模型的上一个属性散列的副本。
-     * > 一般用于获取模型的不同版本之间的区别，或者当发生错误时回滚模型状态。
-     *
-     * @method previousAttributes
-     * @return
-	 * @example
-
-		var model = __Chassis__.Model.extend( {
-			defaults : {
-				title : '__Chassis__'
-			},
-			init : function(){
-				//
-			}
-		} );
-		
-        var m = new model();
-		m.on( 'change', function(){
-			this.previousAttributes( );
-		} );
-		
-        m.set( 'tile', '' );	 
-     **/
-    previousAttributes : function() {
-        return Chassis.clone( this._previousAttributes );
-    },
-    
-    /**
-     * 模型是否已经保存到服务器。 
-	 * > 如果模型尚无 `id`，则被视为新的。
-     *
-     * @method isNew
-     * @return
-	 * @example
-
-		var model = __Chassis__.Model.extend( {
-			defaults : {
-				title : '__Chassis__'
-			},
-			init : function(){
-				//
-			}
-		} );
-		
-        var m = new model();
-
-        m.isNew();		 
-     **/
-    isNew : function() {
-        return this.id === null;
     },
     
     /**
@@ -495,43 +304,6 @@ Chassis.mixin( Model.prototype, Events, {
     },
     
     /**
-     * 自定义校验，建议用自定义的逻辑重载它
-     *
-     * @method validate
-     * @return
-	 * @example
-
-		var model = __Chassis__.Model.extend( {
-			defaults : {
-				title : '__Chassis__'
-			},
-			url : function(){
-				return '/data/?title=' + this.get( 'title' );
-			},
-			parse : function(resp){
-				return resp[ 'data' ];
-			},
-			
-			validate : function( data ){
-				if ( data[ 'title' ] == '' ) {
-					return 'title attribute can not be empty;';
-				}
-				return true;
-			}
-			
-		} );
-		
-        var m = new model();
-		m.on( 'change', function(){
-			//success
-		} );
-        m.fetch();	 
-     **/
-    validate : function() {
-        return true;
-    },
-    
-    /**
      * 手动触发 `change` 事件。
      *
      * @method change
@@ -546,84 +318,8 @@ Chassis.mixin( Model.prototype, Events, {
         return Chassis.$.ajax.call( this, opts );
     }
     
-    
-    
-    
-    
-    // 对服务端做模型操作基本没用，故不做实现
-    /*
-    ,save : function(){}
-    ,destroy : function(){}
-    */
-    
-    
-    // 可以全局指定，没什么实际意义
-    /*
-    ,urlRoot : function(){}
-    */
-    
-    // 数据变更暂不实现(除非实现数据双向绑定)
-    /*
-    ,hasChanged : function(){}
-    ,changedAttributes : function(){}
-    */
-    
 } );
 
 Chassis.mixin( Model, {
-
-    /**
-     * 创建自定义Model类
-     * @method define
-     * @param  {string} modelId     数据模型ID，确保唯一性。
-     * @param  {object} protoProps  原型方法和属性。
-     * @param  {object} staticProps 静态方法和属性。
-     * @static
-     * @example
-     *     // 定义Model
-     *     Chassis.Model.define( 'home', {
-     *         url: function() {},
-     *         parse: function() {}
-     *     } );
-     */
-    define: function( modelId, protoProps, staticProps ) {
-        
-        /*
-        if ( this[ modelId ] ) {
-            throw new Error( 'View ' + modelId + ' exists already.' );
-        }
-        */
-
-        this[ modelId ] = this.extend( protoProps, staticProps );
-
-    },
-
-    /**
-     * 获取自定义Model类
-     * @method get
-     * @static
-     * @param  {string} modelId Model ID
-     * @return {model}
-     */
-    get: function( modelId ) {
-        return this[ modelId ];
-    },
-
-    /**
-     * 创建自定义Model类实例
-     * @method create
-     * @static
-     * @param  {string} modelId     Model ID
-     * @param  {object} attributes  创建实例参数
-     * @param  {object} opts        创建实例参数
-     * @return {model}
-     */
-    create: function( modelId, attributes, opts  ) {
-
-        var klass = this.get( modelId );
-
-        return klass ? (new klass( attributes, opts )) : null;
-    },
-
     extend: Chassis.extend
 } );

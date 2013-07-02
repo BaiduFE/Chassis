@@ -11,7 +11,6 @@ rocket.subview.sayhello_header = rocket.subview.extend({
     ,init: function(options){
         var me = this;
 
-        // todo
     }
 
     ,render: function(sections){
@@ -22,6 +21,7 @@ rocket.subview.sayhello_header = rocket.subview.extend({
 
     , onBeforePageIn : function(){
 		this.$el.show();
+
 	}
 
     ,onbackbtn: function(e){

@@ -263,6 +263,15 @@ Chassis.object = function( list, values ) {
     return result;
 };
 
+
+Chassis.load = function( pkg, callback ) {
+    window.F.load( Chassis.load.config.prefix + pkg, callback );
+};
+Chassis.load.config = {
+    prefix : ''
+};
+
+
 $.support = Chassis.mixin( $.support || {}, {
     has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
 } );

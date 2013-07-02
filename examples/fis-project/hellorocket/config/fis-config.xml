@@ -44,10 +44,27 @@
             <import>rocket.init.js</import>
 
             <!-- page -->
-            <import>/page/*.js</import>
+            <import>/page/index/js/view/rocket.pageview.index.js</import>
+            <import>/page/sayhello/js/view/rocket.pageview.sayhello.js</import>
 
         </app>
 
+        <subview-index_header>
+            <import>/page/index/js/view/rocket.subview.index_header.js</import>
+        </subview-index_header>
+        
+        <subview-index_content>
+            <import>/page/index/js/view/rocket.subview.index_content.js</import>
+        </subview-index_content>
+        
+        <subview-sayhello_header>
+            <import>/page/sayhello/js/view/rocket.subview.sayhello_header.js</import>
+        </subview-sayhello_header>
+        
+        <subview-sayhello_content>
+            <import>/page/sayhello/js/view/rocket.subview.sayhello_content.js</import>
+        </subview-sayhello_content>
+        
     </merge>
 
     <!--task name="refresh_manifest">

@@ -224,8 +224,8 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    append: function( view ) {
-        this._addSubview( view );
+    append: function( view, opts ) {
+        this._addSubview( view, '', opts );
     },
 
     /**
@@ -233,8 +233,8 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    prepend: function( view ) {
-        this._addSubview( view, 'PREPEND' );
+    prepend: function( view, opts ) {
+        this._addSubview( view, 'PREPEND', opts );
     },
 
     /**
@@ -242,14 +242,24 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    setup: function( view ) {
-        this._addSubview( view, 'SETUP' );
+    setup: function( view, opts ) {
+        this._addSubview( view, 'SETUP', opts );
     },
 
     /**
      * 子类初始化
      */
     init: noop,
+    
+    /**
+     * subview异步加载记录
+     *
+     */
+    
+    _asyncSubView : {
+        'global'  : [],
+        'subview' : {}
+    },
 
     /**
      * View销毁时调用，需子类实现。
@@ -292,6 +302,12 @@ Chassis.mixin( View.prototype, Events, {
 
         this.onBeforePageIn( params );
         
+        this._asyncSubView.global = [ { 
+                event  : 'beforepagein', 
+                params : params 
+            } 
+        ];
+        
     },
 
     /**
@@ -305,6 +321,12 @@ Chassis.mixin( View.prototype, Events, {
     _onAfterPageIn: function( params ) {
 
         this.onAfterPageIn( params );
+        
+        this._asyncSubView.global.push({ 
+                event  : 'afterpagein', 
+                params : params 
+            } 
+        );
     },
 
     /**
@@ -387,31 +409,99 @@ Chassis.mixin( View.prototype, Events, {
 		}
 	},
 
-	_addSubview: function( view, action ) {
+	_addSubview: function( view, action, opt, async ) {
+        var me = this,
+            pid,
+            pe;
 
+        if ( (!Chassis.isObject( view )) &&  (!Chassis.SubView[ view ]) ) {
+            me._addAsyncSubview.call( me, view, action, opt );
+            return;
+        }
+
+        
 		if ( view instanceof Chassis.View ) {
 			this.children[ view.cid ] = view;
 			view.parent = this;
+            
+            if ( !async ) {
+                switch ( action ) {
 
-			switch ( action ) {
-
-				// 不进行DOM处理
-				case 'SETUP': 
-					break;
-				case 'PREPEND':
-					this.$el.prepend( view.$el );
-					break;
-				default:
-					this.$el.append( view.$el );
-					break;
-			}
+                    // 不进行DOM处理
+                    case 'SETUP': 
+                        break;
+                    case 'PREPEND':
+                        this.$el.prepend( view.$el );
+                        break;
+                    default:
+                        this.$el.append( view.$el );
+                        break;
+                }
+            }
 
 			view.$el.hide();
 
+            if ( async ) {
+                me._triggerAsyncSubviewEvent.call( me, view );
+            }
 		} else {
 			throw new Error( 'view is not an instance of Chassis.View.' );
 		}
-	}
+	},
+    
+    _addAsyncSubview : function( view, action, opt, async ) {
+        var me = this,
+            pid,
+            pe;
+            
+        pid = Chassis.uniqueId( 'subview-placeholder-' );
+        pe = $( '<div id="' + pid + '"></div>' );
+        
+        me._asyncSubView.subview[ view ] = {
+            id : pid,
+            event : []
+             
+        };
+        
+        switch ( action ) {
+            case 'SETUP' : 
+                break;
+            case 'PREPEND' :
+                me.$el.prepend( pe );
+                break;
+            default :
+                me.$el.append( pe );
+                break;
+        }
+        
+        Chassis.load( 'subview-' + view, function() {
+            var subView     = new Chassis.SubView[ view ]( opt ),
+                placeHolder = me.$el.find( '#subview-placeholder-' + pid  );
+            
+            switch ( action ) {
+				case 'SETUP': 
+					break;
+				case 'PREPEND':
+                    placeHolder.replaceWith( view.$el );
+                    break;
+				default:
+                    placeHolder.replaceWith( view.$el );
+					break;
+			}
+            
+            me._addSubview.call( me, subView, action, opt, true );
+        } );
+        
+        return;
+    },
+    
+    _triggerAsyncSubviewEvent : function( view ) {
+        var me = this;
+        
+        Chassis.$.each( me._asyncSubView.global, function( key, value ) {
+            view.trigger( value.event, value.params );
+        } );
+    }
 } );
 
 // 引入view.loading.js后会在view的原型增加以下方法

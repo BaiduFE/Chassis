@@ -437,9 +437,11 @@ Chassis.mixin( View.prototype, Events, {
                         this.$el.append( view.$el );
                         break;
                 }
+                
+                view.$el.hide();
             }
 
-			view.$el.hide();
+			
 
             if ( async ) {
                 me._triggerAsyncSubviewEvent.call( me, view );
@@ -475,8 +477,13 @@ Chassis.mixin( View.prototype, Events, {
         }
         
         Chassis.load( 'subview-' + view, function() {
-            var subView     = new Chassis.SubView[ view ]( opt ),
-                placeHolder = me.$el.find( '#subview-placeholder-' + pid  );
+            var placeHolder = me.$el.find( '#' + pid  ),
+                subView;
+            
+            if ( !Chassis.SubView[ view ] ) {
+                return;
+            }
+            subView = new Chassis.SubView[ view ]( opt, me );
             
             switch ( action ) {
 				case 'SETUP': 

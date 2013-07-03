@@ -7,12 +7,14 @@ rocket.router.hellorocket = rocket.router.extend({
         '': 'index'
         ,'index': 'index'
         ,'sayhello': 'sayhello'
+        ,'say/:id' : 'say'
     }
 
     // 页面切换顺序配置
     ,pageOrder: [
-        'index'
-        ,'sayhello'
+          'index'
+        , 'sayhello'
+        , 'say'
     ]
 
     // 位置记忆，默认为false，不进行位置记忆

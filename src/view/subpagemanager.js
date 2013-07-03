@@ -234,6 +234,9 @@ Chassis.mixin( SPM.prototype, Events, {
 		this.listenTo( listenTarget, 'beforepagein', this._beforePageIn );
 		this.listenTo( listenTarget, 'afterpagein', this._afterPageIn );
 		
+        this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
+		this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+        
 		this.listenTo( this.owner, 'beforedestroy', this._destroy );
 
 	},
@@ -316,21 +319,33 @@ Chassis.mixin( SPM.prototype, Events, {
 
 	_afterPageIn: function( e ) {
 
-		var params = e.params,
-			owner = this.owner,
-			stamp = this.getStamp( params ),
-			target = this.getBy( 'stamp', stamp ),
+		var me = this,
+            params = e.params,
+			owner = me.owner,
+			stamp = me.getStamp( params ),
+			target = me.getBy( 'stamp', stamp ),
 			subpage;
 
 		// 如果子页面不存在则自动创建
 		if ( !target ) {
-
+            
+            if ( !Chassis.isObject( me.klass ) ) {
+                Chassis.load( 'subview-' + me.klass, function() {
+                    me.klass = Chassis.SubView[ me.klass ];
+                    
+                    if ( me.klass ) {
+                        me._afterPageIn.call( me, e );
+                    }
+                } );
+                return;
+            }
+            
 			// TODO: 某些数据可能不允许自动生成subview
-			subpage = new this.klass( params || {}, owner );
+			subpage = new me.klass( params || {}, owner );
 			subpage.stamp = stamp;
 
 			owner.append( subpage );
-			this.register( subpage );
+			me.register( subpage );
 
 			target = subpage;
 		}

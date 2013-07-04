@@ -234,8 +234,11 @@ Chassis.mixin( SPM.prototype, Events, {
 		this.listenTo( listenTarget, 'beforepagein', this._beforePageIn );
 		this.listenTo( listenTarget, 'afterpagein', this._afterPageIn );
 		
-        this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
-		this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+        if ( this.owner !== listenTarget ) {
+            this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
+            this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+        }
+        
         
 		this.listenTo( this.owner, 'beforedestroy', this._destroy );
 

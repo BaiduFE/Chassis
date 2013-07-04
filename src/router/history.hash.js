@@ -42,7 +42,12 @@ History.Hash = History.extend({
                 ((typeof document.documentMode === 'undefined') ||
                 document.documentMode === 8) ) {
 
-            me._onHashChangeEvent();
+            $( window ).on( 'hashchange', function( e ) {
+                if ( me.fragment === me.getFragment() ) {
+                    return;
+                }
+                me.loadUrl.call( me, me.getFragment() );
+            } );
             
             // 处理当前hash
 			if ( opts.trigger ) {
@@ -74,7 +79,9 @@ History.Hash = History.extend({
         }
 
         fragment = this.getFragment( fragment );
-
+        
+        this.fragment = fragment;
+        
         me._setHash( fragment, opts.replace );
 
         if ( opts.trigger ) {
@@ -100,8 +107,6 @@ History.Hash = History.extend({
 		fragment = Chassis.$.trim( fragment ).replace( /^[#]+/, '' );
 		
         if ( me.getFragment() !== fragment ) {
-		
-			me._offHashChangeEvent(); 
 
             if ( replace ) {
                 href = location.href.replace( /(javascript:|#).*$/, '' );
@@ -118,21 +123,6 @@ History.Hash = History.extend({
                 // Some browsers require that `hash` contains a leading #.
                 location.hash = '#' + fragment;
             }
-			
-			// 处理hash为空时页面回到顶部
-			// 因为不考虑webkit之外的浏览器，所以用此方法比较有效
-            /* 
-			if ( fragment === '' ) {
-				folder = location.href.split( '/' ).slice( 3 ).join( '/' );
-				folder = '/' + folder.replace( /#(.*?)$/, '' );
-                history.pushState( {}, document.title, folder );
-			} else {
-                location.hash = '#' + fragment; 
-			}
-            */
-			window.setTimeout( function() {
-				me._onHashChangeEvent();
-			}, 0 );
         }
 
         return me;
@@ -156,16 +146,5 @@ History.Hash = History.extend({
         else {
             return fragment.replace( /^[#\/]|\s+$/g, '' );
         }
-    },
-    
-    
-    _onHashChangeEvent : function() {
-        var me = this;
-        $( window ).on( 'hashchange', function( e ) {
-			me.loadUrl.call( me, me.getFragment() );
-        } );
-    },
-    _offHashChangeEvent : function() {
-        $( window ).off( 'hashchange' );
     }
 });

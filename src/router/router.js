@@ -448,7 +448,7 @@ Chassis.mixin( Router.prototype, Events, {
         
         if ( !view ) {
 			
-			
+			/// TODO 如果是异步加载的话怎么办？
             if ( (action === me._index) && (!Chassis.PageView[ action ]) ) {
                 return;
             }

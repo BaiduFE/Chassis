@@ -49,7 +49,8 @@ $(document).ready(function() {
       Chassis.history.navigate( '', { trigger: false } );
       Chassis.history.destroy();
     } );
-
+    
+    
     Chassis.history.start();
 
     Chassis.history.navigate( 'glvpagea2/1' );

@@ -42,7 +42,7 @@ rocket.subview.say_content_detail = rocket.subview.extend({
     
     ,onModelChange : function(){
         var me = this;
-        me.$el.html( me.model.get('info') );
+        me.$el.html( me.model.get('info') + '<div><a href="#sayhello">hello!</a></div>');
     }
 
 });

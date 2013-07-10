@@ -1,6 +1,8 @@
 (function($) {
 
-Chassis.load.config.prefix = 'hellorocket_';
+
+
+
 
 $.extend(rocket, {
     init: function() {

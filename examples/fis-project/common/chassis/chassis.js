@@ -54,6 +54,9 @@ Chassis.noConflict = function() {
 	root[ exportName ] = _Chassis;
 	return this;
 };
+
+Chassis.commonView = {};
+
  /*jshint camelcase:false*/
  /**
  * @fileOverview 语言增强
@@ -320,11 +323,16 @@ Chassis.object = function( list, values ) {
 };
 
 
+Chassis.F = root.F;
+
 Chassis.load = function( pkg, callback ) {
-    window.F.load( Chassis.load.config.prefix + pkg, callback );
+    var pkg = Chassis.load.config.ruler( pkg );
+    if ( pkg ) {
+        Chassis.F.load( pkg, callback );
+    }
 };
 Chassis.load.config = {
-    prefix : ''
+    ruler : function( pkg ){}
 };
 
 
@@ -1343,6 +1351,8 @@ Chassis.mixin( Model, {
 /**
  * @fileOverview 数据缓存
  */
+/*jshint camelcase:false*/
+
 /**
  * @fileOverview Router核心实现
  * @requires Router.History || Router.Pushstate
@@ -1572,6 +1582,9 @@ Chassis.mixin( Router.prototype, Events, {
         });
         */
         
+        // TODO不可以有动画
+        to._repairCommonSubView();
+        
         me._doTransition(
             from,
                 to,
@@ -1612,6 +1625,7 @@ Chassis.mixin( Router.prototype, Events, {
                 
                 if ( to ) {
                     to.trigger( 'afterpagein', e );
+                    
                 }
 
             }
@@ -1791,15 +1805,56 @@ Chassis.mixin( Router.prototype, Events, {
         
         if ( !view ) {
 			
-			// 系统预定义定义了首页路由，但是没有实现就不执行。
-			if ( (action === me._index) && (!Chassis.PageView[ action ]) ) {
-				
-				return;
-				
-			}
-            view = me.views[ action ]  =
+			
+            
+            // 如果pageview没有下载，则先使用通用pageview，同时下载需要加载的pageview，加载成功后再触发对应的事件
+            if ( !Chassis.PageView[ action ] ) {
+                
+                Chassis.load( 'pageview-' + action, function() {
+                
+                    if ( !Chassis.PageView[ action ] ) {
+                        view.trigger( 'pageloaderror' );
+                        return;
+                    }
+                    
+                    view.trigger( 'pageloadsuccess' );
+                    
+                    view = me.views[ action ] = 
+                        new Chassis.PageView[ action ]( request, action );
+                    me.previousView = me.currentView;
+                    me.currentView = view;
+                    
+                    view.$el.show();
+                    
+                    
+                    view.trigger( 'beforepagein,afterpagein', {
+                        from: me.previousView,
+                        to: me.currentView,
+                        params: request
+                    } );
+                    return;
+                } );
+                
+                if ( !Chassis.PageView._transition_ ) {
+                    
+                    if ( !Chassis.PageView._TRANSITION_ ) {
+                        Chassis.PageView._TRANSITION_ = 
+                            Chassis.PageView.extend({});
+                    }
+                    
+                    Chassis.PageView._transition_ = 
+                        new Chassis.PageView._TRANSITION_();
+                }
+                
+                view = me.views[ action ]  = Chassis.PageView._transition_;
+                    
+            } else {
+                view = me.views[ action ]  = 
                     new Chassis.PageView[ action ]( request, action ); 
-        } 
+            }
+            
+            
+        }
         
         // 切换视图控制器
         me.previousView = me.currentView;
@@ -2015,7 +2070,15 @@ History.Hash = History.extend({
                 ((typeof document.documentMode === 'undefined') ||
                 document.documentMode === 8) ) {
 
-            me._onHashChangeEvent();
+            $( window ).on( 'hashchange', function( e ) {
+
+                if ( me.curFragment === me.getFragment() ) {
+                    return;
+                }
+                
+                me.curFragment = me.getFragment();
+                me.loadUrl.call( me, me.getFragment() );
+            } );
             
             // 处理当前hash
 			if ( opts.trigger ) {
@@ -2047,7 +2110,9 @@ History.Hash = History.extend({
         }
 
         fragment = this.getFragment( fragment );
-
+        
+        this.curFragment = fragment;
+        
         me._setHash( fragment, opts.replace );
 
         if ( opts.trigger ) {
@@ -2072,41 +2137,24 @@ History.Hash = History.extend({
 		
 		fragment = Chassis.$.trim( fragment ).replace( /^[#]+/, '' );
 		
-        if ( me.getFragment() !== fragment ) {
-		
-			me._offHashChangeEvent(); 
+        
 
-            if ( replace ) {
-                href = location.href.replace( /(javascript:|#).*$/, '' );
+        if ( replace ) {
+            href = location.href.replace( /(javascript:|#).*$/, '' );
 
-                if ( /android/i.test( navigator.userAgent ) &&
-                        'replaceState' in window.history ) {
-                    window.history.replaceState( 
-                        {}, '', href + '#' + fragment );
-                }
-
-                location.replace( href + '#' + fragment );
-            } else {
-
-                // Some browsers require that `hash` contains a leading #.
-                location.hash = '#' + fragment;
+            if ( /android/i.test( navigator.userAgent ) &&
+                    'replaceState' in window.history ) {
+                window.history.replaceState( 
+                    {}, '', href + '#' + fragment );
             }
-			
-			// 处理hash为空时页面回到顶部
-			// 因为不考虑webkit之外的浏览器，所以用此方法比较有效
-            /* 
-			if ( fragment === '' ) {
-				folder = location.href.split( '/' ).slice( 3 ).join( '/' );
-				folder = '/' + folder.replace( /#(.*?)$/, '' );
-                history.pushState( {}, document.title, folder );
-			} else {
-                location.hash = '#' + fragment; 
-			}
-            */
-			window.setTimeout( function() {
-				me._onHashChangeEvent();
-			}, 0 );
+
+            location.replace( href + '#' + fragment );
+        } else {
+
+            // Some browsers require that `hash` contains a leading #.
+            location.hash = '#' + fragment;
         }
+        
 
         return me;
     },
@@ -2129,17 +2177,6 @@ History.Hash = History.extend({
         else {
             return fragment.replace( /^[#\/]|\s+$/g, '' );
         }
-    },
-    
-    
-    _onHashChangeEvent : function() {
-        var me = this;
-        $( window ).on( 'hashchange', function( e ) {
-			me.loadUrl.call( me, me.getFragment() );
-        } );
-    },
-    _offHashChangeEvent : function() {
-        $( window ).off( 'hashchange' );
     }
 });
 /**
@@ -2660,10 +2697,11 @@ Chassis.mixin( View.prototype, Events, {
 
         // 如果未指定DOM元素则自动创建并设置id/className
 		if ( !this.el ) {
-
+            
             // attributes有可能来自原型属性因此需要复制
 			attrs = Chassis.mixin( {}, this.attributes || {} );
-
+            
+            
 			if ( this.id ) {
 				attrs.id = this.id;
 			}
@@ -2671,7 +2709,9 @@ Chassis.mixin( View.prototype, Events, {
 			if ( this.className ) {
 				attrs[ 'class' ] = this.className;
 			}
-
+            
+            
+            
 			$el = Chassis.$( '<' + this.tagName + '>' ).attr( attrs );
 			this.setElement( $el, false );
 
@@ -2685,12 +2725,45 @@ Chassis.mixin( View.prototype, Events, {
         var me = this,
             pid,
             pe;
+        
 
         if ( (!Chassis.isObject( view )) &&  (!Chassis.SubView[ view ]) ) {
+
             me._addAsyncSubview.call( me, view, action, opt );
+            
             return;
         }
+        
+        // TODO 已经加载，而且还是个字符串，那么可以重用
+        // 乾坤大挪移
+        if ( !Chassis.isObject( view ) ) {
+            
+            var viewName = view;
+            
+            view = Chassis.commonView[ view ];
+            
+            switch ( action ) {
 
+                // 不进行DOM处理
+                case 'SETUP': 
+                    break;
+                case 'PREPEND':
+                    view.$el.after( '<div class="__common_subview__" data=' + viewName + '></div>' );
+                    this.$el.prepend( view.$el );
+                    
+                    break;
+                default:
+                    view.$el.after( '<div class="__common_subview__" data=' + viewName + '></div>' );
+                    this.$el.append( view.$el );
+                    break;
+            }
+            
+            
+            //移走了，需要加一个标识，后续恢复
+            
+            return;
+        }
+        
         
 		if ( view instanceof Chassis.View ) {
 			this.children[ view.cid ] = view;
@@ -2712,8 +2785,6 @@ Chassis.mixin( View.prototype, Events, {
                 
                 view.$el.hide();
             }
-
-			
 
             if ( async ) {
                 me._triggerAsyncSubviewEvent.call( me, view );
@@ -2755,16 +2826,21 @@ Chassis.mixin( View.prototype, Events, {
             if ( !Chassis.SubView[ view ] ) {
                 return;
             }
+            
             subView = new Chassis.SubView[ view ]( opt, me );
+            
+            // 需要做一个key-value
+            Chassis.commonView[ view ] = subView;
+            
             
             switch ( action ) {
 				case 'SETUP': 
 					break;
 				case 'PREPEND':
-                    placeHolder.replaceWith( view.$el );
+                    placeHolder.replaceWith( subView.$el );
                     break;
 				default:
-                    placeHolder.replaceWith( view.$el );
+                    placeHolder.replaceWith( subView.$el );
 					break;
 			}
             
@@ -2779,6 +2855,30 @@ Chassis.mixin( View.prototype, Events, {
         
         Chassis.$.each( me._asyncSubView.global, function( key, value ) {
             view.trigger( value.event, value.params );
+        } );
+    },
+    
+    
+    _repairCommonSubView : function(){
+        var me = this;
+        
+        me.$el.find( '.__common_subview__').each(function(k, v) {
+        
+            var subviewName = $( v ).attr( 'data' ),
+                subView = Chassis.commonView[ subviewName ],
+                cloneView = subView.$el.clone();
+            
+            cloneView.attr( 'shadow', subviewName );
+            
+            if ( subView.$el.next().attr( 'shadow' )  !== subviewName ) {
+                subView.$el.after( cloneView );
+            }
+            
+            subView.$el.after( '<div class="__common_subview__" data=' + subviewName + '></div>' );
+            $( v ).replaceWith( subView.$el );
+            
+            me.$el.find( '[shadow=' + subviewName + ']' ).remove();
+            
         } );
     }
 } );
@@ -3223,8 +3323,11 @@ Chassis.mixin( SPM.prototype, Events, {
 		this.listenTo( listenTarget, 'beforepagein', this._beforePageIn );
 		this.listenTo( listenTarget, 'afterpagein', this._afterPageIn );
 		
-        this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
-		this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+        if ( this.owner !== listenTarget ) {
+            this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
+            this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+        }
+        
         
 		this.listenTo( this.owner, 'beforedestroy', this._destroy );
 
@@ -3482,6 +3585,7 @@ Chassis.FX.slider = (function() {
 					
 					if ( toEl ) {
 						$( toEl ).show();
+                        
 					}
 
 				}
@@ -3562,6 +3666,7 @@ Chassis.FX.slider = (function() {
 
 						if ( transitionEnd ) {
 							transitionEnd();
+                            
 						}
 					}, 0 );
 				}, 400 );

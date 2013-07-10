@@ -2,7 +2,7 @@
 
 rocket.subview.say_content = rocket.subview.extend({
 
-    el: '#say_page_content'
+    className: 'say_page_content'
 
     ,init: function(options){
         var me = this,

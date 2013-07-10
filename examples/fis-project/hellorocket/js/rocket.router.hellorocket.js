@@ -1,5 +1,32 @@
 (function($) {
 
+Chassis.load.config.ruler = function( pkg ){
+    return 'hellorocket_' + pkg;
+};
+
+Chassis.PageView._TRANSITION_ = Chassis.PageView.extend({
+    
+    el : '#_common__page',
+    
+    init : function(){
+        this.on('pageloadsuccess',this.onPageLoadSuccess);
+        this.on('pageloaderror',this.onPageLoadError);
+    },
+    
+    
+    onBeforePageIn : function(){
+        this.$el.html( 'page loading...' );
+    },
+    
+    onPageLoadError : function(){
+        this.$el.html( 'page loade error!<div><a href="#">GO Home!</a></div>' );
+    },
+    
+    onPageLoadSuccess : function(){
+        this.$el.hide();
+    }
+});
+
 rocket.router.hellorocket = rocket.router.extend({
 
     // 路由配置
@@ -8,6 +35,7 @@ rocket.router.hellorocket = rocket.router.extend({
         ,'index': 'index'
         ,'sayhello': 'sayhello'
         ,'say/:id' : 'say'
+        ,'error' : 'error'
     }
 
     // 页面切换顺序配置

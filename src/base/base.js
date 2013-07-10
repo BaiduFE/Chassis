@@ -41,7 +41,15 @@ Chassis.FX = {};
  * @type object
  */
 Chassis.$ = root.jQuery || root.Zepto || root.ender;
+Chassis.F = root.F;
 
+/**
+ * 通用模块缓存
+ * @property commonView
+ * @static
+ * @type object
+ */
+Chassis.commonView = {};
 
 /**
  * 获取无冲突命名空间

@@ -5,6 +5,12 @@ $(document).ready(function() {
   module('Chassis.View', {
 
     setup: function() {
+        Chassis.load.config.ruler = function( pkg ){
+            return '../test/data/' + pkg.replace(/\-/g,'.');
+        };
+        
+        F.load = seajs.use;
+    
       view = new Chassis.View({
         id        : 'test-view',
         className : 'test-view',
@@ -14,6 +20,46 @@ $(document).ready(function() {
 
   });
 
+  test('async load pageview', 1, function(){
+    
+    var router = new Chassis.Router( {
+      routes: [ 'async1/:id' ]
+    } );
+    
+    
+
+    Chassis.history.start();
+    Chassis.history.navigate( 'async1/123' );
+    
+    stop();
+
+  });
+  
+  test('async load subview', 3, function(){
+    Chassis.load.config.ruler = function( pkg ){
+        return '../test/data/' + pkg.replace('-','.');
+    };
+    
+    F.load = seajs.use;
+    var router = new Chassis.Router( {
+      routes: [ 'async2/:id' ]
+    } );
+    
+    
+    stop();
+    Chassis.history.start();
+    Chassis.history.navigate( 'async2/123' );
+    
+    
+
+  });
+  
+  
+  
+  
+  return;
+  
+  
   test('constructor', 3, function() {
     equal(view.el.id, 'test-view');
     equal(view.el.className, 'test-view');
@@ -527,5 +573,7 @@ $(document).ready(function() {
     Chassis.history.navigate( 'list2/123' );
 
   });
+  
+  
 
 });

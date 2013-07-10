@@ -43,9 +43,11 @@ History.Hash = History.extend({
                 document.documentMode === 8) ) {
 
             $( window ).on( 'hashchange', function( e ) {
-                if ( me.fragment === me.getFragment() ) {
+                if ( me.curFragment === me.getFragment() ) {
                     return;
                 }
+                
+                me.curFragment = me.getFragment();
                 me.loadUrl.call( me, me.getFragment() );
             } );
             
@@ -80,7 +82,7 @@ History.Hash = History.extend({
 
         fragment = this.getFragment( fragment );
         
-        this.fragment = fragment;
+        this.curFragment = fragment;
         
         me._setHash( fragment, opts.replace );
 
@@ -106,24 +108,24 @@ History.Hash = History.extend({
 		
 		fragment = Chassis.$.trim( fragment ).replace( /^[#]+/, '' );
 		
-        if ( me.getFragment() !== fragment ) {
+        
 
-            if ( replace ) {
-                href = location.href.replace( /(javascript:|#).*$/, '' );
+        if ( replace ) {
+            href = location.href.replace( /(javascript:|#).*$/, '' );
 
-                if ( /android/i.test( navigator.userAgent ) &&
-                        'replaceState' in window.history ) {
-                    window.history.replaceState( 
-                        {}, '', href + '#' + fragment );
-                }
-
-                location.replace( href + '#' + fragment );
-            } else {
-
-                // Some browsers require that `hash` contains a leading #.
-                location.hash = '#' + fragment;
+            if ( /android/i.test( navigator.userAgent ) &&
+                    'replaceState' in window.history ) {
+                window.history.replaceState( 
+                    {}, '', href + '#' + fragment );
             }
+
+            location.replace( href + '#' + fragment );
+        } else {
+
+            // Some browsers require that `hash` contains a leading #.
+            location.hash = '#' + fragment;
         }
+        
 
         return me;
     },

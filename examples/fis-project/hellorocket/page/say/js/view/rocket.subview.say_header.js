@@ -2,21 +2,23 @@
 
 rocket.subview.say_header = rocket.subview.extend({
 
-    el: '#say_page_header'
+    className: 'say_page_header'
 
     ,events: {
         'click .say-page-header-backbtn': 'onbackbtn'
     }
 
+    ,template : $( '#template_say_header' ).html()
+    
     ,init: function(options){
         var me = this;
-
+        me.render();
     }
 
     ,render: function(sections){
-        var me = this;
-        // todo
-        me.hideLoading();
+        var me = this,tpl = baidu.template(me.template, {});
+        
+        me.$el.html( tpl );
     }
 
     , onBeforePageIn : function(){

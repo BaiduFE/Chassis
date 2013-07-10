@@ -412,13 +412,40 @@ Chassis.mixin( View.prototype, Events, {
 	_addSubview: function( view, action, opt, async ) {
         var me = this,
             pid,
-            pe;
+            pe,
+            viewElement;
 
         if ( (!Chassis.isObject( view )) &&  (!Chassis.SubView[ view ]) ) {
             me._addAsyncSubview.call( me, view, action, opt );
             return;
         }
 
+        // TODO 已经加载，而且还是个字符串，那么可以重用
+        // 乾坤大挪移
+        if ( !Chassis.isObject( view ) ) {
+            
+            viewElement = '<div class="__common_subview__" data=' + 
+                                view + '></div>';
+            
+            view = Chassis.commonView[ view ];
+            
+            switch ( action ) {
+
+                // 不进行DOM处理
+                case 'SETUP': 
+                    break;
+                case 'PREPEND':
+                    view.$el.after(  viewElement );
+                    this.$el.prepend( view.$el );
+                    
+                    break;
+                default:
+                    view.$el.after( viewElement );
+                    this.$el.append( view.$el );
+                    break;
+            }
+            return;
+        }
         
 		if ( view instanceof Chassis.View ) {
 			this.children[ view.cid ] = view;
@@ -484,15 +511,15 @@ Chassis.mixin( View.prototype, Events, {
                 return;
             }
             subView = new Chassis.SubView[ view ]( opt, me );
-            
+            Chassis.commonView[ view ] = subView;
             switch ( action ) {
 				case 'SETUP': 
 					break;
 				case 'PREPEND':
-                    placeHolder.replaceWith( view.$el );
+                    placeHolder.replaceWith( subView.$el );
                     break;
 				default:
-                    placeHolder.replaceWith( view.$el );
+                    placeHolder.replaceWith( subView.$el );
 					break;
 			}
             
@@ -508,7 +535,32 @@ Chassis.mixin( View.prototype, Events, {
         Chassis.$.each( me._asyncSubView.global, function( key, value ) {
             view.trigger( value.event, value.params );
         } );
+    },
+    
+    _repairCommonSubView : function() {
+        var me = this;
+        
+        me.$el.find( '.__common_subview__' ).each(function( k, v ) {
+        
+            var subviewName = $( v ).attr( 'data' ),
+                subView = Chassis.commonView[ subviewName ],
+                cloneView = subView.$el.clone();
+            
+            cloneView.attr( 'shadow', subviewName );
+            
+            if ( subView.$el.next().attr( 'shadow' )  !== subviewName ) {
+                subView.$el.after( cloneView );
+            }
+            
+            subView.$el.after( '<div class="__common_subview__" data=' + 
+                                subviewName + '></div>' );
+            $( v ).replaceWith( subView.$el );
+            
+            me.$el.find( '[shadow=' + subviewName + ']' ).remove();
+            
+        });
     }
+    
 } );
 
 // 引入view.loading.js后会在view的原型增加以下方法

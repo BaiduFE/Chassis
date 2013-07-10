@@ -10,8 +10,8 @@ rocket.pageview.say = rocket.pageview.extend({
         opt = $.extend({}, options);
         
         
-        me.setup('say_header',opt);
-        me.setup('say_content',opt);
+        me.append('say_header',opt);
+        me.append('say_content',opt);
         
         
         

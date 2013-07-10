@@ -9,7 +9,7 @@ rocket.pageview.sayhello = rocket.pageview.extend({
         
         opt = $.extend({}, options);
         
-        me.setup('sayhello_header',opt);
+        me.prepend('say_header',opt);
         me.setup('sayhello_content',opt);
         
         /*

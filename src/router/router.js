@@ -229,6 +229,9 @@ Chassis.mixin( Router.prototype, Events, {
         });
         */
         
+        // 通用subview复用及影子节点处理
+        to._repairCommonSubView();
+        
         me._doTransition(
             from,
                 to,

@@ -139,7 +139,7 @@ function getResources(url, list, fn){
     });
 }
 //在普通package加载前，提前加载
-var preload = 'common_fislib';
+var preload = '';
 /**
  * 加载包
  * @param packages {Array} 包
@@ -154,4 +154,4 @@ F.load = function(packages, fn){
 };
 
  'F' in window || (window.F = F);
-})(/*__baseUrl*/);
+})('data');

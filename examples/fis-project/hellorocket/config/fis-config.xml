@@ -47,9 +47,7 @@
             <import>rocket.init.js</import>
 
             <!-- page -->
-            <import>/page/index/js/view/rocket.pageview.index.js</import>
-            <import>/page/sayhello/js/view/rocket.pageview.sayhello.js</import>
-            <import>/page/say/js/view/rocket.pageview.say.js</import>
+            
 
         </app>
 
@@ -61,9 +59,7 @@
             <import>/page/index/js/view/rocket.subview.index_content.js</import>
         </subview-index_content>
         
-        <subview-sayhello_header>
-            <import>/page/sayhello/js/view/rocket.subview.sayhello_header.js</import>
-        </subview-sayhello_header>
+
         
         <subview-sayhello_content>
             <import>/page/sayhello/js/view/rocket.subview.sayhello_content.js</import>
@@ -81,6 +77,18 @@
             <import>/page/say/js/model/*.js</import>
             <import>/page/say/js/view/rocket.subview.say_content_detail.js</import>
         </subview-say_content_detail>
+        
+        <pageview-index>
+            <import>/page/index/js/view/rocket.pageview.index.js</import>
+        </pageview-index>
+        
+        <pageview-sayhello>
+            <import>/page/sayhello/js/view/rocket.pageview.sayhello.js</import>
+        </pageview-sayhello>
+        
+        <pageview-say>
+            <import>/page/say/js/view/rocket.pageview.say.js</import>
+        </pageview-say>
         
     </merge>
 

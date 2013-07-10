@@ -263,16 +263,16 @@ Chassis.object = function( list, values ) {
     return result;
 };
 
-Chassis.F = root.F;
+
 
 Chassis.load = function( pkg, callback ) {
-    var pkg = Chassis.load.config.ruler( pkg );
-    if ( pkg ) {
-        Chassis.F.load( pkg, callback );
+    var pkgs = Chassis.load.config.ruler( pkg );
+    if ( pkgs ) {
+        Chassis.F.load( pkgs, callback );
     }
 };
 Chassis.load.config = {
-    ruler : function( pkg ){}
+    ruler : function( pkg ) {}
 };
 
 

@@ -49,12 +49,12 @@ History.Pushstate = History.extend({
 				me._load  = true;
 				return;
 			}
-            me._triggerHandle.call( me, me._getFragment() );
+            me.loadUrl.call( me, me.getFragment() );
         } );
         
         // 处理当前pushState
         if ( opts.trigger ) {
-			me._triggerHandle.call( me, me._getFragment() );
+			me.loadUrl.call( me, me.getFragment() );
 		}
         
         return;
@@ -86,7 +86,7 @@ History.Pushstate = History.extend({
         me.cacheOptions = null;
         
         if ( opts.trigger ) {
-            me._triggerHandle.call( me, fragment );
+            me.loadUrl.call( me, fragment );
         }
     },
     
@@ -110,10 +110,10 @@ History.Pushstate = History.extend({
      * 获取当前的fragment
      *
      * @private
-     * @method _getFragment
+     * @method getFragment
      * @return 
      **/
-    _getFragment : function() {
+    getFragment : function() {
         
         return window.location.href
                 .split( /\// )

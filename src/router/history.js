@@ -28,7 +28,8 @@ Chassis.mixin( History.prototype, Events, {
      * @return 
      **/
     route: function( routeRe, callback ) {
-        this.handler.push({
+
+        this.handler.unshift({
             reg : routeRe,
             callback : callback
         });
@@ -47,25 +48,7 @@ Chassis.mixin( History.prototype, Events, {
         return this;
     },
     
-    /**
-     * 传入url触发对应的事件
-     *
-     * @private
-     * @method _triggerHandle
-     * @param {string} fragment
-     * @return 
-     **/
-    _triggerHandle : function( fragment ) {
-        var me = this;
-		
-        Chassis.$.each( me.handler, function( key, item ) {
-            if ( !item.reg.test( fragment ) ) {
-                return;
-            }
 
-            item.callback.call( me, fragment );
-        } );
-    },
     
     /**
      * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控路由变化事件并分发事件。
@@ -108,6 +91,22 @@ Chassis.mixin( History.prototype, Events, {
         }
         Chassis.history = new History[ type ]( handler );
         return Chassis.history.start( opts );
+    },
+
+    loadUrl: function( fragmentOverride ) {
+        var i = 0,
+            fragment = this.getFragment( fragmentOverride ),
+            len = this.handler.length,
+            handler;
+
+        for ( ; i < len; i++ ) {
+            handler = this.handler[ i ];
+
+            if ( handler.reg.test( fragment ) ) {
+                handler.callback.call( this, fragment );
+                break;
+            }
+        }
     },
 
     /**

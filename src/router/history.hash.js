@@ -46,7 +46,7 @@ History.Hash = History.extend({
             
             // 处理当前hash
 			if ( opts.trigger ) {
-				me._triggerHandle.call( me, me._getHash() );
+				me.loadUrl.call( me, me.getFragment() );
 			}
             
             return;
@@ -73,10 +73,12 @@ History.Hash = History.extend({
             opts = { trigger : true };
         }
 
-        me._setHash( fragment );
+        fragment = this.getFragment( fragment );
+
+        me._setHash( fragment, opts.replace );
 
         if ( opts.trigger ) {
-            me._triggerHandle.call( me, fragment );
+            this.loadUrl( fragment );
         }
 
     },
@@ -87,20 +89,39 @@ History.Hash = History.extend({
      * @private
      * @method _setHash
      * @param {string} fragment
+     * @param {boolean} replace
      * @return 
      **/
-    _setHash : function( fragment ) {
+    _setHash : function( fragment, replace ) {
 		var me = this,
-			folder = '';
+			folder = '',
+            href;
 		
 		fragment = Chassis.$.trim( fragment ).replace( /^[#]+/, '' );
 		
-        if ( me._getHash() !== fragment ) {
+        if ( me.getFragment() !== fragment ) {
 		
 			me._offHashChangeEvent(); 
+
+            if ( replace ) {
+                href = location.href.replace( /(javascript:|#).*$/, '' );
+
+                if ( /android/i.test( navigator.userAgent ) &&
+                        'replaceState' in window.history ) {
+                    window.history.replaceState( 
+                        {}, '', href + '#' + fragment );
+                }
+
+                location.replace( href + '#' + fragment );
+            } else {
+
+                // Some browsers require that `hash` contains a leading #.
+                location.hash = '#' + fragment;
+            }
 			
 			// 处理hash为空时页面回到顶部
 			// 因为不考虑webkit之外的浏览器，所以用此方法比较有效
+            /* 
 			if ( fragment === '' ) {
 				folder = location.href.split( '/' ).slice( 3 ).join( '/' );
 				folder = '/' + folder.replace( /#(.*?)$/, '' );
@@ -108,6 +129,7 @@ History.Hash = History.extend({
 			} else {
                 location.hash = '#' + fragment; 
 			}
+            */
 			window.setTimeout( function() {
 				me._onHashChangeEvent();
 			}, 0 );
@@ -120,19 +142,27 @@ History.Hash = History.extend({
      * 获取hash 
      *
      * @private
-     * @method _getHash
+     * @method getFragment
      * @return 
      **/
-    _getHash : function() {
-        var match = location.href.match( /#(.*)$/ );
-        return match ? match[ 1 ] : '';
+    getFragment : function( fragment ) {
+        var match;
+
+        if ( fragment === undefined ) {
+            match = location.href.match( /#(.*)$/ );
+         
+            return match ? match[ 1 ] : '';
+        }
+        else {
+            return fragment.replace( /^[#\/]|\s+$/g, '' );
+        }
     },
     
     
     _onHashChangeEvent : function() {
         var me = this;
         $( window ).on( 'hashchange', function( e ) {
-			me._triggerHandle.call( me, me._getHash() );
+			me.loadUrl.call( me, me.getFragment() );
         } );
     },
     _offHashChangeEvent : function() {

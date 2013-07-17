@@ -1,4 +1,4 @@
-Chassis
+![](https://raw.github.com/miller/Chassis/master/docs/chassis.png)
 =======
 
 ## 内容导航

@@ -1,3 +1,4 @@
+![](https://raw.github.com/miller/Chassis/master/docs/chassis.png)
 Chassis
 =======
 

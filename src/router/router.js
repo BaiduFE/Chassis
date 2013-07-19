@@ -230,7 +230,7 @@ Chassis.mixin( Router.prototype, Events, {
         */
         
         // 通用subview复用及影子节点处理
-        to._repairCommonSubView();
+        to.$el && to._repairCommonSubView();
         
         me._doTransition(
             from,
@@ -261,7 +261,7 @@ Chassis.mixin( Router.prototype, Events, {
                 });
                 */
                 
-                if ( from ) {
+                if ( from && from.$el ) {
                     
                     if ( from.trigger( 'afterpageout', e ) ) {
                         from.$el.hide();
@@ -270,7 +270,7 @@ Chassis.mixin( Router.prototype, Events, {
                     
                 }
                 
-                if ( to ) {
+                if ( to && to.$el ) {
                     to.trigger( 'afterpagein', e );
                 }
 
@@ -446,7 +446,13 @@ Chassis.mixin( Router.prototype, Events, {
 
         var me = this,
             view = me.views[ action ];
-
+		
+		// 如果该view被销毁，需要重新new
+		if ( view && !view.$el ) {
+			me.views[ action ] = null;
+			return me._doAction( action, request );
+		}
+		
         this._decodeRequest( request );
         
         if ( !view ) {

@@ -181,7 +181,7 @@ Chassis.mixin( View.prototype, Events, {
                 switch ( selector ) {
                     case 'window':
                     case 'document':
-                        Chassis.$(window[ selector ])
+                        Chassis.$( window[ selector ] )
                                 .on( fullEventName, method );
                         break;
                     case 'view':
@@ -408,13 +408,29 @@ Chassis.mixin( View.prototype, Events, {
 			this.setElement( this.el, false );
 		}
 	},
-
-	_addSubview: function( view, action, opt, async ) {
+	
+	_removeRecycleView : function() {
+		var me = this;
+		
+		Chassis.$.each( me.children, function( k, v ) {
+			if ( !v.$el ) {
+				delete me.children[ v.cid ];
+			}
+		} );
+		
+		
+	},
+	
+	_addSubview: function( view, action, opt, async, trigger ) {
         var me = this,
+			oldView = view,
             pid,
             pe,
-            viewElement;
-
+            viewElement,
+			_subView;
+		
+		me._removeRecycleView();
+		
         if ( (!Chassis.isObject( view )) &&  (!Chassis.SubView[ view ]) ) {
             me._addAsyncSubview.call( me, view, action, opt );
             return;
@@ -429,6 +445,15 @@ Chassis.mixin( View.prototype, Events, {
             
             view = Chassis.commonView[ view ];
             
+			// 被销毁了
+			if ( !view.$el ) {
+
+				_subView = new Chassis.SubView[ oldView ]( opt, me );
+				Chassis.commonView[ oldView ] = _subView;
+				
+				return me._addSubview( _subView, action, opt, false, true );
+			}
+			
             switch ( action ) {
 
                 // 不进行DOM处理
@@ -470,7 +495,7 @@ Chassis.mixin( View.prototype, Events, {
 
 			
 
-            if ( async ) {
+            if ( trigger ) {
                 me._triggerAsyncSubviewEvent.call( me, view );
             }
 		} else {
@@ -504,26 +529,43 @@ Chassis.mixin( View.prototype, Events, {
         }
         
         Chassis.load( 'subview-' + view, function() {
-            var placeHolder = me.$el.find( '#' + pid  ),
-                subView;
-            
-            if ( !Chassis.SubView[ view ] ) {
-                return;
-            }
-            subView = new Chassis.SubView[ view ]( opt, me );
-            Chassis.commonView[ view ] = subView;
-            switch ( action ) {
-				case 'SETUP': 
-					break;
-				case 'PREPEND':
-                    placeHolder.replaceWith( subView.$el );
-                    break;
-				default:
-                    placeHolder.replaceWith( subView.$el );
-					break;
+		
+			me._renderAsyncSubViewStack[ view ] = function() {
+				var placeHolder = me.$el.find( '#' + pid  ),
+					subView;
+				
+				if ( !Chassis.SubView[ view ] ) {
+					return;
+				}
+				subView = new Chassis.SubView[ view ]( opt, me );
+				Chassis.commonView[ view ] = subView;
+				switch ( action ) {
+					case 'SETUP': 
+						break;
+					case 'PREPEND':
+						placeHolder.replaceWith( subView.$el );
+						break;
+					default:
+						placeHolder.replaceWith( subView.$el );
+						break;
+				}
+				
+				me._addSubview.call( me, subView, action, opt, true, true );
+			};
+			
+			if ( me._renderAsyncSubViewStart ) {
+				
+				if ( me._renderAsyncSubViewCall === '*' ) {
+					me.renderAsyncSubView( view );
+					
+				} else {
+					(view in me._renderAsyncSubViewCall) &&
+							me.renderAsyncSubView( view );
+				}
+				
+				me._renderAsyncSubViewStack[ view ] = null;
 			}
-            
-            me._addSubview.call( me, subView, action, opt, true );
+			
         } );
         
         return;
@@ -559,7 +601,57 @@ Chassis.mixin( View.prototype, Events, {
             me.$el.find( '[shadow=' + subviewName + ']' ).remove();
             
         });
-    }
+    },
+	
+	_renderAsyncSubViewStack : {},
+	
+	_renderAsyncSubViewStart : false,
+	
+	_renderAsyncSubViewCall : {},
+	
+    /**
+     * render async view
+	 * 异步加载的模块并不是自动添加到视图中的
+     * @method renderAsyncView
+	 * @param  {string} [subView]     subView的name
+     */
+	renderAsyncSubView : function( subView ) {
+		var me = this;
+		
+		me._renderAsyncSubViewStart = true;
+		
+		
+
+		if ( !subView ) {
+			me._renderAsyncSubViewCall = '*';
+			Chassis.$.each( me._renderAsyncSubViewStack, 
+					function( key, value ) {
+						value && value.call( me );
+						me._renderAsyncSubViewStack[ key ] = null;
+					} 
+			);
+			
+			return;
+		}
+		
+		if ( !Chassis.isArray( subView ) ) {
+			subView = [ subView ];
+		}
+		
+		subView = Chassis.object( subView, subView );
+		
+		if ( me._renderAsyncSubViewCall !== '*' ) {
+			me._renderAsyncSubViewCall = 
+				Chassis.mixin( {}, me._renderAsyncSubViewCall, subView );
+		}
+		
+		Chassis.$.each( me._renderAsyncSubViewStack, function( key, value ) {
+			if ( value && (key in subView) ) {
+				value.call( me );
+				me._renderAsyncSubViewStack[ key ] = null;
+			}
+		} );
+	}
     
 } );
 

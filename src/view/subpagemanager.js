@@ -328,8 +328,13 @@ Chassis.mixin( SPM.prototype, Events, {
 			stamp = me.getStamp( params ),
 			target = me.getBy( 'stamp', stamp ),
 			subpage;
-
+			
+		if ( !e.to.$el ) {
+			return;
+		}
+		
 		// 如果子页面不存在则自动创建
+		
 		if ( !target ) {
             
             if ( !Chassis.isObject( me.klass ) ) {

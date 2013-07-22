@@ -7,7 +7,7 @@ $(document).ready(function() {
 	});
 
 	test('constructor arguments mixin', 6, function() {
-    
+		stop();
 		var SubViewTab = Chassis.SubView.extend({
 			init: function() {
 				this.spm = new Chassis.SubPageMgr({
@@ -24,17 +24,19 @@ $(document).ready(function() {
 		var svt = new SubViewTab(),
         spm = svt.spm;
 
-		ok( spm.owner === svt );
+		equal( spm.owner , svt );
 		equal( spm.max, 4 );
-		ok( spm.klass === SubViewTabContent );
+		equal( spm.klass , SubViewTabContent );
 		ok( Chassis.isFunction( spm.dirFn ) ); 
 		ok( Chassis.isFunction( spm.dirFn ) );
 		equal( spm.transition, 'slider' );
+		
+		start();
 
 	});
 
 	test( 'register && getBy', 6, function() {
-    
+		
 		var SubViewTab = Chassis.SubView.extend( {
 			init: function() {
 				this.spm = new Chassis.SubPageMgr( {
@@ -54,11 +56,13 @@ $(document).ready(function() {
 			spm = svt.spm;
 
 		equal( spm.pagesList.length, 1 );
-		ok( spm.pagesMap[ svt.subpage.cid ] === svt.subpage );
+		equal( spm.pagesMap[ svt.subpage.cid ], svt.subpage );
 		equal( svt.subpage.__order__, 0 );
-		ok( spm.getBy( 'cid', svt.subpage.cid ) === svt.subpage );
-		ok( spm.getBy( '__order__', svt.subpage.__order__ ) === svt.subpage );
+		equal( spm.getBy( 'cid', svt.subpage.cid ) , svt.subpage );
+		equal( spm.getBy( '__order__', svt.subpage.__order__ ), svt.subpage );
 		equal( spm.getBy( '__order__', 123 ), null );
+		
+		
 
 	} );
 

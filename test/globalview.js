@@ -116,5 +116,7 @@ $(document).ready(function() {
 		Chassis.history.navigate( 'glvpageb3/1' );
 
 	} );
+	
+	
 
 });

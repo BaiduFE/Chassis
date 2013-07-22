@@ -13,6 +13,7 @@
             me.on( 'subViewLoaded',    this._onSubViewLoaded );
             me.on( 'allSubViewLoaded', this._onAllSubViewLoaded );
             
+			me.renderAsyncSubView();
             ok( true );
 
         },

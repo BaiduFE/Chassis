@@ -58,22 +58,25 @@ $(document).ready(function() {
 
   } );
 
-  asyncTest('pageview save and restore position', 2, function(){
-    var view = new Chassis.PageView();
-    var startY = window.scrollY;
+	asyncTest('pageview save and restore position', 2, function(){
+		var view = new Chassis.PageView();
+		var startY = window.scrollY;
 
-    view.savePos();
+		view.savePos();
+	
+		// 如果高度不够，scrollTo就不会生效
+		$('body').append( '<div style="height:3000px;" id="_tmpElement_"></div>' );
+		window.scrollTo(0,300);
 
-    window.scrollTo(0,300);
+		equal(window.scrollY,300);
+		
 
-    equal(window.scrollY,300);
+		view.restorePos();
 
-    view.restorePos();
-
-    setTimeout(function() {
-      equal(startY, window.scrollY);
-      start();
-    }, 300);
-  });
-
+		setTimeout(function() {
+			equal(startY, window.scrollY);
+			$('#_tmpElement_').remove();
+			start();
+		}, 300);
+	});
 });

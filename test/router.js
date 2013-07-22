@@ -163,9 +163,10 @@ $(document).ready(function() {
     });
     
     router = new Router();
-
+	
+	
     Chassis.history.start( {trigger:false} );
-
+	
     deepEqual( router.pageOrder, ['index','info'] );
     
     Chassis.history.destroy();
@@ -173,7 +174,8 @@ $(document).ready(function() {
     
 
   });
-
+	
+	
   test("test init for routers handle when return false;", 1, function() {
     var Router,router;
     stop();

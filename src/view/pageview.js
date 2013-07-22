@@ -94,7 +94,12 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
 				maxView = v;
 			}
 		} );
-
+		
+		
+		if ( !max ) {
+			return;
+		}
+		
 		selector = maxView.$el.selector;
 		
 		parent = maxView.$el.parent();

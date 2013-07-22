@@ -171,353 +171,352 @@ $(document).ready(function() {
   } );
 
 
+	
+	asyncTest( 'auto create subview on switch', 1, function() {
 
-  asyncTest( 'auto create subview on switch', 1, function() {
+		var Router = Chassis.Router.extend( {
+			routes: [ 'spmpagea1/:aid', 'spmpageb1/:bid' ]
+		} );
+
+		Chassis.PageView[ 'spmpagea1' ] = Chassis.PageView.extend( {
+			id: 'spmpagea1'
+		} );
+
+		Chassis.PageView[ 'spmpageb1' ] = Chassis.PageView.extend( {
+			id: 'spmpageb1',
+			init: function( opts ) {
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					klass: spmpagebSubView
+				} );
+			}
+		} );
 
-    var Router = Chassis.Router.extend( {
-      routes: [ 'spmpagea1/:aid', 'spmpageb1/:bid' ]
-    } );
+		var spmpagebSubView = Chassis.SubView.extend( {
+			init: function( opts ) {
+				equal( opts.bid, 2 );
+			}
+		} );
 
-    Chassis.PageView[ 'spmpagea1' ] = Chassis.PageView.extend( {
-      id: 'spmpagea1'
-    } );
+		new Router();
 
-    Chassis.PageView[ 'spmpageb1' ] = Chassis.PageView.extend( {
-      id: 'spmpageb1',
-      init: function( opts ) {
-        this.spm = new Chassis.SubPageMgr( {
-          owner: this,
-          klass: spmpagebSubView
-        } );
-      }
-    } );
+		Chassis.history.start();
+		Chassis.history.navigate( 'spmpagea1/1' );
 
-    var spmpagebSubView = Chassis.SubView.extend( {
-      init: function( opts ) {
-        equal( opts.bid, 2 );
-      }
-    } );
+		Chassis.history.navigate( 'spmpageb1/2' );
 
-    new Router();
+		// This invoke won't create subview again
+		Chassis.history.navigate( 'spmpageb1/2' );
 
-    Chassis.history.start();
-    Chassis.history.navigate( 'spmpagea1/1' );
+		start();
 
-    Chassis.history.navigate( 'spmpageb1/2' );
+		Chassis.history.navigate( '', { trigger: false } );
+		Chassis.history.destroy();
 
-    // This invoke won't create subview again
-    Chassis.history.navigate( 'spmpageb1/2' );
+	} );
+	
+	asyncTest( 'custome animate function', 3, function() {
 
-    start();
+		var Router = Chassis.Router.extend( {
+			routes: [ 'spmpageb2/:bid' ]
+		} );
 
-    Chassis.history.navigate( '', { trigger: false } );
-    Chassis.history.destroy();
+		Chassis.PageView[ 'spmpageb2' ] = Chassis.PageView.extend( {
+			id: 'spmpageb2',
+			init: function( opts ) {
 
-  } );
+				var me = this;
 
-  asyncTest( 'custome animate function', 3, function() {
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					klass: spmpagebSubView,
+					transition: function( fromEl, toEl, dir, transitionEnd ) {
+						equal( fromEl, me.spm.pagesList[ 0 ].$el );
+						equal( toEl, me.spm.pagesList[ 1 ].$el );
+						equal( dir, 1 );
+					}
+				} );
+			}
+		} );
 
-      var Router = Chassis.Router.extend( {
-        routes: [ 'spmpageb2/:bid' ]
-      } );
+		var spmpagebSubView = Chassis.SubView.extend( {} );
 
-      Chassis.PageView[ 'spmpageb2' ] = Chassis.PageView.extend( {
-        id: 'spmpageb2',
-        init: function( opts ) {
+		new Router();
 
-          var me = this;
+		Chassis.history.start();
 
-          this.spm = new Chassis.SubPageMgr( {
-            owner: this,
-            klass: spmpagebSubView,
-            transition: function( fromEl, toEl, dir, transitionEnd ) {
-              equal( fromEl, me.spm.pagesList[ 0 ].$el );
-              equal( toEl, me.spm.pagesList[ 1 ].$el );
-              equal( dir, 1 );
-            }
-          } );
-        }
-      } );
+		Chassis.history.navigate( 'spmpageb2/2', { trigger: true } );
 
-      var spmpagebSubView = Chassis.SubView.extend( {} );
+		Chassis.history.navigate( 'spmpageb2/3', { trigger: true } );
 
-      new Router();
+		start();
 
-      Chassis.history.start();
+		Chassis.history.navigate( '', { trigger: false } );
+		Chassis.history.destroy();
+	} );
+	
+	
+	asyncTest( 'custome dir function', 5, function() {
 
-      Chassis.history.navigate( 'spmpageb2/2', { trigger: true } );
+		var Router = Chassis.Router.extend( {
+			routes: [ 'spmpageb3/:bid' ]
+		} );
 
-      Chassis.history.navigate( 'spmpageb2/3', { trigger: true } );
+		Chassis.PageView[ 'spmpageb3' ] = Chassis.PageView.extend( {
+			id: 'spmpageb3',
+			init: function( opts ) {
 
-      start();
+				var me = this;
 
-      Chassis.history.navigate( '', { trigger: false } );
-      Chassis.history.destroy();
-  } );
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					klass: spmpagebSubView,
+					dirFn: function( from, to ) {
+						equal( from, me.spm.pagesList[ 0 ] );
+						equal( to, me.spm.pagesList[ 1 ] );
+						return 5;
+					},
+					transition: function( fromEl, toEl, dir, transitionEnd ) {
+						equal( fromEl, me.spm.pagesList[ 0 ].$el );
+						equal( toEl, me.spm.pagesList[ 1 ].$el );
+						equal( dir, 5 );
+					}
+				} );
+			}
+		} );
 
-  asyncTest( 'custome dir function', 5, function() {
+		var spmpagebSubView = Chassis.SubView.extend( {} );
 
-      var Router = Chassis.Router.extend( {
-        routes: [ 'spmpageb3/:bid' ]
-      } );
+		new Router();
 
-      Chassis.PageView[ 'spmpageb3' ] = Chassis.PageView.extend( {
-        id: 'spmpageb3',
-        init: function( opts ) {
+		Chassis.history.start();
 
-          var me = this;
+		Chassis.history.navigate( 'spmpageb3/2', { trigger: true } );
 
-          this.spm = new Chassis.SubPageMgr( {
-            owner: this,
-            klass: spmpagebSubView,
-            dirFn: function( from, to ) {
-              equal( from, me.spm.pagesList[ 0 ] );
-              equal( to, me.spm.pagesList[ 1 ] );
-              return 5;
-            },
-            transition: function( fromEl, toEl, dir, transitionEnd ) {
-              equal( fromEl, me.spm.pagesList[ 0 ].$el );
-              equal( toEl, me.spm.pagesList[ 1 ].$el );
-              equal( dir, 5 );
-            }
-          } );
-        }
-      } );
+		Chassis.history.navigate( 'spmpageb3/3', { trigger: true } );
 
-      var spmpagebSubView = Chassis.SubView.extend( {} );
+		start();
 
-      new Router();
+		Chassis.history.navigate( '', { trigger: false } );
+		Chassis.history.destroy();
+	} );
 
-      Chassis.history.start();
+	asyncTest( 'swtich between subpages', 3, function() {
 
-      Chassis.history.navigate( 'spmpageb3/2', { trigger: true } );
+		var Router = Chassis.Router.extend( {
+			routes: [ 'spmpageb4/:bid' ]
+		} );
 
-      Chassis.history.navigate( 'spmpageb3/3', { trigger: true } );
+		var counter = 0;
 
-      start();
+		Chassis.PageView[ 'spmpageb4' ] = Chassis.PageView.extend( {
+			id: 'spmpageb4',
+			init: function( opts ) {
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					klass: spmpagebSubView
+				} );
+			}
+		} );
 
-      Chassis.history.navigate( '', { trigger: false } );
-      Chassis.history.destroy();
-  } );
+		var spmpagebSubView = Chassis.SubView.extend( {
+			init: function( opts ) {
+				counter++;
 
-  asyncTest( 'swtich between subpages', 3, function() {
+				ok( true );
 
-    var Router = Chassis.Router.extend( {
-      routes: [ 'spmpageb4/:bid' ]
-    } );
+				if ( counter === 3 ) {
+					start();
+					Chassis.history.navigate( '', { trigger: false } );
+					Chassis.history.destroy();
+				}
+			}
+		} );
 
-    var counter = 0;
+		var switchRouter = new Router();
 
-    Chassis.PageView[ 'spmpageb4' ] = Chassis.PageView.extend( {
-      id: 'spmpageb4',
-      init: function( opts ) {
-        this.spm = new Chassis.SubPageMgr( {
-          owner: this,
-          klass: spmpagebSubView
-        } );
-      }
-    } );
+		Chassis.history.start();
 
-    var spmpagebSubView = Chassis.SubView.extend( {
-      init: function( opts ) {
-        counter++;
+		Chassis.history.navigate( 'spmpageb4/2', { trigger: true } );
 
-        ok( true );
+		Chassis.history.navigate( 'spmpageb4/3', { trigger: true } );
 
-        if ( counter === 3 ) {
-          start();
-          Chassis.history.navigate( '', { trigger: false } );
-          Chassis.history.destroy();
-        }
-      }
-    } );
+		Chassis.history.navigate( 'spmpageb4/4', { trigger: true } );
 
-    var switchRouter = new Router();
+	} );
 
-    Chassis.history.start();
+	asyncTest( 'switch events on different pages', 10, function() {
 
-    Chassis.history.navigate( 'spmpageb4/2', { trigger: true } );
+		var Router = Chassis.Router.extend( {
+			routes: [ 'spmpagea5/:aid', 'spmpageb5/:bid' ]
+		} );
 
-    Chassis.history.navigate( 'spmpageb4/3', { trigger: true } );
+		var counter = 0;
 
-    Chassis.history.navigate( 'spmpageb4/4', { trigger: true } );
+		Chassis.PageView[ 'spmpagea5' ] = Chassis.PageView.extend( {} );
 
-  } );
+		Chassis.PageView[ 'spmpageb5' ] = Chassis.PageView.extend( {
+			id: 'spmpageb5',
+			init: function( opts ) {
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					klass: spmpagebSubView
+				} );
+			}
+		} );
 
-  asyncTest( 'switch events on different pages', 10, function() {
+		var spmpagebSubView = Chassis.SubView.extend( {
 
-    var Router = Chassis.Router.extend( {
-      routes: [ 'spmpagea5/:aid', 'spmpageb5/:bid' ]
-    } );
+			onBeforeSwitchIn: function( e ) {
 
-    var counter = 0;
+				equal( e.from, null );
+				equal( e.to, this );
+				equal( e.params.from.action, 'spmpagea5' );
+				equal( e.params.to.action, 'spmpageb5' );
+				equal( e.params.params.bid, 2 );
+			},
 
-    Chassis.PageView[ 'spmpagea5' ] = Chassis.PageView.extend( {} );
+			onAfterSwitchIn: function( e ) {
 
-    Chassis.PageView[ 'spmpageb5' ] = Chassis.PageView.extend( {
-      id: 'spmpageb5',
-      init: function( opts ) {
-        this.spm = new Chassis.SubPageMgr( {
-          owner: this,
-          klass: spmpagebSubView
-        } );
-      }
-    } );
+				equal( e.from, null );
+				equal( e.to, this );
+				equal( e.params.from.action, 'spmpagea5' );
+				equal( e.params.to.action, 'spmpageb5' );
+				equal( e.params.params.bid, 2 );
 
-    var spmpagebSubView = Chassis.SubView.extend( {
+				start();
+				Chassis.history.navigate( '', { trigger: false } );
+				Chassis.history.destroy();
+			}
+		} );
 
-      onBeforeSwitchIn: function( e ) {
+		var switchRouter = new Router();
 
-        equal( e.from, null );
-        equal( e.to, this );
-        equal( e.params.from.action, 'spmpagea5' );
-        equal( e.params.to.action, 'spmpageb5' );
-        equal( e.params.params.bid, 2 );
-      },
+		Chassis.history.start();
 
-      onAfterSwitchIn: function( e ) {
+		Chassis.history.navigate( 'spmpagea5/1' );
 
-        equal( e.from, null );
-        equal( e.to, this );
-        equal( e.params.from.action, 'spmpagea5' );
-        equal( e.params.to.action, 'spmpageb5' );
-        equal( e.params.params.bid, 2 );
+		Chassis.history.navigate( 'spmpageb5/2' );
 
-        start();
-        Chassis.history.navigate( '', { trigger: false } );
-        Chassis.history.destroy();
-      }
-    } );
+	} );
 
-    var switchRouter = new Router();
+	asyncTest( 'switch events on the same page', 10, function() {
 
-    Chassis.history.start();
+		var Router = Chassis.Router.extend( {
+			routes: [ 'spmpageb6/:bid' ]
+		} );
 
-    Chassis.history.navigate( 'spmpagea5/1' );
+		var bcounter = 0;
+		var acounter = 0;
 
-    Chassis.history.navigate( 'spmpageb5/2' );
+		Chassis.PageView[ 'spmpageb6' ] = Chassis.PageView.extend( {
+			id: 'spmpageb6',
 
-  } );
+			init: function( opts ) {
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					klass: spmpagebSubView
+				} );
+			}
+		} );
 
-  asyncTest( 'switch events on the same page', 10, function() {
+		var spmpagebSubView = Chassis.SubView.extend( {
 
-    var Router = Chassis.Router.extend( {
-      routes: [ 'spmpageb6/:bid' ]
-    } );
+			className: 'spmpageb6',
 
-    var bcounter = 0;
-    var acounter = 0;
+			onBeforeSwitchIn: function( e ) {
 
-    Chassis.PageView[ 'spmpageb6' ] = Chassis.PageView.extend( {
-      id: 'spmpageb6',
+				bcounter++;
 
-      init: function( opts ) {
-        this.spm = new Chassis.SubPageMgr( {
-          owner: this,
-          klass: spmpagebSubView
-        } );
-      }
-    } );
+				if ( e.from && bcounter === 2 ) {
 
-    var spmpagebSubView = Chassis.SubView.extend( {
+					ok( e.from instanceof spmpagebSubView  );
+					equal( e.to, this );
+					equal( e.params.from, e.params.to );
+					equal( e.params.from.action, 'spmpageb6' );
+					equal( e.params.params.bid, 2 );
 
-      className: 'spmpageb6',
+				}
+			},
 
-      onBeforeSwitchIn: function( e ) {
+			onAfterSwitchIn: function( e ) {
 
-        bcounter++;
+				acounter++;
 
-        if ( e.from && bcounter === 2 ) {
+				if ( e.from && acounter === 2 ) {
 
-          ok( e.from instanceof spmpagebSubView  );
-          equal( e.to, this );
-          equal( e.params.from, e.params.to );
-          equal( e.params.from.action, 'spmpageb6' );
-          equal( e.params.params.bid, 2 );
+					ok( e.from instanceof spmpagebSubView  );
+					equal( e.to, this );
+					equal( e.params.from, e.params.to );
+					equal( e.params.from.action, 'spmpageb6' );
+					equal( e.params.params.bid, 2 );
 
-        }
-      },
-
-      onAfterSwitchIn: function( e ) {
-
-        acounter++;
-
-        if ( e.from && acounter === 2 ) {
-
-          ok( e.from instanceof spmpagebSubView  );
-          equal( e.to, this );
-          equal( e.params.from, e.params.to );
-          equal( e.params.from.action, 'spmpageb6' );
-          equal( e.params.params.bid, 2 );
-
-          start();
-          Chassis.history.navigate( '', { trigger: false } );
-          Chassis.history.destroy();
+					start();
+					Chassis.history.navigate( '', { trigger: false } );
+					Chassis.history.destroy();
           
-        }
-      }
-    } );
+				}
+			}
+		} );
 
-    var switchRouter = new Router();
+		var switchRouter = new Router();
 
-    Chassis.history.start();
+		Chassis.history.start();
 
-    // 诡异：PhantomJS和浏览器中跑这个case结果不一样
-    // 在PhantomJS中会在spmpageb6中触发4次onBeforePageIn
-    // 正常应该只触发两次，暂时不明原因，先简单的用开关控制
-    Chassis.history.navigate( 'spmpageb6/1' );
+		Chassis.history.navigate( 'spmpageb6/1' );
 
-    Chassis.history.navigate( 'spmpageb6/2' );
+		Chassis.history.navigate( 'spmpageb6/2' );
 
-  } );
+	} );
 
-  asyncTest( 'switch events on subpage', 2, function() {
+	
+	asyncTest( 'switch events on subpage', 2, function() {
 
-    var Router = Chassis.Router.extend( {
-      routes: [ 'spmpageb7/:bid' ]
-    } );
+		var Router = Chassis.Router.extend( {
+			routes: [ 'spmpageb7/:bid' ]
+		} );
 
-    Chassis.PageView[ 'spmpageb7' ] = Chassis.PageView.extend( {
-      id: 'spmpageb7',
+		Chassis.PageView[ 'spmpageb7' ] = Chassis.PageView.extend( {
+			id: 'spmpageb7',
 
-      init: function( opts ) {
-        this.append( new spmpagebSubView( opts, this ) );
-      }
-    } );
+			init: function( opts ) {
+				this.append( new spmpagebSubView( opts, this ) );
+			}
+		} );
 
-    var spmpagebSubView = Chassis.SubView.extend( {
+		var spmpagebSubView = Chassis.SubView.extend( {
 
-      init: function( opts ) {
+			init: function( opts ) {
 
-        this.spm = new Chassis.SubPageMgr( {
-          owner: this,
-          klass: spmpagebSubView1
-        } );
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					klass: spmpagebSubView1
+				} );
         
-      }
-    } );
+			}
+		} );
 
-    var spmpagebSubView1 = Chassis.SubView.extend( {
+		var spmpagebSubView1 = Chassis.SubView.extend( {
 
-      onBeforeSwitchIn: function( e ) {
-        ok( true );
-      },
+			onBeforeSwitchIn: function( e ) {
+				ok( true );
+			},
 
-      onAfterSwitchIn: function( e ) {
-        ok( true );
+			onAfterSwitchIn: function( e ) {
+				ok( true );
 
-        start();
-        Chassis.history.navigate( '', { trigger: false } );
-        Chassis.history.destroy();
-      }
-    } );
+				start();
+				Chassis.history.navigate( '', { trigger: false } );
+				Chassis.history.destroy();
+			}
+		} );
 
-    var switchRouter = new Router();
+		var switchRouter = new Router();
 
-    Chassis.history.start();
+		Chassis.history.start();
 
-    Chassis.history.navigate( 'spmpageb7/1' );
+		Chassis.history.navigate( 'spmpageb7/1' );
 
-  } );
+	} );
 
 });

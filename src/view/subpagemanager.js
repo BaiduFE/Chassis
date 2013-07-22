@@ -156,7 +156,7 @@ Chassis.mixin( SPM.prototype, Events, {
 			this._doSwitch( from, to, dir, function() {
 
 				// 隐藏已切出子页面
-				if ( from ) {
+				if ( from && from.$el ) {
 					from.$el.hide();
 				}
 
@@ -190,7 +190,10 @@ Chassis.mixin( SPM.prototype, Events, {
 	recycle: function() {
 		var list = this.pagesList,
 			page;
-
+		
+		if ( !list ) {
+			return;
+		}
 		while ( list.length > this.max ) {
 			page = list.shift();
 

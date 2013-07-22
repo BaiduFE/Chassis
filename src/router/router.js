@@ -465,6 +465,19 @@ Chassis.mixin( Router.prototype, Events, {
             // 如果pageview没有下载，则先使用通用pageview，同时下载需要加载的pageview，加载成功后再触发对应的事件
             if ( !Chassis.PageView[ action ] ) {
                 
+				if ( !Chassis.PageView._transition_ ) {
+                    
+                    if ( !Chassis.PageView._TRANSITION_ ) {
+                        Chassis.PageView._TRANSITION_ = 
+                            Chassis.PageView.extend({});
+                    }
+                    
+                    Chassis.PageView._transition_ = 
+                        new Chassis.PageView._TRANSITION_();
+                }
+                
+                view = me.views[ action ]  = Chassis.PageView._transition_;
+                
                 Chassis.load( 'pageview-' + action, function() {
                     view.$el.hide();
                     
@@ -484,18 +497,7 @@ Chassis.mixin( Router.prototype, Events, {
                     return;
                 } );
                 
-                if ( !Chassis.PageView._transition_ ) {
-                    
-                    if ( !Chassis.PageView._TRANSITION_ ) {
-                        Chassis.PageView._TRANSITION_ = 
-                            Chassis.PageView.extend({});
-                    }
-                    
-                    Chassis.PageView._transition_ = 
-                        new Chassis.PageView._TRANSITION_();
-                }
-                
-                view = me.views[ action ]  = Chassis.PageView._transition_;
+
                     
             } else {
                 view = me.views[ action ]  = 

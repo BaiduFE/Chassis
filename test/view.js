@@ -57,7 +57,7 @@ $(document).ready(function() {
   
   
   
-  return;
+  //return;
   
   
   test('constructor', 3, function() {

@@ -231,7 +231,7 @@ $(document).ready(function() {
       el: document.body
     });
 
-    equal(new View().el, document.body);
+    ok(new View().el === document.body);
   });
 
   test('_ensureElement with string el', 3, function() {
@@ -474,14 +474,14 @@ $(document).ready(function() {
     top.prepend( sub2 );
     top.setup(sub3);
 
-    equal( sub1.parent, top );
-    equal( sub2.parent, top );
-    equal( sub3.parent, top );
+    ok( sub1.parent === top );
+    ok( sub2.parent === top );
+    ok( sub3.parent === top );
 
     var divs = top.$('div');
 
-    strictEqual( sub1.el, divs[1] );
-    strictEqual( sub2.el, divs[0] );
+    ok( sub1.el === divs[1] );
+    ok( sub2.el === divs[0] );
     ok(!top.$('#sub3').length);
     
   });
@@ -516,12 +516,12 @@ $(document).ready(function() {
     Chassis.PageView['list1'] = Chassis.PageView.extend( {
       onBeforePageIn: function( opts ) {
         // ok(!opts.from);
-        strictEqual(opts.to, this);
+        ok(opts.to === this);
         strictEqual(opts.params.id, '123');
       },
       onAfterPageIn: function( opts ) {
         // ok(!opts.from);
-        strictEqual(opts.to, this);
+        ok(opts.to === this);
         strictEqual(opts.params.id, '123');
         start();
 

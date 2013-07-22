@@ -1,174 +1,173 @@
 $(document).ready(function() {
 
-  module('Chassis.SubPageMgr', {
+	module('Chassis.SubPageMgr', {
 
-    setup: function() {
-    }
+		setup: function() {}
 
-  });
+	});
 
-  test('constructor arguments mixin', 6, function() {
+	test('constructor arguments mixin', 6, function() {
     
-    var SubViewTab = Chassis.SubView.extend({
-      init: function() {
-        this.spm = new Chassis.SubPageMgr({
-          owner: this,
-          max: 4,
-          klass: SubViewTabContent,
-          dirFn: function() {}
-        });
-      }
-    });
+		var SubViewTab = Chassis.SubView.extend({
+			init: function() {
+				this.spm = new Chassis.SubPageMgr({
+					owner: this,
+					max: 4,
+					klass: SubViewTabContent,
+					dirFn: function() {}
+				});
+			}
+		});
 
-    var SubViewTabContent = Chassis.SubView.extend({});
+		var SubViewTabContent = Chassis.SubView.extend({});
 
-    var svt = new SubViewTab(),
+		var svt = new SubViewTab(),
         spm = svt.spm;
 
-    equal( spm.owner, svt );
-    equal( spm.max, 4 );
-    equal( spm.klass, SubViewTabContent );
-    ok( Chassis.isFunction( spm.dirFn ) ); 
-    ok( Chassis.isFunction( spm.dirFn ) );
-    equal( spm.transition, 'slider' );
+		ok( spm.owner === svt );
+		equal( spm.max, 4 );
+		ok( spm.klass === SubViewTabContent );
+		ok( Chassis.isFunction( spm.dirFn ) ); 
+		ok( Chassis.isFunction( spm.dirFn ) );
+		equal( spm.transition, 'slider' );
 
-  });
+	});
 
-  test( 'register && getBy', 6, function() {
+	test( 'register && getBy', 6, function() {
     
-    var SubViewTab = Chassis.SubView.extend( {
-      init: function() {
-        this.spm = new Chassis.SubPageMgr( {
-          owner: this,
-          klass: SubViewTabContent
-        } );
+		var SubViewTab = Chassis.SubView.extend( {
+			init: function() {
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					klass: SubViewTabContent
+				} );
 
-        this.subpage = new this.spm.klass;
-        this.spm.register( this.subpage );
-        this.spm.register( this.subpage );
-      }
-    });
+				this.subpage = new this.spm.klass;
+				this.spm.register( this.subpage );
+				this.spm.register( this.subpage );
+			}
+		});
 
-    var SubViewTabContent = Chassis.SubView.extend({});
+		var SubViewTabContent = Chassis.SubView.extend({});
 
-    var svt = new SubViewTab(),
-        spm = svt.spm;
+		var svt = new SubViewTab(),
+			spm = svt.spm;
 
-    equal( spm.pagesList.length, 1 );
-    equal( spm.pagesMap[ svt.subpage.cid ], svt.subpage );
-    equal( svt.subpage.__order__, 0 );
-    equal( spm.getBy( 'cid', svt.subpage.cid ), svt.subpage );
-    equal( spm.getBy( '__order__', svt.subpage.__order__ ), svt.subpage );
-    equal( spm.getBy( '__order__', 123 ), null );
+		equal( spm.pagesList.length, 1 );
+		ok( spm.pagesMap[ svt.subpage.cid ] === svt.subpage );
+		equal( svt.subpage.__order__, 0 );
+		ok( spm.getBy( 'cid', svt.subpage.cid ) === svt.subpage );
+		ok( spm.getBy( '__order__', svt.subpage.__order__ ) === svt.subpage );
+		equal( spm.getBy( '__order__', 123 ), null );
 
-  } );
-
-
-  test('getStamp', 1, function() {
-    var data = {
-      a: 1
-    };
-
-    var SubViewTab = Chassis.SubView.extend({
-      init: function() {
-        this.spm = new Chassis.SubPageMgr({
-          owner: this,
-          klass: SubViewTabContent
-        });
-      }
-    });
-
-    var SubViewTabContent = Chassis.SubView.extend({});
-
-    var svt = new SubViewTab(),
-        spm = svt.spm;
-
-    strictEqual( spm.getStamp( data ), Chassis.$.param( data ) );
-  } );
-
-  test('calcDir', 3, function() {
-    var data = {
-      a: 1
-    };
-
-    var SubViewTab = Chassis.SubView.extend({
-      init: function() {
-        this.spm = new Chassis.SubPageMgr({
-          owner: this,
-          klass: SubViewTabContent
-        });
-
-        this.subpage1 = new this.spm.klass;
-        this.subpage2 = new this.spm.klass;
-
-        this.spm.register( this.subpage1 );
-        this.spm.register( this.subpage2 );
-      }
-    });
-
-    var SubViewTabContent = Chassis.SubView.extend({});
-
-    var svt = new SubViewTab(),
-        spm = svt.spm;
-
-    equal( spm._calcDir( svt.subpage1, svt.subpage2 ), 1 );
-    equal( spm._calcDir( svt.subpage2, svt.subpage1 ), 2 );
-    equal( spm._calcDir( svt.abc, svt.subpage1 ), 0 );
-
-  } );
+	} );
 
 
-  test( 'recycle', 11, function() {
+	test('getStamp', 1, function() {
+		var data = {
+			a: 1
+		};
+
+		var SubViewTab = Chassis.SubView.extend({
+			init: function() {
+				this.spm = new Chassis.SubPageMgr({
+					owner: this,
+					klass: SubViewTabContent
+				});
+			}
+		});
+
+		var SubViewTabContent = Chassis.SubView.extend({});
+
+		var svt = new SubViewTab(),
+			spm = svt.spm;
+
+		strictEqual( spm.getStamp( data ), Chassis.$.param( data ) );
+	} );
+
+	test('calcDir', 3, function() {
+		var data = {
+			a: 1
+		};
+
+		var SubViewTab = Chassis.SubView.extend({
+			init: function() {
+				this.spm = new Chassis.SubPageMgr({
+					owner: this,
+					klass: SubViewTabContent
+				});
+
+				this.subpage1 = new this.spm.klass;
+				this.subpage2 = new this.spm.klass;
+
+				this.spm.register( this.subpage1 );
+				this.spm.register( this.subpage2 );
+			}
+		});
+
+		var SubViewTabContent = Chassis.SubView.extend({});
+
+		var svt = new SubViewTab(),
+			spm = svt.spm;
+
+		equal( spm._calcDir( svt.subpage1, svt.subpage2 ), 1 );
+		equal( spm._calcDir( svt.subpage2, svt.subpage1 ), 2 );
+		equal( spm._calcDir( svt.abc, svt.subpage1 ), 0 );
+
+	} );
+
+
+	test( 'recycle', 11, function() {
     
-    var SubViewTab = Chassis.SubView.extend( {
-      init: function() {
-        this.spm = new Chassis.SubPageMgr( {
-          owner: this,
-          max: 2,
-          klass: SubViewTabContent
-        } );
+		var SubViewTab = Chassis.SubView.extend( {
+			init: function() {
+				this.spm = new Chassis.SubPageMgr( {
+					owner: this,
+					max: 2,
+					klass: SubViewTabContent
+				} );
 
-        this.subpage1 = new this.spm.klass;
-        this.subpage2 = new this.spm.klass;
-        this.subpage3 = new this.spm.klass;
-        this.subpage4 = new this.spm.klass;
+				this.subpage1 = new this.spm.klass;
+				this.subpage2 = new this.spm.klass;
+				this.subpage3 = new this.spm.klass;
+				this.subpage4 = new this.spm.klass;
 
-        this.spm.register( this.subpage1 );
-        this.spm.register( this.subpage2 );
-        this.spm.register( this.subpage3 );
-        this.spm.register( this.subpage4 );
-      }
-    });
+				this.spm.register( this.subpage1 );
+				this.spm.register( this.subpage2 );
+				this.spm.register( this.subpage3 );
+				this.spm.register( this.subpage4 );
+			}
+		});
 
-    var SubViewTabContent = Chassis.SubView.extend({});
+		var SubViewTabContent = Chassis.SubView.extend({});
 
-    var svt = new SubViewTab(),
-        spm = svt.spm;
+		var svt = new SubViewTab(),
+			spm = svt.spm;
 
-    equal( spm.pagesList.length, 4 );
-    equal( spm.pagesList[ 0 ], svt.subpage1 );
-    equal( spm.pagesList[ 1 ], svt.subpage2 );
-    equal( spm.pagesList[ 2 ], svt.subpage3 );
-    equal( spm.pagesList[ 3 ], svt.subpage4 );
+		equal( spm.pagesList.length, 4 );
+		ok( spm.pagesList[ 0 ] === svt.subpage1 );
+		ok( spm.pagesList[ 1 ] === svt.subpage2 );
+		ok( spm.pagesList[ 2 ] === svt.subpage3 );
+		ok( spm.pagesList[ 3 ] === svt.subpage4 );
 
-    spm.recycle();
+		spm.recycle();
 
-    equal( spm.pagesList.length, 2 );
-    equal( spm.pagesList[ 0 ], svt.subpage3 );
-    equal( spm.pagesList[ 1 ], svt.subpage4 );
+		equal( spm.pagesList.length, 2 );
+		ok( spm.pagesList[ 0 ] === svt.subpage3 );
+		ok( spm.pagesList[ 1 ] === svt.subpage4 );
 
-    var subpage5 = new spm.klass;
-    spm.current = svt.subpage3;
+		var subpage5 = new spm.klass;
+		spm.current = svt.subpage3;
 
-    spm.register( subpage5 );
+		spm.register( subpage5 );
 
-    spm.recycle();
+		spm.recycle();
 
-    equal( spm.pagesList.length, 2 );
-    equal( spm.pagesList[ 0 ], subpage5 );
-    equal( spm.pagesList[ 1 ], svt.subpage3 );
+		equal( spm.pagesList.length, 2 );
+		ok( spm.pagesList[ 0 ] === subpage5 );
+		ok( spm.pagesList[ 1 ] === svt.subpage3 );
 
-  } );
+	} );
 
 
 	
@@ -231,8 +230,8 @@ $(document).ready(function() {
 					owner: this,
 					klass: spmpagebSubView,
 					transition: function( fromEl, toEl, dir, transitionEnd ) {
-						equal( fromEl, me.spm.pagesList[ 0 ].$el );
-						equal( toEl, me.spm.pagesList[ 1 ].$el );
+						ok( fromEl === me.spm.pagesList[ 0 ].$el );
+						ok( toEl === me.spm.pagesList[ 1 ].$el );
 						equal( dir, 1 );
 					}
 				} );
@@ -272,13 +271,13 @@ $(document).ready(function() {
 					owner: this,
 					klass: spmpagebSubView,
 					dirFn: function( from, to ) {
-						equal( from, me.spm.pagesList[ 0 ] );
-						equal( to, me.spm.pagesList[ 1 ] );
+						ok( from === me.spm.pagesList[ 0 ] );
+						ok( to === me.spm.pagesList[ 1 ] );
 						return 5;
 					},
 					transition: function( fromEl, toEl, dir, transitionEnd ) {
-						equal( fromEl, me.spm.pagesList[ 0 ].$el );
-						equal( toEl, me.spm.pagesList[ 1 ].$el );
+						ok( fromEl === me.spm.pagesList[ 0 ].$el );
+						ok( toEl === me.spm.pagesList[ 1 ].$el );
 						equal( dir, 5 );
 					}
 				} );
@@ -370,7 +369,7 @@ $(document).ready(function() {
 			onBeforeSwitchIn: function( e ) {
 
 				equal( e.from, null );
-				equal( e.to, this );
+				ok( e.to === this );
 				equal( e.params.from.action, 'spmpagea5' );
 				equal( e.params.to.action, 'spmpageb5' );
 				equal( e.params.params.bid, 2 );
@@ -379,7 +378,7 @@ $(document).ready(function() {
 			onAfterSwitchIn: function( e ) {
 
 				equal( e.from, null );
-				equal( e.to, this );
+				ok( e.to === this );
 				equal( e.params.from.action, 'spmpagea5' );
 				equal( e.params.to.action, 'spmpageb5' );
 				equal( e.params.params.bid, 2 );
@@ -431,8 +430,8 @@ $(document).ready(function() {
 				if ( e.from && bcounter === 2 ) {
 
 					ok( e.from instanceof spmpagebSubView  );
-					equal( e.to, this );
-					equal( e.params.from, e.params.to );
+					ok( e.to === this );
+					ok( e.params.from === e.params.to );
 					equal( e.params.from.action, 'spmpageb6' );
 					equal( e.params.params.bid, 2 );
 
@@ -446,8 +445,8 @@ $(document).ready(function() {
 				if ( e.from && acounter === 2 ) {
 
 					ok( e.from instanceof spmpagebSubView  );
-					equal( e.to, this );
-					equal( e.params.from, e.params.to );
+					ok( e.to === this );
+					ok( e.params.from === e.params.to );
 					equal( e.params.from.action, 'spmpageb6' );
 					equal( e.params.params.bid, 2 );
 

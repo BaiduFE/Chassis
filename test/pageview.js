@@ -49,7 +49,7 @@ $(document).ready(function() {
 
     var homeView = PageView.create( 'home', { className: 'homeClass' }, 'home' );
 
-    equal( PageView.get( 'home' ), PageView.home );
+    ok( PageView.get( 'home' ) === PageView.home );
     equal( homeView.el.id, 'home1' );
     equal( homeView.el.className, 'homeClass' );
     equal( homeView.action, 'home' );

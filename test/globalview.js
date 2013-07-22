@@ -45,9 +45,9 @@ $(document).ready(function() {
 
 		gView.on( 'routechange', function( opts ) {
 			equal( opts.from, null );
-			equal( opts.to, opts.views[ 'glvpagea2' ] );
+			ok( opts.to === opts.views[ 'glvpagea2' ] );
 			equal( opts.params.aid, 1 );
-			equal( opts.views, gView.router.views );
+			ok( opts.views === gView.router.views );
 			equal( gView.getCurrentAction(), 'glvpagea2' );
 
 			start();

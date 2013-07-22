@@ -109,7 +109,7 @@ routes: {
     </div>
     <ul class="list">
         {{#list}}
-        <li class="song url log song-40153340">
+        <li class="song url log song-{{album_id}}">
                 <div class="left">
                     <div class="rank equal">{{rank}}</div>
                     <div class="info">

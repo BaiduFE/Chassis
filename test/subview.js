@@ -33,7 +33,7 @@ $(document).ready(function() {
     equal( sub2.$el[0].id, 'sub2' );
 
     ok(!sub1.parent);
-    equal( sub2.parent, sub1 );
+    ok( sub2.parent === sub1 );
   });
 
   test( 'static methods', 3, function() {
@@ -53,9 +53,9 @@ $(document).ready(function() {
 
     var homeView = PageView.create( 'home', { className: 'homeClass' }, 'home' );
 
-    equal( SubView.get( 'home.banner' ), SubView[ 'home.banner' ] );
+    ok( SubView.get( 'home.banner' ) === SubView[ 'home.banner' ] );
     equal( homeView.$( '.banner' )[ 0 ].id, 'banner1' );
-    equal( homeView.banner.parent, homeView );
+    ok( homeView.banner.parent === homeView );
 
     delete PageView[ 'home' ];
     delete SubView[ 'home.banner' ];
@@ -79,12 +79,12 @@ $(document).ready(function() {
     Chassis.SubView.Sub = Chassis.SubView.extend({
       id: 'SubView',
       onBeforePageIn: function( opts ) {
-        strictEqual(opts.to, this.root);
-        strictEqual(opts.to, this.parent);
+        ok(opts.to === this.root);
+        ok(opts.to === this.parent);
         strictEqual(opts.params.id, '123');
       },
       onAfterPageIn: function( opts ) {
-        strictEqual(opts.to, this.root);
+        ok(opts.to === this.root);
         strictEqual(opts.params.id, '123');
       }
     });
@@ -92,12 +92,12 @@ $(document).ready(function() {
     Chassis.SubView.Sub2 = Chassis.SubView.extend({
       id: 'SubView2',
       onBeforePageIn: function( opts ) {
-        strictEqual(opts.to, this.root);
-        strictEqual(opts.to, this.parent);
+        ok(opts.to === this.root);
+        ok(opts.to === this.parent);
         strictEqual(opts.params.id, '123');
       },
       onAfterPageIn: function( opts ) {
-        strictEqual(opts.to, this.root);
+        ok(opts.to === this.root);
         strictEqual(opts.params.id, '123');
         start();
 

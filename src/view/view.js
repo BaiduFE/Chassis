@@ -446,7 +446,7 @@ Chassis.mixin( View.prototype, Events, {
             view = Chassis.commonView[ view ];
             
 			// 被销毁了
-			if ( !view.$el ) {
+			if ( !view || !view.$el ) {
 
 				_subView = new Chassis.SubView[ oldView ]( opt, me );
 				Chassis.commonView[ oldView ] = _subView;
@@ -568,7 +568,6 @@ Chassis.mixin( View.prototype, Events, {
 			
         } );
         
-        return;
     },
     
     _triggerAsyncSubviewEvent : function( view ) {
@@ -592,6 +591,7 @@ Chassis.mixin( View.prototype, Events, {
             
             if ( subView.$el.next().attr( 'shadow' )  !== subviewName ) {
                 subView.$el.after( cloneView );
+				subView.parent = me;
             }
             
             subView.$el.after( '<div class="__common_subview__" data=' + 
@@ -615,12 +615,19 @@ Chassis.mixin( View.prototype, Events, {
      * @method renderAsyncView
 	 * @param  {string} [subView]     subView的name
      */
-	renderAsyncSubView : function( subView ) {
-		var me = this;
+	renderAsyncSubView : function( subView, callback ) {
+		var me = this,
+			oldcallback;
 		
 		me._renderAsyncSubViewStart = true;
 		
+		oldcallback =  callback || function() { };
 		
+		callback = function() {
+			window.setTimeout( function() {
+				oldcallback.call( me );
+			}, 20 );
+		};
 
 		if ( !subView ) {
 			me._renderAsyncSubViewCall = '*';
@@ -630,7 +637,7 @@ Chassis.mixin( View.prototype, Events, {
 						me._renderAsyncSubViewStack[ key ] = null;
 					} 
 			);
-			
+			callback.call( me );
 			return;
 		}
 		
@@ -651,6 +658,8 @@ Chassis.mixin( View.prototype, Events, {
 				me._renderAsyncSubViewStack[ key ] = null;
 			}
 		} );
+		
+		callback.call( me );
 	}
     
 } );

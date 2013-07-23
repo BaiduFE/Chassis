@@ -6,8 +6,7 @@ $(document).ready(function() {
 
 	});
 
-	test('constructor arguments mixin', 6, function() {
-		stop();
+	asyncTest('constructor arguments mixin', 6, function() {
 		var SubViewTab = Chassis.SubView.extend({
 			init: function() {
 				this.spm = new Chassis.SubPageMgr({
@@ -35,7 +34,7 @@ $(document).ready(function() {
 
 	});
 
-	test( 'register && getBy', 6, function() {
+	asyncTest( 'register && getBy', 6, function() {
 		
 		var SubViewTab = Chassis.SubView.extend( {
 			init: function() {
@@ -62,12 +61,12 @@ $(document).ready(function() {
 		equal( spm.getBy( '__order__', svt.subpage.__order__ ), svt.subpage );
 		equal( spm.getBy( '__order__', 123 ), null );
 		
-		
+		start();
 
 	} );
 
 
-	test('getStamp', 1, function() {
+	asyncTest('getStamp', 1, function() {
 		var data = {
 			a: 1
 		};
@@ -87,9 +86,11 @@ $(document).ready(function() {
 			spm = svt.spm;
 
 		strictEqual( spm.getStamp( data ), Chassis.$.param( data ) );
+		
+		start();
 	} );
 
-	test('calcDir', 3, function() {
+	asyncTest('calcDir', 3, function() {
 		var data = {
 			a: 1
 		};
@@ -117,11 +118,13 @@ $(document).ready(function() {
 		equal( spm._calcDir( svt.subpage1, svt.subpage2 ), 1 );
 		equal( spm._calcDir( svt.subpage2, svt.subpage1 ), 2 );
 		equal( spm._calcDir( svt.abc, svt.subpage1 ), 0 );
+		
+		start();
 
 	} );
 
 
-	test( 'recycle', 11, function() {
+	asyncTest( 'recycle', 11, function() {
     
 		var SubViewTab = Chassis.SubView.extend( {
 			init: function() {
@@ -170,6 +173,8 @@ $(document).ready(function() {
 		equal( spm.pagesList.length, 2 );
 		ok( spm.pagesList[ 0 ] === subpage5 );
 		ok( spm.pagesList[ 1 ] === svt.subpage3 );
+		
+		start();
 
 	} );
 
@@ -211,10 +216,11 @@ $(document).ready(function() {
 		// This invoke won't create subview again
 		Chassis.history.navigate( 'spmpageb1/2' );
 
-		start();
+		
 
 		Chassis.history.navigate( '', { trigger: false } );
 		Chassis.history.destroy();
+		start();
 
 	} );
 	
@@ -252,10 +258,11 @@ $(document).ready(function() {
 
 		Chassis.history.navigate( 'spmpageb2/3', { trigger: true } );
 
-		start();
+		
 
 		Chassis.history.navigate( '', { trigger: false } );
 		Chassis.history.destroy();
+		start();
 	} );
 	
 	
@@ -298,10 +305,11 @@ $(document).ready(function() {
 
 		Chassis.history.navigate( 'spmpageb3/3', { trigger: true } );
 
-		start();
+		
 
 		Chassis.history.navigate( '', { trigger: false } );
 		Chassis.history.destroy();
+		start();
 	} );
 
 	asyncTest( 'swtich between subpages', 3, function() {
@@ -329,9 +337,10 @@ $(document).ready(function() {
 				ok( true );
 
 				if ( counter === 3 ) {
-					start();
+					
 					Chassis.history.navigate( '', { trigger: false } );
 					Chassis.history.destroy();
+					start();
 				}
 			}
 		} );
@@ -354,7 +363,7 @@ $(document).ready(function() {
 			routes: [ 'spmpagea5/:aid', 'spmpageb5/:bid' ]
 		} );
 
-		var counter = 0;
+
 
 		Chassis.PageView[ 'spmpagea5' ] = Chassis.PageView.extend( {} );
 
@@ -387,9 +396,10 @@ $(document).ready(function() {
 				equal( e.params.to.action, 'spmpageb5' );
 				equal( e.params.params.bid, 2 );
 
-				start();
+				
 				Chassis.history.navigate( '', { trigger: false } );
 				Chassis.history.destroy();
+				start();
 			}
 		} );
 
@@ -409,9 +419,6 @@ $(document).ready(function() {
 			routes: [ 'spmpageb6/:bid' ]
 		} );
 
-		var bcounter = 0;
-		var acounter = 0;
-
 		Chassis.PageView[ 'spmpageb6' ] = Chassis.PageView.extend( {
 			id: 'spmpageb6',
 
@@ -429,9 +436,8 @@ $(document).ready(function() {
 
 			onBeforeSwitchIn: function( e ) {
 
-				bcounter++;
 
-				if ( e.from && bcounter === 2 ) {
+				if ( e.from ) {
 
 					ok( e.from instanceof spmpagebSubView  );
 					ok( e.to === this );
@@ -444,9 +450,7 @@ $(document).ready(function() {
 
 			onAfterSwitchIn: function( e ) {
 
-				acounter++;
-
-				if ( e.from && acounter === 2 ) {
+				if ( e.from ) {
 
 					ok( e.from instanceof spmpagebSubView  );
 					ok( e.to === this );
@@ -454,9 +458,10 @@ $(document).ready(function() {
 					equal( e.params.from.action, 'spmpageb6' );
 					equal( e.params.params.bid, 2 );
 
-					start();
+					
 					Chassis.history.navigate( '', { trigger: false } );
 					Chassis.history.destroy();
+					start();
           
 				}
 			}
@@ -508,9 +513,10 @@ $(document).ready(function() {
 			onAfterSwitchIn: function( e ) {
 				ok( true );
 
-				start();
+				
 				Chassis.history.navigate( '', { trigger: false } );
 				Chassis.history.destroy();
+				start();
 			}
 		} );
 

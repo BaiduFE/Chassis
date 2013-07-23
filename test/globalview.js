@@ -3,8 +3,7 @@ $(document).ready(function() {
 	module('Chassis.GlobalView');
 	
 	
-	test( 'constructor', 3, function() {
-		stop();
+	asyncTest( 'constructor', 3, function() {
 		var Router = Chassis.Router.extend( {
 			routes: [ 'glvpagea1/:aid', 'glvpageb1/:bid' ]
 		} );

@@ -76,29 +76,29 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
 			max = 0,
 			maxView = null,
 			selector = null,
-			parent = null;
+			parent = null,
+			recycleKey = null;
 		
 		if ( !Chassis.PageView.AllPageView ) {
 			return;
 		}
 		
-		if ( Chassis.PageView.AllPageView.length < 10 ) {
+		if ( Chassis.PageView.AllPageView.length < Chassis.View.MaxPageView ) {
 			return;
 		}
 		
 		Chassis.$.each( Chassis.PageView.AllPageView, function( k, v ) {
 			var len = me._getChildrenLength( v );
 			
-			if ( len > max ) {
+			if ( (len > max) || (k === 0) ) {
 				max = len;
 				maxView = v;
+				recycleKey = k;
 			}
 		} );
 		
 		
-		if ( !max ) {
-			return;
-		}
+		Chassis.PageView.AllPageView.splice( recycleKey, 1 );
 		
 		selector = maxView.$el.selector;
 		

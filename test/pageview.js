@@ -3,7 +3,7 @@ $(document).ready(function() {
 	module('Chassis.PageView');
 
 	var PageView = Chassis.PageView;
-
+	
 	asyncTest('pageview constructor arguments', 5, function() {
 		var counter = 0;
 		var PageView = Chassis.PageView.extend({
@@ -66,22 +66,23 @@ $(document).ready(function() {
 	asyncTest('pageview save and restore position', 2, function(){
 		var view = new Chassis.PageView();
 		var startY = window.scrollY;
-
+		
+		//保存当前的值
 		view.savePos();
-	
 		// 如果高度不够，scrollTo就不会生效
 		$('body').append( '<div style="height:3000px;" id="_tmpElement_"></div>' );
 		window.scrollTo(0,300);
 
 		equal(window.scrollY,300);
-		
 
 		view.restorePos();
 
 		setTimeout(function() {
-			equal(startY, window.scrollY);
+			equal(window.scrollY,startY);
+
 			$('#_tmpElement_').remove();
 			start();
 		}, 20);
+
 	});
 });

@@ -330,6 +330,8 @@ Chassis.mixin( SPM.prototype, Events, {
 			owner = me.owner,
 			stamp = me.getStamp( params ),
 			target = me.getBy( 'stamp', stamp ),
+			subViewName = me.klass,
+			kkls,
 			subpage;
 			
 		if ( !e.to.$el ) {
@@ -340,16 +342,20 @@ Chassis.mixin( SPM.prototype, Events, {
 		
 		if ( !target ) {
             
-            if ( !Chassis.isObject( me.klass ) ) {
-                Chassis.load( 'subview-' + me.klass, function() {
-                    me.klass = Chassis.SubView[ me.klass ];
-                    
-                    if ( me.klass ) {
-                        me._afterPageIn.call( me, e );
-                    }
-                } );
-                return;
-            }
+			me.klass = Chassis.View.getSubViewInstance( subViewName, 
+					function() {
+						me.klass = Chassis.SubView[ subViewName ];
+						
+						if ( me.klass ) {
+							me._afterPageIn.call( me, e );
+						}
+					} );
+
+			if ( !me.klass ) {
+				return;
+			}
+			
+            
             
 			// TODO: 某些数据可能不允许自动生成subview
 			subpage = new me.klass( params || {}, owner );

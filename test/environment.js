@@ -15,6 +15,7 @@
     setup: function() {
       var env = this;
 
+	  
       // Capture ajax settings for comparison.
       Chassis.ajax = function(settings) {
         env.ajaxSettings = settings;

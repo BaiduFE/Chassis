@@ -86,8 +86,10 @@ $(document).ready(function() {
 		Chassis.PageView.index = Chassis.PageView.extend({
         
 			init : function(){
-				delete Chassis.PageView.index;
+				
 				ok(true);
+				
+				delete Chassis.PageView.index;
 				Chassis.history.navigate( '',{trigger:false} );
 				Chassis.history.destroy();
 				start();
@@ -119,8 +121,10 @@ $(document).ready(function() {
 		Chassis.PageView.index = Chassis.PageView.extend({
         
 			init : function(){
-				delete Chassis.PageView.index;
+				
 				ok(true);
+				
+				delete Chassis.PageView.index;
 				Chassis.history.navigate( '',{trigger:false} );
 				Chassis.history.destroy();
 				start();
@@ -146,10 +150,8 @@ $(document).ready(function() {
 
 	} );
   
-	asyncTest("test pageOrder when routes is array", 1, function() {
+	test("test pageOrder when routes is array", 1, function() {
 		var Router,router;
-    
-    
 
 		Router = Chassis.Router.extend({
 			routes : [
@@ -159,30 +161,29 @@ $(document).ready(function() {
 		} );
     
 		router = new Router();
-	
-	
+
 		Chassis.history.start( {trigger:false} );
 	
 		deepEqual( router.pageOrder, ['index','info'] );
     
 		Chassis.history.destroy();
-		start();
+		
 	} );
 	
 	
 	asyncTest("test init for routers handle when return false;", 1, function() {
 		var Router,router;
-    
 
-    
 		Router = Chassis.Router.extend({
 			routes : {
 				'index/:id' : 'index'
 			},
         
 			index : function(){
-				delete Chassis.PageView.index;
+				
 				ok(true);
+				
+				delete Chassis.PageView.index;
 				Chassis.history.navigate( '',{trigger:false} );
 				Chassis.history.destroy();
 				start();
@@ -209,8 +210,10 @@ $(document).ready(function() {
 			},
         
 			index : function(){
-				delete Chassis.PageView.index;
+				
 				ok(true);
+				
+				delete Chassis.PageView.index;
 				Chassis.history.navigate( '',{trigger:false} );
 				Chassis.history.destroy();
 				start();
@@ -300,8 +303,10 @@ $(document).ready(function() {
 		Chassis.PageView.index = Chassis.PageView.extend({
         
 			init : function(){
-				delete Chassis.PageView.index;
+				
 				ok(true);
+				
+				delete Chassis.PageView.index;
 				Chassis.history.navigate( '',{trigger:false} );
 				Chassis.history.destroy();
 				start();
@@ -325,8 +330,10 @@ $(document).ready(function() {
     
 		Chassis.PageView.index = Chassis.PageView.extend( {
 			init : function(){
-				delete Chassis.PageView.index;
+				
 				ok(true);
+				
+				delete Chassis.PageView.index;
 				Chassis.history.navigate( '',{trigger:false} );
 				Chassis.history.destroy();
 				start();

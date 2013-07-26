@@ -517,6 +517,7 @@ $(document).ready(function() {
 		var SubView2 = Chassis.SubView.extend( {
 
 			onBeforePageIn: function( e ) {
+				
 				ok( true );
 			},
 
@@ -533,6 +534,133 @@ $(document).ready(function() {
 
 		Chassis.history.start();
 		Chassis.history.navigate( 'list2/123' );
+
+	});
+	
+	asyncTest('page auto recycle', 11, function(){
+		var router = new Chassis.Router( {
+			routes: [ 'm1/:id','m2/:id','m3/:id','m4/:id','m5/:id','m6/:id','m7/:id','m8/:id','m9/:id','m10/:id' ]
+		} );
+		
+		var Counter = 0;
+		
+		var oldMaxView = Chassis.View.MaxPageView;
+		
+		Chassis.View.MaxPageView = 100;
+		Chassis.PageView.AllPageView.length = 0;
+		Chassis.PageView.m1 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				// 超过阀值就会重新创建实例,即被回收后重新实例化
+				if (Counter === 11) {
+					ok( true );
+					
+					Chassis.history.navigate( '',{trigger:false}  );
+					Chassis.history.destroy();
+					
+					delete Chassis.PageView.m1;
+					delete Chassis.PageView.m2;
+					delete Chassis.PageView.m3;
+					delete Chassis.PageView.m4;
+					delete Chassis.PageView.m5;
+					delete Chassis.PageView.m6;
+					delete Chassis.PageView.m7;
+					delete Chassis.PageView.m8;
+					delete Chassis.PageView.m9;
+					delete Chassis.PageView.m10;
+					
+					Chassis.View.MaxPageView = oldMaxView;
+					start();
+					return;
+				}
+				this.append( new SubView1( opts, this ) );
+				this.append( new SubView2( opts, this ) );
+				this.append( new SubView3( opts, this ) );
+				
+				ok( true );
+				
+				Chassis.history.navigate( 'm2/1' );
+			}
+			
+		} );
+		
+		Chassis.PageView.m2 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm3/100' );
+			}
+		} );
+		
+		Chassis.PageView.m3 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm4/100' );
+			}
+		} );
+		
+		Chassis.PageView.m4 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm5/100' );
+			}
+		} );
+		
+		Chassis.PageView.m5 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm6/100' );
+			}
+		} );
+		
+		Chassis.PageView.m6 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm7/100' );
+			}
+		} );
+		
+		Chassis.PageView.m7 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm8/100' );
+			}
+		} );
+		Chassis.PageView.m8 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm9/100' );
+			}
+		} );
+		Chassis.PageView.m9 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm10/100' );
+			}
+		} );
+		Chassis.PageView.m10 = Chassis.PageView.extend( {
+			init: function( opts ) {
+				Counter++;
+				ok( true );
+				Chassis.history.navigate( 'm1/100' );
+			}
+		} );
+
+		var SubView1 = Chassis.SubView.extend( {} );
+		var SubView2 = Chassis.SubView.extend( {} );
+		var SubView3 = Chassis.SubView.extend( {} );
+
+
+
+		Chassis.history.start();
+		Chassis.history.navigate( 'm1/123' );
 
   });
   

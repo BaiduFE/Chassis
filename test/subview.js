@@ -27,7 +27,7 @@ $(document).ready(function() {
 	var SubView = Chassis.SubView;
 
 	asyncTest('subview constructor arguments', 6, function() {
-
+		
 		var counter = 0;
 
 		var View = Chassis.SubView.extend({
@@ -60,7 +60,7 @@ $(document).ready(function() {
 	});
 
 	asyncTest( 'static methods', 3, function() {
-
+		
 		PageView.define( 'home', {
 			id: 'home1',
 			className: 'home2',
@@ -88,7 +88,7 @@ $(document).ready(function() {
 	} );
 
 	asyncTest('subview page change events', 10, function(){
-
+		
 		var router = new Chassis.Router( {
 			routes: [ 'subview/:id' ]
 		} );
@@ -141,7 +141,7 @@ $(document).ready(function() {
 	} );
 
 	asyncTest('subview page change events only trigger on targeted page', 1, function(){
-
+		
 		var router = new Chassis.Router( {
 			routes: [ 'subview/:vid', 'subview2/:vid' ]
 		} );
@@ -190,7 +190,8 @@ $(document).ready(function() {
 
 	});
 	
-	asyncTest('subview reuse', 4, function(){
+	asyncTest('subview async load,reuse and async render', 4, function(){
+		Chassis.reset();
 		var Router = Chassis.Router.extend( {
 			routes: [ 'reuse1/:id','reuse2/:id','reuse3/:id' ]
 		} );
@@ -205,7 +206,9 @@ $(document).ready(function() {
 				this.setup('reuse',options );
 				
 				this.renderAsyncSubView( 'reuse',function(){
+					
 					Chassis.history.navigate( 'reuse2/123'  );
+					
 				} );
 				
 			}
@@ -236,6 +239,8 @@ $(document).ready(function() {
 
 				this.setup('reuse',options );
 				
+
+				
 				this.renderAsyncSubView( 'reuse', function(){
 					Chassis.history.navigate( '#',{trigger:false} );
 					Chassis.history.destroy();
@@ -246,7 +251,9 @@ $(document).ready(function() {
 					delete Chassis.PageView.reuse2;
 					delete Chassis.PageView.reuse3;
 					delete Chassis.SubView.reuse;
+					
 					start();
+					
 				} );
 			}
 		} );

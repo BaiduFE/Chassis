@@ -61,3 +61,9 @@ Chassis.noConflict = function() {
 	root[ exportName ] = _Chassis;
 	return this;
 };
+
+Chassis.reset = function() {
+	Chassis.commonView = {};
+	Chassis.PageView.AllPageView = [];
+	Chassis.PageView.AllPageViewBox = {};
+};

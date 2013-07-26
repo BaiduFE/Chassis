@@ -528,7 +528,7 @@ Chassis.mixin( View.prototype, Events, {
                 break;
         }
         
-        Chassis.load( 'subview-' + view, function() {
+        Chassis.View.getSubViewSource( view, function() {
 		
 			me._renderAsyncSubViewStack[ view ] = function() {
 				var placeHolder = me.$el.find( '#' + pid  ),
@@ -740,6 +740,23 @@ Chassis.mixin( View, {
 
         return klass ? (new klass( opts1, opts2 )) : null;
     },
+	
+	/**
+     * 根据字符串获取View实例
+     * @method getViewInstance
+     * @static
+     * @param  {string} action 
+     * @param  {object} request  请求参数
+     * @return {view}
+     */
+	getViewInstance : function( action, request ) {
+		var me = this,
+			view;
+		view = new Chassis.PageView[ action ]( request, action );
+		
+		return view;
+	},
+
 
     extend: Chassis.extend
 } );

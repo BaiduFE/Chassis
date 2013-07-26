@@ -359,7 +359,8 @@ Test.prototype = {
 		// defer when previous test run passed, if storage is available
 		bad = QUnit.config.reorder && defined.sessionStorage &&
 						+sessionStorage.getItem( "qunit-test-" + this.module + "-" + this.testName );
-
+		
+		
 		if ( bad ) {
 			run();
 		} else {

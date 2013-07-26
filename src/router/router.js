@@ -14,6 +14,8 @@
  */
 var Router = Chassis.Router = function( opts ) {
     
+	this.pageOrder = [];
+	
     if ( !opts ) {
         opts = {};
     }
@@ -461,50 +463,10 @@ Chassis.mixin( Router.prototype, Events, {
             if ( (action === me._index) && (!Chassis.PageView[ action ]) ) {
                 return;
             }
-            
-            // 如果pageview没有下载，则先使用通用pageview，同时下载需要加载的pageview，加载成功后再触发对应的事件
-            if ( !Chassis.PageView[ action ] ) {
-                
-				if ( !Chassis.PageView._transition_ ) {
-                    
-                    if ( !Chassis.PageView._TRANSITION_ ) {
-                        Chassis.PageView._TRANSITION_ = 
-                            Chassis.PageView.extend({});
-                    }
-                    
-                    Chassis.PageView._transition_ = 
-                        new Chassis.PageView._TRANSITION_();
-                }
-                
-                view = me.views[ action ]  = Chassis.PageView._transition_;
-                
-                Chassis.load( 'pageview-' + action, function() {
-                    view.$el.hide();
-                    
-                    view = me.views[ action ] = 
-                        new Chassis.PageView[ action ]( request, action );
-                    me.previousView = me.currentView;
-                    me.currentView = view;
-                    
-                    view.$el.show();
-                    
-                    
-                    view.trigger( 'beforepagein,afterpagein', {
-                        from: me.previousView,
-                        to: me.currentView,
-                        params: request
-                    } );
-                    return;
-                } );
-                
+			
+			view = me.views[ action ] = 
+					Chassis.View.getViewInstance.call( me, action, request );
 
-                    
-            } else {
-                view = me.views[ action ]  = 
-                    new Chassis.PageView[ action ]( request, action ); 
-            }
-            
-            
         }
         
         // 切换视图控制器

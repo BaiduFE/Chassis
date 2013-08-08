@@ -32,7 +32,7 @@ Chassis.mixin( View, {
 			}
 			
 			Chassis.PageView._transition_ = 
-				new Chassis.PageView._TRANSITION_();
+				new Chassis.PageView._TRANSITION_( request, action );
 		}
 		
 		view  = Chassis.PageView._transition_;

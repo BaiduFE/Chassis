@@ -48,7 +48,7 @@ History.Hash = History.extend({
                 }
                 
                 me.curFragment = me.getFragment();
-                me.loadUrl.call( me, me.getFragment() );
+                me.loadUrl.call( me, me.curFragment );
             } );
             
             // 处理当前hash

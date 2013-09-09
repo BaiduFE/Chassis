@@ -81,8 +81,8 @@ Chassis.mixin( History.prototype, Events, {
 		handler = Chassis.clone( this.handler );
 		
         this.destroy();
-        
-        if ( opts.pushState ) {
+		
+        if ( opts.pushState && history.pushState ) {
             type = 'Pushstate';
         }
         

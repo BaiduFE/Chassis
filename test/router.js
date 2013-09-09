@@ -7,7 +7,7 @@ $(document).ready(function() {
 		Router = Chassis.Router.extend({
 			init : function(){
 				ok(true);
-            
+				
 				Chassis.history.destroy();
 				start();
 			},
@@ -16,12 +16,12 @@ $(document).ready(function() {
     
 		router = new Router();
 		Chassis.history.start( {trigger:false} );
-	
+		
 	} );
   
 	asyncTest("test destroy", 2, function() {
 		var Router,router;
-
+		
 		Router = Chassis.Router.extend({
 
 			routes : {

@@ -94,15 +94,24 @@ Chassis.mixin( Router.prototype, Events, {
      * @method route
      * @param {string} route
      * @param {string} name
+     * @param {function} callback
      * @return 
      **/
-    route : function( route, name ) {
+    route : function( route, name, callback ) {
 
         var me = this,
-            callback = this._getHandler( name ),
             routeRe = me._routeToRegExp( route ),
             keys = routeRe.exec( route ).slice( 1 );
         
+		if ( Chassis.isFunction( name ) ) {
+            callback = name;
+            name = '';
+        }
+		
+		if ( !callback ) {
+            callback = this._getHandler( name );
+        }
+		
         Chassis.$.each( keys, function( key, item ) {
             keys[ key ] = item.substring( 1 );
         } );

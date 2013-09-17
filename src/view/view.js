@@ -181,7 +181,7 @@ Chassis.mixin( View.prototype, Events, {
                 switch ( selector ) {
                     case 'window':
                     case 'document':
-                        Chassis.$(window[ selector ])
+                        Chassis.$( window[ selector ] )
                                 .on( fullEventName, method );
                         break;
                     case 'view':
@@ -224,8 +224,8 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    append: function( view ) {
-        this._addSubview( view );
+    append: function( view, opts ) {
+        this._addSubview( view, '', opts );
     },
 
     /**
@@ -233,8 +233,8 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    prepend: function( view ) {
-        this._addSubview( view, 'PREPEND' );
+    prepend: function( view, opts ) {
+        this._addSubview( view, 'PREPEND', opts );
     },
 
     /**
@@ -242,14 +242,24 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    setup: function( view ) {
-        this._addSubview( view, 'SETUP' );
+    setup: function( view, opts ) {
+        this._addSubview( view, 'SETUP', opts );
     },
 
     /**
      * 子类初始化
      */
     init: noop,
+    
+    /**
+     * subview异步加载记录
+     *
+     */
+    
+    _asyncSubView : {
+        'global'  : [],
+        'subview' : {}
+    },
 
     /**
      * View销毁时调用，需子类实现。
@@ -292,6 +302,12 @@ Chassis.mixin( View.prototype, Events, {
 
         this.onBeforePageIn( params );
         
+        this._asyncSubView.global = [ { 
+                event  : 'beforepagein', 
+                params : params 
+            } 
+        ];
+        
     },
 
     /**
@@ -305,6 +321,12 @@ Chassis.mixin( View.prototype, Events, {
     _onAfterPageIn: function( params ) {
 
         this.onAfterPageIn( params );
+        
+        this._asyncSubView.global.push({ 
+                event  : 'afterpagein', 
+                params : params 
+            } 
+        );
     },
 
     /**
@@ -386,32 +408,260 @@ Chassis.mixin( View.prototype, Events, {
 			this.setElement( this.el, false );
 		}
 	},
+	
+	_removeRecycleView : function() {
+		var me = this;
+		
+		Chassis.$.each( me.children, function( k, v ) {
+			if ( !v.$el ) {
+				delete me.children[ v.cid ];
+			}
+		} );
+		
+		
+	},
+	
+	_addSubview: function( view, action, opt, async, trigger ) {
+        var me = this,
+			oldView = view,
+            pid,
+            pe,
+            viewElement,
+			_subView;
+		
+		me._removeRecycleView();
+		
+        if ( (!Chassis.isObject( view )) &&  (!Chassis.SubView[ view ]) ) {
+            me._addAsyncSubview.call( me, view, action, opt );
+            return;
+        }
 
-	_addSubview: function( view, action ) {
+        // TODO 已经加载，而且还是个字符串，那么可以重用
+        // 乾坤大挪移
+        if ( !Chassis.isObject( view ) ) {
+            
+            viewElement = '<div class="__common_subview__" data=' + 
+                                view + '></div>';
+            
+            view = Chassis.commonView[ view ];
+            
+			// 被销毁了
+			if ( !view || !view.$el ) {
 
+				_subView = new Chassis.SubView[ oldView ]( opt, me );
+				Chassis.commonView[ oldView ] = _subView;
+				
+				return me._addSubview( _subView, action, opt, false, true );
+			}
+			
+            switch ( action ) {
+
+                // 不进行DOM处理
+                case 'SETUP': 
+                    break;
+                case 'PREPEND':
+                    view.$el.after(  viewElement );
+                    this.$el.prepend( view.$el );
+                    
+                    break;
+                default:
+                    view.$el.after( viewElement );
+                    this.$el.append( view.$el );
+                    break;
+            }
+            return;
+        }
+        
 		if ( view instanceof Chassis.View ) {
 			this.children[ view.cid ] = view;
 			view.parent = this;
+            
+            if ( !async ) {
+                switch ( action ) {
 
-			switch ( action ) {
+                    // 不进行DOM处理
+                    case 'SETUP': 
+                        break;
+                    case 'PREPEND':
+                        this.$el.prepend( view.$el );
+                        break;
+                    default:
+                        this.$el.append( view.$el );
+                        break;
+                }
+                
+                view.$el.hide();
+            }
 
-				// 不进行DOM处理
-				case 'SETUP': 
-					break;
-				case 'PREPEND':
-					this.$el.prepend( view.$el );
-					break;
-				default:
-					this.$el.append( view.$el );
-					break;
-			}
+			
 
-			view.$el.hide();
-
+            if ( trigger ) {
+                me._triggerAsyncSubviewEvent.call( me, view );
+            }
 		} else {
 			throw new Error( 'view is not an instance of Chassis.View.' );
 		}
+	},
+    
+    _addAsyncSubview : function( view, action, opt, async ) {
+        var me = this,
+            pid,
+            pe;
+            
+        pid = Chassis.uniqueId( 'subview-placeholder-' );
+        pe = $( '<div id="' + pid + '"></div>' );
+        
+        me._asyncSubView.subview[ view ] = {
+            id : pid,
+            event : []
+             
+        };
+        
+        switch ( action ) {
+            case 'SETUP' : 
+                break;
+            case 'PREPEND' :
+                me.$el.prepend( pe );
+                break;
+            default :
+                me.$el.append( pe );
+                break;
+        }
+        
+        Chassis.View.getSubViewSource( view, function() {
+		
+			me._renderAsyncSubViewStack[ view ] = function() {
+				var placeHolder = me.$el.find( '#' + pid  ),
+					subView;
+				
+				if ( !Chassis.SubView[ view ] ) {
+					return;
+				}
+				subView = new Chassis.SubView[ view ]( opt, me );
+				Chassis.commonView[ view ] = subView;
+				switch ( action ) {
+					case 'SETUP': 
+						break;
+					case 'PREPEND':
+						placeHolder.replaceWith( subView.$el );
+						break;
+					default:
+						placeHolder.replaceWith( subView.$el );
+						break;
+				}
+				
+				me._addSubview.call( me, subView, action, opt, true, true );
+			};
+			
+			if ( me._renderAsyncSubViewStart ) {
+				
+				if ( me._renderAsyncSubViewCall === '*' ) {
+					me.renderAsyncSubView( view );
+					
+				} else {
+					(view in me._renderAsyncSubViewCall) &&
+							me.renderAsyncSubView( view );
+				}
+				
+				me._renderAsyncSubViewStack[ view ] = null;
+			}
+			
+        } );
+        
+    },
+    
+    _triggerAsyncSubviewEvent : function( view ) {
+        var me = this;
+        
+        Chassis.$.each( me._asyncSubView.global, function( key, value ) {
+            view.trigger( value.event, value.params );
+        } );
+    },
+    
+    _repairCommonSubView : function() {
+        var me = this;
+        
+        me.$el.find( '.__common_subview__' ).each(function( k, v ) {
+        
+            var subviewName = $( v ).attr( 'data' ),
+                subView = Chassis.commonView[ subviewName ],
+                cloneView = subView.$el.clone();
+            
+            cloneView.attr( 'shadow', subviewName );
+            
+            if ( subView.$el.next().attr( 'shadow' )  !== subviewName ) {
+                subView.$el.after( cloneView );
+				subView.parent = me;
+            }
+            
+            subView.$el.after( '<div class="__common_subview__" data=' + 
+                                subviewName + '></div>' );
+            $( v ).replaceWith( subView.$el );
+            
+            me.$el.find( '[shadow=' + subviewName + ']' ).remove();
+            
+        });
+    },
+	
+	_renderAsyncSubViewStack : {},
+	
+	_renderAsyncSubViewStart : false,
+	
+	_renderAsyncSubViewCall : {},
+	
+    /**
+     * render async view
+	 * 异步加载的模块并不是自动添加到视图中的
+     * @method renderAsyncView
+	 * @param  {string} [subView]     subView的name
+     */
+	renderAsyncSubView : function( subView, callback ) {
+		var me = this,
+			oldcallback;
+		
+		me._renderAsyncSubViewStart = true;
+		
+		oldcallback =  callback || function() { };
+		
+		callback = function() {
+			window.setTimeout( function() {
+				oldcallback.call( me );
+			}, 20 );
+		};
+
+		if ( !subView ) {
+			me._renderAsyncSubViewCall = '*';
+			Chassis.$.each( me._renderAsyncSubViewStack, 
+					function( key, value ) {
+						value && value.call( me );
+						me._renderAsyncSubViewStack[ key ] = null;
+					} 
+			);
+			callback.call( me );
+			return;
+		}
+		
+		if ( !Chassis.isArray( subView ) ) {
+			subView = [ subView ];
+		}
+		
+		subView = Chassis.object( subView, subView );
+		
+		if ( me._renderAsyncSubViewCall !== '*' ) {
+			me._renderAsyncSubViewCall = 
+				Chassis.mixin( {}, me._renderAsyncSubViewCall, subView );
+		}
+		
+		Chassis.$.each( me._renderAsyncSubViewStack, function( key, value ) {
+			if ( value && (key in subView) ) {
+				value.call( me );
+				me._renderAsyncSubViewStack[ key ] = null;
+			}
+		} );
+		
+		callback.call( me );
 	}
+    
 } );
 
 // 引入view.loading.js后会在view的原型增加以下方法
@@ -490,6 +740,23 @@ Chassis.mixin( View, {
 
         return klass ? (new klass( opts1, opts2 )) : null;
     },
+	
+	/**
+     * 根据字符串获取View实例
+     * @method getViewInstance
+     * @static
+     * @param  {string} action 
+     * @param  {object} request  请求参数
+     * @return {view}
+     */
+	getViewInstance : function( action, request ) {
+		var me = this,
+			view;
+		view = new Chassis.PageView[ action ]( request, action );
+		
+		return view;
+	},
+
 
     extend: Chassis.extend
 } );

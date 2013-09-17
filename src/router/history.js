@@ -81,8 +81,8 @@ Chassis.mixin( History.prototype, Events, {
 		handler = Chassis.clone( this.handler );
 		
         this.destroy();
-        
-        if ( opts.pushState ) {
+		
+        if ( opts.pushState && history.pushState ) {
             type = 'Pushstate';
         }
         
@@ -101,13 +101,18 @@ Chassis.mixin( History.prototype, Events, {
 
         for ( ; i < len; i++ ) {
             handler = this.handler[ i ];
-
-            if ( handler.reg.test( fragment ) ) {
+			
+			if ( handler.reg.test( fragment ) ) {
                 handler.callback.call( this, fragment );
                 break;
             }
+			
         }
     },
+	
+	reload : function() {
+		return this.loadUrl( this.getFragment() );
+	},
 
     /**
      * 销毁当前的history实例，并重新生成新的History实例。

@@ -9,6 +9,7 @@ rocket.subview.sayhello_content = rocket.subview.extend({
 
         me.showLoading();
         me.render();
+
     }
 
     
@@ -20,7 +21,10 @@ rocket.subview.sayhello_content = rocket.subview.extend({
 	
 	, onBeforePageIn : function(){
 		this.$el.show();
+        this.$el.find('.loading').css('color','#ff3200').text('load complete!');
+
 	}
+
 
 });
 

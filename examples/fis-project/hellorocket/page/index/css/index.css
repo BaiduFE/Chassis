@@ -64,3 +64,15 @@
     -webkit-transform:translateZ(0);
 }
 
+#index_page_content dl {
+    margin:10px;
+}
+    #index_page_content dl dt {
+        background:#eee;
+        font-weight:700;
+    }
+    
+    #index_page_content dl dd {
+        font-size:13px;
+    }
+

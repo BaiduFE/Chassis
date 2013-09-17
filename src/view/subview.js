@@ -35,6 +35,9 @@ var SubView = Chassis.SubView = View.SubView = View.extend({
         // 自动监听SUBPAGE事件
         this.listenTo( this, 'beforeswitchin', this.onBeforeSwitchIn );
         this.listenTo( this, 'afterswitchin', this.onAfterSwitchIn );
+        
+        this.listenTo( this, 'beforepagein', this.onBeforePageIn );
+        this.listenTo( this, 'afterpagein', this.onAfterPageIn );
 
 		SubView.__super__._initialize.call( this, opts );
 	},

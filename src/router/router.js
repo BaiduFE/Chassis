@@ -1,3 +1,5 @@
+/*jshint camelcase:false*/
+
 /**
  * @fileOverview Router核心实现
  * @requires Router.History || Router.Pushstate
@@ -12,6 +14,8 @@
  */
 var Router = Chassis.Router = function( opts ) {
     
+	this.pageOrder = [];
+	
     if ( !opts ) {
         opts = {};
     }
@@ -90,15 +94,24 @@ Chassis.mixin( Router.prototype, Events, {
      * @method route
      * @param {string} route
      * @param {string} name
+     * @param {function} callback
      * @return 
      **/
-    route : function( route, name ) {
+    route : function( route, name, callback ) {
 
         var me = this,
-            callback = this._getHandler( name ),
             routeRe = me._routeToRegExp( route ),
             keys = routeRe.exec( route ).slice( 1 );
         
+		if ( Chassis.isFunction( name ) ) {
+            callback = name;
+            name = '';
+        }
+		
+		if ( !callback ) {
+            callback = this._getHandler( name );
+        }
+		
         Chassis.$.each( keys, function( key, item ) {
             keys[ key ] = item.substring( 1 );
         } );
@@ -227,6 +240,9 @@ Chassis.mixin( Router.prototype, Events, {
         });
         */
         
+        // 通用subview复用及影子节点处理
+        to.$el && to._repairCommonSubView();
+        
         me._doTransition(
             from,
                 to,
@@ -256,7 +272,7 @@ Chassis.mixin( Router.prototype, Events, {
                 });
                 */
                 
-                if ( from ) {
+                if ( from && from.$el ) {
                     
                     if ( from.trigger( 'afterpageout', e ) ) {
                         from.$el.hide();
@@ -265,7 +281,7 @@ Chassis.mixin( Router.prototype, Events, {
                     
                 }
                 
-                if ( to ) {
+                if ( to && to.$el ) {
                     to.trigger( 'afterpagein', e );
                 }
 
@@ -441,20 +457,26 @@ Chassis.mixin( Router.prototype, Events, {
 
         var me = this,
             view = me.views[ action ];
-
+		
+		// 如果该view被销毁，需要重新new
+		if ( view && !view.$el ) {
+			me.views[ action ] = null;
+			return me._doAction( action, request );
+		}
+		
         this._decodeRequest( request );
         
         if ( !view ) {
 			
-			// 系统预定义定义了首页路由，但是没有实现就不执行。
-			if ( (action === me._index) && (!Chassis.PageView[ action ]) ) {
-				
-				return;
-				
-			}
-            view = me.views[ action ]  =
-                    new Chassis.PageView[ action ]( request, action ); 
-        } 
+			// TODO 如果是异步加载的话怎么办？
+            if ( (action === me._index) && (!Chassis.PageView[ action ]) ) {
+                return;
+            }
+			
+			view = me.views[ action ] = 
+					Chassis.View.getViewInstance.call( me, action, request );
+
+        }
         
         // 切换视图控制器
         me.previousView = me.currentView;

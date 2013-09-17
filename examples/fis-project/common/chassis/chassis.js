@@ -35,9 +35,11 @@ Chassis.VERSION = '0.1.0';
 Chassis.FX = {}; 
 
 /**
- * $
+ * see [jQuery](http://api.jquery.com/),
+ * [Zepto](http://zeptojs.com/),[GMU](http://gmu.baidu.com/)
+ * or [ender](https://ender.no.de)
  * @property $
- * @type jQuery|Zepto|ender
+ * @type object
  */
 Chassis.$ = root.jQuery || root.Zepto || root.ender;
 
@@ -52,6 +54,9 @@ Chassis.noConflict = function() {
 	root[ exportName ] = _Chassis;
 	return this;
 };
+
+Chassis.commonView = {};
+
  /*jshint camelcase:false*/
  /**
  * @fileOverview 语言增强
@@ -63,6 +68,11 @@ var proto = Array.prototype,
     toString = proto.toString,
     nativeIsArray = Array.isArray;
 
+/**
+ * mixin方法，等同于$.extend;
+ * @method mixin
+ * @static
+ */
 Chassis.mixin = $.extend;
 
 /**
@@ -108,11 +118,16 @@ Chassis.extend = function( protoProps, staticProps ) {
 
 };
 
-
-
-
-      
-      
+/**
+ * 创建一个只能调用一次的函数。
+ * > 重复调用改进的方法也没有效果，还是返回第一次执行的结果。
+ * > 有助于初始化类型的方法，代替过去设置一个boolean标记及后续对标记检测。
+ *
+ * @method _once
+ * @static
+ * @param  {function} func 传入的函数
+ * @return {function} 只能调用一次的函数
+ */     
 Chassis._once = function( func ) {
     var me = this,
         ran = false, 
@@ -131,10 +146,28 @@ Chassis._once = function( func ) {
     };
 };
 
+/**
+ * 判断一个对象是否有你给出名称的属性或对象。
+ * > 需要注意的是，此方法无法检查该对象的原型链中是否具有该属性，该属性必须是对象本身的一个成员。
+ *
+ * @method has
+ * @static
+ * @param  {object} obj 目标对象
+ * @param {string} key 属性
+ * @return {boolean} key 属性
+ */
 Chassis.has = function( obj, key ) {
     return hasOwnProperty.call( obj, key );
 };
 
+/**
+ * 检索object的所有的属性名称。
+ *
+ * @method keys
+ * @static
+ * @param  {object} obj 目标对象
+ * @return {array} 所有的属性名称
+ */
 Chassis.keys = function( obj ) {
     var keys = [];
     
@@ -150,7 +183,16 @@ Chassis.keys = function( obj ) {
     
     return keys;
 };
-    
+
+/**
+ * 为需要的客户端模型或DOM元素生成一个全局唯一的id。
+ * > 如果prefix参数存在， id 将附加给它
+ *
+ * @method uniqueId
+ * @static
+ * @param  {string} prefix 前缀
+ * @return {string}
+ */
 Chassis.uniqueId = (function() {
     var idCounter = 0;
 
@@ -161,15 +203,42 @@ Chassis.uniqueId = (function() {
 })();
 
     
-
+/**
+ * see [$.isArray](http://zeptojs.com/#$.isArray)
+ * @method isArray
+ * @static
+ */
 Chassis.isArray = Chassis.$.isArray;
 
+/**
+ * 判断是否是对象
+ *
+ * @method isObject
+ * @static
+ * @param  {*} obj 目标
+ * @return {boolean}
+ */
 Chassis.isObject = function( obj ) {
     return obj === Object( obj );
 };
 
+/**
+ * see [$.isFunction](http://zeptojs.com/#$.isFunction)
+ *
+ * @method isFunction
+ * @static
+ */
 Chassis.isFunction = Chassis.$.isFunction;
 
+/**
+ * 创建 一个浅复制（浅拷贝）的克隆object。
+ * > 任何嵌套的对象或数组都通过引用拷贝，不会复制。
+ *
+ * @method clone
+ * @static
+ * @param  {object} obj 目标对象
+ * @return {object}
+ */
 Chassis.clone = function( obj ) {
     if ( !Chassis.isObject( obj ) ) {
         return obj;
@@ -177,6 +246,16 @@ Chassis.clone = function( obj ) {
     return Chassis.isArray( obj ) ? obj.slice() : Chassis.mixin( {}, obj );
 };
 
+/**
+ * 返回对象属性的运行结果
+ * > 如果该属性是一个方法，则返回该方法的运算结果
+ *
+ * @method result
+ * @static
+ * @param  {object} obj 目标对象
+ * @param  {object} property 目标属性
+ * @return {object}
+ */
 Chassis.result = function( object, property ) {
     var value;
 
@@ -188,6 +267,14 @@ Chassis.result = function( object, property ) {
     return Chassis.isFunction( value ) ? value.call( object ) : value;
 };
 
+/**
+ * 转义HTML字符串，替换&, <, >, ", ', /字符
+ *
+ * @method escape
+ * @static
+ * @param  {string} str 目标字符串
+ * @return {string}
+ */
 Chassis.escape = function( str ) {
     return str ?
         str.replace( /\&/g, '&amp;' )
@@ -200,8 +287,23 @@ Chassis.escape = function( str ) {
 
 };
 
+/**
+ * see [$.proxy](http://zeptojs.com/#$.proxy)
+ *
+ * @method proxy
+ * @static
+ */
 Chassis.proxy = $.proxy;
 
+/**
+ * 将两个数组转换为名称-值对的对象
+ *
+ * @method object
+ * @param  {array} list 目标数组(key)
+ * @param  {array} values 目标数组(value)
+ * @return {object}
+ * @static
+ */
 Chassis.object = function( list, values ) {
     var result = {};
 
@@ -220,34 +322,61 @@ Chassis.object = function( list, values ) {
     return result;
 };
 
+
+Chassis.F = root.F;
+
+Chassis.load = function( pkg, callback ) {
+    var pkg = Chassis.load.config.ruler( pkg );
+    if ( pkg ) {
+        Chassis.F.load( pkg, callback );
+    }
+};
+Chassis.load.config = {
+    ruler : function( pkg ){}
+};
+
+
 $.support = Chassis.mixin( $.support || {}, {
     has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
 } );
 
+/**
+ * Undefined
+ * @property Undefined
+ * @static
+ * @type undefined
+ * @private
+ */
 Chassis.Undefined;
 /**
  * @fileOverview 事件机制
  */
 
 /**
- * Chassis Events模块
- *
- * @module Events
- *
+ * Events
+ * @class Events
+ * @namespace Chassis
  */
 var Events = Chassis.Events = {
     
-    /**
-     * on
-     *
-     * @param {string} name
-     * @param {function} callback
-     * @param {object} context
-     * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.on("a b c",callback);
-     * obj.on({a:callback, b:callback, c:callback},obj);
-     */
+	/**
+	 * > 绑定 `callback` 函数到 `object` 对象。
+	 *
+	 * > 当事件触发时执行回调函数 callback 。
+	 *
+	 * @method on
+	 * @param {string} name
+	 * @param {function} callback
+	 * @param {object} context
+	 * @return {object}
+	 * @static
+	 * @example
+
+		var obj = Chassis.mixin({},Chassis.Events);
+		obj.on("a b c",callback);
+		obj.on({a:callback, b:callback, c:callback},obj);
+
+	 */
     on: function( name, callback, context ) {
         var events;
         
@@ -271,16 +400,23 @@ var Events = Chassis.Events = {
     },
 
     /**
-     * once
-     *
+	 * > 绑定 只能运行一次的callback 函数到 object 对象。 
+	 *
+	 * > 当事件触发时执行回调函数 callback 。
+	 *
+	 * @method once
      * @param {string} name
      * @param {function} callback
      * @param {object} context
+	 * @return {object}
+	 * @static
      * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.once("a b c",callback);
-     * obj.once({a:callback, b:callback, c:callback},obj);
-     */
+	
+		var obj = Chassis.mixin({},Chassis.Events);
+		obj.once("a b c",callback);
+		obj.once({a:callback, b:callback, c:callback},obj);
+	
+	 */
     once: function( name, callback, context ) {
         var me = this,
             once;
@@ -302,16 +438,21 @@ var Events = Chassis.Events = {
     },
 
     /**
-     * off
-     *
+	 * > 移除绑定的事件。 
+	 *
+	 * @method off
      * @param {string} name
      * @param {function} callback
      * @param {object} context
+	 * @return {object}
+	 * @static
      * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.off("a b c",callback);
-     * obj.off({a:callback, b:callback, c:callback},obj);
-     */
+	
+		var obj = Chassis.mixin({},Chassis.Events);
+		obj.off("a b c",callback);
+		obj.off({a:callback, b:callback, c:callback},obj);
+	
+	 */
     off: function( name, callback, context ) {
         var me = this,
             retain, 
@@ -333,14 +474,15 @@ var Events = Chassis.Events = {
             return this;
         }
 
-        names = name ? [ name ] : Chassis.keys( this._events );
+        names = name ? [ name ] : this._events;
         
         Chassis.$.each( names, function( nKey, nItem ) {
-            name = nItem;
-            events = me._events[ name ];
+            var evtName = name ? nItem : nKey;
+
+            events = me._events[ evtName ];
 
             if ( events ) {
-                me._events[ name ] = retain = [];
+                me._events[ evtName ] = retain = [];
 
                 if ( callback || context ) {
                     Chassis.$.each( events, function( eKey, eItem ) {
@@ -354,7 +496,7 @@ var Events = Chassis.Events = {
                     
                 }
                 if ( !retain.length ) {
-                    delete me._events[ name ];
+                    delete me._events[ evtName ];
                 }
             }
         } );
@@ -363,13 +505,18 @@ var Events = Chassis.Events = {
     },
 
     /**
-     * trigger
-     *
+	 * > 触发绑定的事件。 
+	 *
+	 * @method trigger
      * @param {string} name
+	 * @return {object}
+	 * @static
      * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.trigger("a b c");
-     */
+	
+		var obj = Chassis.mixin({},Chassis.Events);
+		obj.trigger("a b c");
+	
+	 */
     trigger: function( name ) {
         var args,
             events,
@@ -400,15 +547,20 @@ var Events = Chassis.Events = {
     },
 
     /**
-     * stopListening
-     *
+	 * > 停止监听事件 
+	 *
+	 * @method stopListening
      * @param {string} name
      * @param {function} callback
      * @param {object} context
+	 * @return {object}
+	 * @static
      * @example
-     * var obj = _.extend({},Chassis.Events);
-     * obj.stopListening("a b c",callback);
-     */
+	
+		var obj = Chassis.mixin({},Chassis.Events);
+		obj.stopListening("a b c",callback);
+	
+	 */
     stopListening: function( obj, name, callback ) {
 
         var listeners = this._listeners,
@@ -517,7 +669,18 @@ var triggerEvents = function( events, args ) {
 
 var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
 
-
+/**
+ * see [on](#method_on)
+ *
+ * @method listenTo
+ * @static
+ */
+/**
+ * see [once](#method_once)
+ *
+ * @method listenToOnce
+ * @static
+ */
 Chassis.$.each( listenMethods, function( method, implementation ) {
     Events[ method ] = function( obj, name, callback ) {
 
@@ -538,6 +701,20 @@ Chassis.$.each( listenMethods, function( method, implementation ) {
     };
 } );
 
+/**
+ * see [on](#method_on)
+ *
+ * @method bind
+ * @static
+ */
+
+/**
+ * see [off](#method_off)
+ *
+ * @method unbind
+ * @static
+ */
+
 Events.bind   = Events.on;
 Events.unbind = Events.off;
 
@@ -546,6 +723,14 @@ Chassis.mixin( Chassis, Events );
  * @fileOverview Model
  */
 
+/**
+ * Model
+ * @class Model
+ * @namespace Chassis
+ * @constructor
+ * @param {object} attributes
+ * @param {object} opts
+ */
 var Model = Chassis.Model = function( attributes, opts ) {
     var me = this,
         attrs = attributes || {},
@@ -568,36 +753,94 @@ var Model = Chassis.Model = function( attributes, opts ) {
 
 Chassis.mixin( Model.prototype, Events, {
     
+	/**
+     * 模型的特殊属性
+     * > `id` 可以是任意字符串。在属性中设置的 `id` 会被直接拷贝到模型属性上。 
+     *
+     * @property idAttribute
+     * @return 
+     **/
     idAttribute : 'id',
     
+	/**
+	 * 初始化
+     * > 当创建模型实例时，可以传入 `属性` 初始值，这些值会被 `set` 到模型。 如果定义了 `init` 函数，该函数会在模型创建后执行。
+     *
+     * @method init
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			init : function(){
+				//
+			}
+		} );
+		
+        var m = new model();
+     **/
     init : function() {},
     
     /**
      * fetch方法获取数据的url。
-     * 注意这个方法的意思和backbone是有区别的
+     * > 注意这个方法的意思和backbone是有区别的
      *
      * @method url
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			url : function(){
+				return '/path/?title=' + this.get( 'title' );
+			}
+		} );
+		
+        var m = new model();
      **/
     url : function() {},
     
     /**
-     * 从模型获取当前属性值，比如：csser.get("title")
+     * 从模型获取当前属性值
      *
      * @method get
      * @param {string} key
-     * @return 
+     * @return
+	 * @example
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			}
+		} );
+		
+        var m = new model();
+        m.get( 'title' );
      **/
     get : function( key ) {
         return this.attributes[ key ];
     },
     
     /**
-     * 属性值为非 null 或非 undefined 时返回 true
+	 * 模型是否具有某个属性
+     * > 属性值为非 null 或非 undefined 时返回 true
      *
      * @method has
      * @param {string} key
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			}
+		} );
+		
+        var m = new model();
+		m.has( 'title' );
      **/
     has : function( key ) {
         return this.get( key ) !== null;
@@ -605,14 +848,28 @@ Chassis.mixin( Model.prototype, Events, {
     
     /**
      * 向模型设置一个或多个散列属性。
-     * 如果任何一个属性改变了模型的状态，在不传入 {silent: true} 选项参数的情况下，
-     * 会触发 "change" 事件。 
+     * > 如果任何一个属性改变了模型的状态，在不传入 `{silent: true}` 选项参数的情况下，
+     * > 会触发 `change` 事件。 
      *
      * @method set
      * @param {string} key
      * @param {*} val
      * @param {object} opts
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			}
+		} );
+		
+        var m = new model();
+		m.on( 'change', function(){
+			//model has be changed.
+		} );
+        m.set( 'title', '' );
+		
      **/
     set : function( key, val, opts ) {
 
@@ -665,16 +922,30 @@ Chassis.mixin( Model.prototype, Events, {
             }   
         } );
         
-        me.trigger( 'change', me );
+		if ( !opts.silent ) {
+			me.trigger( 'change', me );
+		}
+        
     },
     
     /**
-     * 从内部属性散列表中删除指定属性。 如果未设置 silent 选项，会触发 "change" 事件。
+     * 从内部属性散列表中删除指定属性。 
+	 * > 如果未设置 `silent` 选项，会触发 `change` 事件。
      *
      * @method clear
      * @param {string} attr
      * @param {object} opts
      * @return 
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			}
+		} );
+		
+        var m = new model();
+		m.unset( 'title' )
      **/
     unset : function( attr, opts ) {
         return this.set( attr, Chassis.Undefined,
@@ -682,11 +953,22 @@ Chassis.mixin( Model.prototype, Events, {
     },
     
     /**
-     * 从模型中删除所有属性。 如果未设置 silent 选项，会触发 "change" 事件。
+     * 从模型中删除所有属性。 
+	 * > 如果未设置 `silent` 选项，会触发 `change` 事件。
      *
      * @method clear
      * @param {object} opts
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			}
+		} );
+		
+        var m = new model();
+		m.clear();
      **/
     clear : function( opts ) {
         var attrs = {};
@@ -698,10 +980,24 @@ Chassis.mixin( Model.prototype, Events, {
     },
     
     /**
-     * 返回模型 attributes 副本的 JSON 字符串化形式。 它可用于模型的持久化、序列化，或者传递到视图前的扩充。
+     * 返回模型 `attributes` 副本的 JSON 字符串化形式。 
+	 * > 它可用于模型的持久化、序列化，或者传递到视图前的扩充。
      *
      * @method toJSON
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			init : function(){
+				//
+			}
+		} );
+		
+        var m = new model();
+        m.toJSON();		
      **/
     toJSON : function() {
         return Chassis.clone( this.attributes );
@@ -711,7 +1007,20 @@ Chassis.mixin( Model.prototype, Events, {
      * 返回与模型属性一致的新的实例。
      *
      * @method clone
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			init : function(){
+				//
+			}
+		} );
+		
+        var m = new model();
+        m.clone();	
      **/
     clone : function() {
         return new this.constructor( this.attributes );
@@ -719,22 +1028,52 @@ Chassis.mixin( Model.prototype, Events, {
     
     /**
      * 与 get 类似, 但返回模型属性值的 HTML 转义后的版本。 
-     * 如果将数据从模型插入 HTML，使用 escape 取数据可以避免 XSS 攻击.
+     * > 如果将数据从模型插入 HTML，使用 escape 取数据可以避免 XSS 攻击.
      *
      * @method escape
      * @param {string} attr
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			init : function(){
+				//
+			}
+		} );
+		
+        var m = new model();
+        m.escape( 'title' );		 
      **/
     escape : function( attr ) {
         return Chassis.escape( this.get( attr ) );
     },
     
     /**
-     *在 "change" 事件发生的过程中，本方法可被用于获取已改变属性的旧值。
+     *在 `change` 事件发生的过程中，本方法可被用于获取已改变属性的旧值。
      *
      * @method previous
      * @param {string} attr
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			init : function(){
+				//
+			}
+		} );
+		
+        var m = new model();
+		m.on( 'change', function(){
+			this.previous( 'title' );
+		} );
+		
+        m.set( 'tile', '' );	 
      **/
     previous : function( attr ) {
         return (attr === null || !this._previousAttributes) ?
@@ -743,20 +1082,52 @@ Chassis.mixin( Model.prototype, Events, {
     
     /**
      * 返回模型的上一个属性散列的副本。
-     * 一般用于获取模型的不同版本之间的区别，或者当发生错误时回滚模型状态。
+     * > 一般用于获取模型的不同版本之间的区别，或者当发生错误时回滚模型状态。
      *
      * @method previousAttributes
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			init : function(){
+				//
+			}
+		} );
+		
+        var m = new model();
+		m.on( 'change', function(){
+			this.previousAttributes( );
+		} );
+		
+        m.set( 'tile', '' );	 
      **/
     previousAttributes : function() {
         return Chassis.clone( this._previousAttributes );
     },
     
     /**
-     * 模型是否已经保存到服务器。 如果模型尚无 id，则被视为新的。
+     * 模型是否已经保存到服务器。 
+	 * > 如果模型尚无 `id`，则被视为新的。
      *
      * @method isNew
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			init : function(){
+				//
+			}
+		} );
+		
+        var m = new model();
+
+        m.isNew();		 
      **/
     isNew : function() {
         return this.id === null;
@@ -767,7 +1138,23 @@ Chassis.mixin( Model.prototype, Events, {
      *
      * @method fetch
      * @param {object} opts
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			url : function(){
+				return '/data/?title=' + this.get( 'title' );
+			}
+		} );
+		
+        var m = new model();
+		m.on( 'change', function(){
+			//success
+		} );
+        m.fetch();	 
      **/
     fetch : function( opts ) {
         var me = this,
@@ -803,7 +1190,26 @@ Chassis.mixin( Model.prototype, Events, {
      * @method parse
      * @param {object} resp
      * @param {object} opts
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			url : function(){
+				return '/data/?title=' + this.get( 'title' );
+			},
+			parse : function(resp){
+				return resp[ 'data' ];
+			}
+		} );
+		
+        var m = new model();
+		m.on( 'change', function(){
+			//success
+		} );
+        m.fetch();	 
      **/
     parse: function( resp, opts ) {
         return resp;
@@ -813,17 +1219,45 @@ Chassis.mixin( Model.prototype, Events, {
      * 自定义校验，建议用自定义的逻辑重载它
      *
      * @method validate
-     * @return 
+     * @return
+	 * @example
+
+		var model = Chassis.Model.extend( {
+			defaults : {
+				title : 'Chassis'
+			},
+			url : function(){
+				return '/data/?title=' + this.get( 'title' );
+			},
+			parse : function(resp){
+				return resp[ 'data' ];
+			},
+			
+			validate : function( data ){
+				if ( data[ 'title' ] == '' ) {
+					return 'title attribute can not be empty;';
+				}
+				return true;
+			}
+			
+		} );
+		
+        var m = new model();
+		m.on( 'change', function(){
+			//success
+		} );
+        m.fetch();	 
      **/
     validate : function() {
         return true;
     },
     
     /**
-     * 手动触发 "change" 事件。
+     * 手动触发 `change` 事件。
      *
      * @method change
-     * @return 
+     * @return
+     * @private	 
      **/
     change : function() {
         this.trigger( 'change' );
@@ -857,26 +1291,93 @@ Chassis.mixin( Model.prototype, Events, {
     
 } );
 
+Chassis.mixin( Model, {
 
-Model.extend = Chassis.extend;
+    /**
+     * 创建自定义Model类
+     * @method define
+     * @param  {string} modelId     数据模型ID，确保唯一性。
+     * @param  {object} protoProps  原型方法和属性。
+     * @param  {object} staticProps 静态方法和属性。
+     * @static
+     * @example
+     *     // 定义Model
+     *     Chassis.Model.define( 'home', {
+     *         url: function() {},
+     *         parse: function() {}
+     *     } );
+     */
+    define: function( modelId, protoProps, staticProps ) {
+        
+        /*
+        if ( this[ modelId ] ) {
+            throw new Error( 'View ' + modelId + ' exists already.' );
+        }
+        */
+
+        this[ modelId ] = this.extend( protoProps, staticProps );
+
+    },
+
+    /**
+     * 获取自定义Model类
+     * @method get
+     * @static
+     * @param  {string} modelId Model ID
+     * @return {model}
+     */
+    get: function( modelId ) {
+        return this[ modelId ];
+    },
+
+    /**
+     * 创建自定义Model类实例
+     * @method create
+     * @static
+     * @param  {string} modelId     Model ID
+     * @param  {object} attributes  创建实例参数
+     * @param  {object} opts        创建实例参数
+     * @return {model}
+     */
+    create: function( modelId, attributes, opts  ) {
+
+        var klass = this.get( modelId );
+
+        return klass ? (new klass( attributes, opts )) : null;
+    },
+
+    extend: Chassis.extend
+} );
 /**
  * @fileOverview 数据缓存
  */
+/*jshint camelcase:false*/
+
 /**
  * @fileOverview Router核心实现
- * @requires Router.History
+ * @requires Router.History || Router.Pushstate
  */
 
+/**
+ * 路由
+ * @class Router
+ * @namespace Chassis
+ * @constructor
+ * @param {object} opts
+ */
 var Router = Chassis.Router = function( opts ) {
     
     if ( !opts ) {
         opts = {};
     }
     
-    /**
-     * @property {array|object} routes 路由规则
+	/**
+	 * 路由规则
+	 * @property routes
      * @description
+	 *
      *      路由规则包括两种配置方式
+	 *
      *      1. 键值对配置，例如：
      *      {
      *          '': 'index',
@@ -895,7 +1396,10 @@ var Router = Chassis.Router = function( opts ) {
      *      这种配置方式会使用默认的路由行为：路由目标为`Chassis.PageView.info`;
      *      使用这种配置方式时如果路由action为空时会默认路由到`Chassis.PageView.index`,
      *      可以通过`opts.index`来重新设置;
-     */
+	 * @type object
+	 */
+	 
+
     if ( opts.routes ) {
         this.routes = opts.routes;
     }
@@ -913,6 +1417,10 @@ var Router = Chassis.Router = function( opts ) {
     this._bindRoutes();
     
     this.init.apply( this, arguments );
+	
+	if ( opts.start ) {
+        Chassis.history.start();
+    }
 };
 
 Chassis.mixin( Router.prototype, Events, {
@@ -922,13 +1430,16 @@ Chassis.mixin( Router.prototype, Events, {
      *
      * @public
      * @method init
+	 * @optional
      * @return 
      **/
     init : function() {},
     
     /**
-     * 为路由对象手动创建路由，route 参数可以是 路由字符串 或 正则表达式。 
-     * 每个捕捉到的被传入的路由或正则表达式，都将作为参数传入回调函数（callback）。
+     * 
+  为路由对象手动创建路由，route 参数可以是 路由字符串 或 正则表达式。 
+
+  每个捕捉到的被传入的路由或正则表达式，都将作为参数传入回调函数（callback）。
      *
      * @public
      * @method route
@@ -976,23 +1487,28 @@ Chassis.mixin( Router.prototype, Events, {
         return Chassis.history.navigate( fragment, opts );
     },
 
-    /** 
-     * @property {array} [pageOrder] 页面切换顺序配置
-     * 产品线按以下格式配置，使用action名称
-     */
-    pageOrder: [/*'index', 'search', 'page'*/],
-
-    /**
-     * @property {string} [defaultTransition] 默认页面切换动画，合理选择配置
-     * @note: slide比较适用于固高切换
+	/**
+	 * 页面切换顺序配置
+	 * @property pageOrder
+	 * @type array
+	 */
+    pageOrder: [],
+	
+	/**
+	 * 默认页面切换动画，合理选择配置
+	 * @property defaultTransition
+     * @note: slide比较适用于固高切换(默认)
      * @note: fade比较适用DOM树较小的两个页面切换
      * @note: simple性能最好，但效果最一般
      * @note: dropdown只能用于固高切换
-     */
+	 * @type string
+	 */
     defaultTransition: 'slider',
 
-    /**
-     * @property {object} [pageTransition] 页面切换动画配置
+
+	/**
+	 * 页面切换动画配置
+	 * @property pageTransition
      * @key {string} actionname-actionname，"-"号分隔的action名称串，不分先后，但支持精确设定
      * @value {string} animation name
      * @note: 以index和search为例，有两种可设定的值：index-search和search-index：
@@ -1001,7 +1517,8 @@ Chassis.mixin( Router.prototype, Events, {
      *     2. 如果两个都设定了，则分别生效。比如'index-search':'fade'，'search-index':
      *     'slide'，那么index->search使用fade动画，search->index使用slide动画
      *     3. 如果两个都没有设定，则都是用默认动画
-     */
+	 * @type object
+	 */
     pageTransition: {
         
         // 'index-search': 'fade'
@@ -1065,6 +1582,9 @@ Chassis.mixin( Router.prototype, Events, {
         });
         */
         
+        // TODO不可以有动画
+        to._repairCommonSubView();
+        
         me._doTransition(
             from,
                 to,
@@ -1105,6 +1625,7 @@ Chassis.mixin( Router.prototype, Events, {
                 
                 if ( to ) {
                     to.trigger( 'afterpagein', e );
+                    
                 }
 
             }
@@ -1177,10 +1698,16 @@ Chassis.mixin( Router.prototype, Events, {
         
         // 对routes支持数组的处理
         me._routeArray.call( me );
-        
+
         Chassis.$.each( me.routes, function( key, item ) {
             me.route( key, item );
         } );
+		
+		// 设定一个空的配置
+		if ( !me.routes[ '' ] ) {
+			me.route( '', me._index );
+		}
+		
         
         return me;
     },
@@ -1277,9 +1804,57 @@ Chassis.mixin( Router.prototype, Events, {
         this._decodeRequest( request );
         
         if ( !view ) {
-            view = me.views[ action ]  =
+			
+			
+            
+            // 如果pageview没有下载，则先使用通用pageview，同时下载需要加载的pageview，加载成功后再触发对应的事件
+            if ( !Chassis.PageView[ action ] ) {
+                
+                Chassis.load( 'pageview-' + action, function() {
+                
+                    if ( !Chassis.PageView[ action ] ) {
+                        view.trigger( 'pageloaderror' );
+                        return;
+                    }
+                    
+                    view.trigger( 'pageloadsuccess' );
+                    
+                    view = me.views[ action ] = 
+                        new Chassis.PageView[ action ]( request, action );
+                    me.previousView = me.currentView;
+                    me.currentView = view;
+                    
+                    view.$el.show();
+                    
+                    
+                    view.trigger( 'beforepagein,afterpagein', {
+                        from: me.previousView,
+                        to: me.currentView,
+                        params: request
+                    } );
+                    return;
+                } );
+                
+                if ( !Chassis.PageView._transition_ ) {
+                    
+                    if ( !Chassis.PageView._TRANSITION_ ) {
+                        Chassis.PageView._TRANSITION_ = 
+                            Chassis.PageView.extend({});
+                    }
+                    
+                    Chassis.PageView._transition_ = 
+                        new Chassis.PageView._TRANSITION_();
+                }
+                
+                view = me.views[ action ]  = Chassis.PageView._transition_;
+                    
+            } else {
+                view = me.views[ action ]  = 
                     new Chassis.PageView[ action ]( request, action ); 
-        } 
+            }
+            
+            
+        }
         
         // 切换视图控制器
         me.previousView = me.currentView;
@@ -1287,7 +1862,9 @@ Chassis.mixin( Router.prototype, Events, {
 
         me.trigger( 'routechange', {
             from: me.previousView,
-            to: me.currentView
+            to: me.currentView,
+            params: request,
+            views: this.views
         } );
 
         me.switchPage(
@@ -1316,6 +1893,14 @@ Router.extend = Chassis.extend;
  * @fileOverview history 基类
  */
 
+/**
+ * History
+ * @class History
+ * @namespace Chassis
+ * @constructor
+ * @param {object} handler
+ */
+
 var History = Chassis.History = function( handler ) {
     this.handler = handler || [];
 };
@@ -1323,8 +1908,9 @@ var History = Chassis.History = function( handler ) {
 Chassis.mixin( History.prototype, Events, {
     
     /**
-     * 为路由对象手动创建路由，route 参数可以是 路由字符串 或 正则表达式。 
-     * 每个捕捉到的被传入的路由或正则表达式，都将作为参数传入回调函数(注意和Backbone还是有所不同的)
+     * 为路由对象手动创建路由
+	 * > route 参数可以是 路由字符串 或 正则表达式。 
+     * > 每个捕捉到的被传入的路由或正则表达式，都将作为参数传入回调函数
      *
      * @public
      * @method route
@@ -1333,61 +1919,58 @@ Chassis.mixin( History.prototype, Events, {
      * @return 
      **/
     route: function( routeRe, callback ) {
-        this.handler.push({
+
+        this.handler.unshift({
             reg : routeRe,
             callback : callback
         });
     },
     
     /**
-     * 手动到达应用程序中的某个位置 
-     * (注意这个方法会被继承类实现)
+     * 手动到达应用程序中的某个位置
      *
      * @public
      * @method navigate
+	 * @param {string} fragment hash字符串
+	 * @param {object} opts 配置，opts.trigger指定是否触发事件
      * @return 
      **/
-    navigate: function( /*fragment, opts, replace*/ ) {
+    navigate: function() {
         return this;
     },
     
-    /**
-     * 传入url触发对应的事件
-     *
-     * @private
-     * @method _triggerHandle
-     * @param {string} fragment
-     * @return 
-     **/
-    _triggerHandle : function( fragment ) {
-        var me = this;
 
-        Chassis.$.each( me.handler, function( key, item ) {
-            if ( !item.reg.test( fragment ) ) {
-                return;
-            }
-
-            item.callback.call( me, fragment );
-        } );
-    },
     
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
-     * (注意这是一个会被重写的基类)
-     *
+     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控路由变化事件并分发事件。
      * @public
      * @method start
-     * @param {object} opts
+     * @param {object} opts (optional) 
+	 * opts.trigger 是否触发事件;
+	 * opts.pushState 是否使用pushState;
+	 * opts.root 使用pushState时配置的相对路径;
      * @return 
      **/
     start : function( opts ) {
-        var handler = Chassis.clone( this.handler ),
-            type = 'Hash';
+        var handler = {},
+            type = 'Hash',
+			router;
         
         if ( !opts ) {
             opts = {};
         }
-        
+		
+		
+		
+		if ( opts.router ) {
+			
+			opts.trigger = (opts.trigger === false) ? false : true;
+			router = Chassis.Router.extend( opts.router );
+			new router();
+		}
+        opts.trigger = (opts.trigger === false) ? false : true;
+		handler = Chassis.clone( this.handler );
+		
         this.destroy();
         
         if ( opts.pushState ) {
@@ -1401,9 +1984,25 @@ Chassis.mixin( History.prototype, Events, {
         return Chassis.history.start( opts );
     },
 
+    loadUrl: function( fragmentOverride ) {
+        var i = 0,
+            fragment = this.getFragment( fragmentOverride ),
+            len = this.handler.length,
+            handler;
+
+        for ( ; i < len; i++ ) {
+            handler = this.handler[ i ];
+
+            if ( handler.reg.test( fragment ) ) {
+                handler.callback.call( this, fragment );
+                break;
+            }
+        }
+    },
+
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
-     * (注意这个是Backbone没有的，除非单个应用同时使用hash和pushstate才用到这个)
+     * 销毁当前的history实例，并重新生成新的History实例。
+     * > 当应用的路由配置在hash和pushState之间来回切换时尤其有用。
      *
      * @public
      * @method destroy
@@ -1431,10 +2030,21 @@ Chassis.history = new History();
  * @fileOverview 浏览器历史管理
  */
 
+/**
+ * Hash
+ * > 用户不需要手动调用，当使用`history.start`时，会根据传递的参数自动实例化此类并覆盖之前的`history`实例。
+ *
+ * > 当用户调用destroy时，history将自动恢复至初始状态。
+ * @class Hash
+ * @namespace Chassis.History
+ * @constructor
+ * @param {object} handler
+ * @private
+ */
 History.Hash = History.extend({
     
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
+     * 当所有的路由创建并设置完毕，调用 `Chassis.history.start()` 监控 `hashchange` 事件并分配路由。
      *
      * @overwrite
      * @public
@@ -1452,7 +2062,7 @@ History.Hash = History.extend({
         History.start = true;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         // 开始监听hashchange
@@ -1460,10 +2070,20 @@ History.Hash = History.extend({
                 ((typeof document.documentMode === 'undefined') ||
                 document.documentMode === 8) ) {
 
-            me._onHashChangeEvent();
+            $( window ).on( 'hashchange', function( e ) {
+
+                if ( me.curFragment === me.getFragment() ) {
+                    return;
+                }
+                
+                me.curFragment = me.getFragment();
+                me.loadUrl.call( me, me.getFragment() );
+            } );
             
             // 处理当前hash
-            me.navigate( me._getHash(), { trigger: true }, true ); 
+			if ( opts.trigger ) {
+				me.loadUrl.call( me, me.getFragment() );
+			}
             
             return;
         }
@@ -1479,35 +2099,25 @@ History.Hash = History.extend({
      * @method navigate
      * @param {string} fragment
      * @param {object} opts
-     * @param {boolean} replace
      * @return 
      **/
-    navigate : function( fragment, opts, replace ) {
+    navigate : function( fragment, opts ) {
         var me = this;
-        
-        // 先取消监听，完成后再回来
-        me._offHashChangeEvent();
+
         
         if ( !opts ) {
             opts = { trigger : true };
         }
+
+        fragment = this.getFragment( fragment );
         
-		if ( fragment.indexOf( '#' ) === 0 ) {
-			fragment = fragment.substring( 1 );
-		}
+        this.curFragment = fragment;
         
-        me._setHash( fragment );
-        
-        
+        me._setHash( fragment, opts.replace );
+
         if ( opts.trigger ) {
-            me._triggerHandle.call( me, fragment );
+            this.loadUrl( fragment );
         }
-        
-        window.setTimeout( function() {
-            me._onHashChangeEvent();
-        }, 0 );
-        
-        
 
     },
     
@@ -1517,41 +2127,56 @@ History.Hash = History.extend({
      * @private
      * @method _setHash
      * @param {string} fragment
+     * @param {boolean} replace
      * @return 
      **/
-    _setHash : function( fragment ) {
+    _setHash : function( fragment, replace ) {
+		var me = this,
+			folder = '',
+            href;
+		
+		fragment = Chassis.$.trim( fragment ).replace( /^[#]+/, '' );
+		
+        
 
-        if ( this._getHash() !== fragment ) {
-            window.location.hash = '#' + fragment;              
+        if ( replace ) {
+            href = location.href.replace( /(javascript:|#).*$/, '' );
+
+            if ( /android/i.test( navigator.userAgent ) &&
+                    'replaceState' in window.history ) {
+                window.history.replaceState( 
+                    {}, '', href + '#' + fragment );
+            }
+
+            location.replace( href + '#' + fragment );
+        } else {
+
+            // Some browsers require that `hash` contains a leading #.
+            location.hash = '#' + fragment;
         }
+        
 
-        return this;
+        return me;
     },
     
     /**
      * 获取hash 
      *
      * @private
-     * @method _getHash
+     * @method getFragment
      * @return 
      **/
-    _getHash : function() {
-        var match = window.location.href.match( /#(.*)$/ );
-        return match ? match[ 1 ] : '';
-    },
-    
-    
-    _onHashChangeEvent : function() {
-        var me = this;
-        $( window ).on( 'hashchange', function( e ) {
+    getFragment : function( fragment ) {
+        var match;
 
-            me.navigate( me._getHash(), { trigger: true }, true );
-            
-        } );
-    },
-    _offHashChangeEvent : function() {
-        var me = this;
-        $( window ).off( 'hashchange' );
+        if ( fragment === undefined ) {
+            match = location.href.match( /#(.*)$/ );
+         
+            return match ? match[ 1 ] : '';
+        }
+        else {
+            return fragment.replace( /^[#\/]|\s+$/g, '' );
+        }
     }
 });
 /**
@@ -1559,10 +2184,21 @@ History.Hash = History.extend({
  * @requires Router.History
  */
 
+/**
+ * Pushstate
+ * > 用户不需要手动调用，当使用history.start时，会根据传递的参数自动实例化此类并覆盖之前的history实例。
+ *
+ * > 当用户调用destroy时，history将自动恢复至初始状态。
+ * @class Pushstate
+ * @namespace Chassis.History
+ * @constructor
+ * @param {object} handler
+ * @private
+ */
 History.Pushstate = History.extend({
     
     /**
-     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 hashchange 事件并分配路由。
+     * 当所有的 路由 创建并设置完毕，调用 Chassis.history.start() 开始监控 Pushstate 事件并分配路由。
      *
      * @overwrite
      * @public
@@ -1580,7 +2216,7 @@ History.Pushstate = History.extend({
         History.start = true;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         
@@ -1590,11 +2226,17 @@ History.Pushstate = History.extend({
         
         // 当浏览器前进后退时触发
         $( window ).on( 'popstate', function() {
-            me._triggerHandle.call( me, me._getFragment() );
+			if ( !me._load ) {
+				me._load  = true;
+				return;
+			}
+            me.loadUrl.call( me, me.getFragment() );
         } );
         
         // 处理当前pushState
-        me._triggerHandle.call( me, me._getFragment() );
+        if ( opts.trigger ) {
+			me.loadUrl.call( me, me.getFragment() );
+		}
         
         return;
        
@@ -1615,7 +2257,7 @@ History.Pushstate = History.extend({
         var me = this;
         
         if ( !opts ) {
-            opts = {};
+            opts = { trigger : true };
         }
         
         
@@ -1625,7 +2267,7 @@ History.Pushstate = History.extend({
         me.cacheOptions = null;
         
         if ( opts.trigger ) {
-            me._triggerHandle.call( me, fragment );
+            me.loadUrl.call( me, fragment );
         }
     },
     
@@ -1649,16 +2291,16 @@ History.Pushstate = History.extend({
      * 获取当前的fragment
      *
      * @private
-     * @method _getFragment
+     * @method getFragment
      * @return 
      **/
-    _getFragment : function() {
+    getFragment : function() {
         
         return window.location.href
                 .split( /\// )
                 .slice( 3 )
                 .join( '/' )
-                .substring( this.root.length );
+                .substring( this.root.length - 1 );
     }
     
     
@@ -1673,11 +2315,9 @@ History.Pushstate.extend = Chassis.extend;
 
 // View构造函数中的opts参数中需要添加到View实例中的属性列表
 var viewOptions = [ 'model', 'el', 'id', 'attributes', 'className',
-		'tagName', 'events' ];
-
-var rDelegateEventSplitter = /^(\S+)\s*(.*)$/;
-
-var noop = function() {};
+		'tagName', 'events' ],
+    rDelegateEventSplitter = /^(\S+)\s*(.*)$/,
+    noop = function() {};
 
 /**
  * 视图类
@@ -1893,8 +2533,8 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    append: function( view ) {
-        this._addSubview( view );
+    append: function( view, opts ) {
+        this._addSubview( view, '', opts );
     },
 
     /**
@@ -1902,8 +2542,8 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    prepend: function( view ) {
-        this._addSubview( view, 'PREPEND' );
+    prepend: function( view, opts ) {
+        this._addSubview( view, 'PREPEND', opts );
     },
 
     /**
@@ -1911,14 +2551,24 @@ Chassis.mixin( View.prototype, Events, {
      * @param  {[type]} view
      * @return {[type]}
      */
-    setup: function( view ) {
-        this._addSubview( view, 'SETUP' );
+    setup: function( view, opts ) {
+        this._addSubview( view, 'SETUP', opts );
     },
 
     /**
      * 子类初始化
      */
     init: noop,
+    
+    /**
+     * subview异步加载记录
+     *
+     */
+    
+    _asyncSubView : {
+        'global'  : [],
+        'subview' : {}
+    },
 
     /**
      * View销毁时调用，需子类实现。
@@ -1961,6 +2611,12 @@ Chassis.mixin( View.prototype, Events, {
 
         this.onBeforePageIn( params );
         
+        this._asyncSubView.global = [ { 
+                event  : 'beforepagein', 
+                params : params 
+            } 
+        ];
+        
     },
 
     /**
@@ -1974,6 +2630,12 @@ Chassis.mixin( View.prototype, Events, {
     _onAfterPageIn: function( params ) {
 
         this.onAfterPageIn( params );
+        
+        this._asyncSubView.global.push({ 
+                event  : 'afterpagein', 
+                params : params 
+            } 
+        );
     },
 
     /**
@@ -2035,10 +2697,11 @@ Chassis.mixin( View.prototype, Events, {
 
         // 如果未指定DOM元素则自动创建并设置id/className
 		if ( !this.el ) {
-
+            
             // attributes有可能来自原型属性因此需要复制
 			attrs = Chassis.mixin( {}, this.attributes || {} );
-
+            
+            
 			if ( this.id ) {
 				attrs.id = this.id;
 			}
@@ -2046,7 +2709,9 @@ Chassis.mixin( View.prototype, Events, {
 			if ( this.className ) {
 				attrs[ 'class' ] = this.className;
 			}
-
+            
+            
+            
 			$el = Chassis.$( '<' + this.tagName + '>' ).attr( attrs );
 			this.setElement( $el, false );
 
@@ -2056,35 +2721,248 @@ Chassis.mixin( View.prototype, Events, {
 		}
 	},
 
-	_addSubview: function( view, action ) {
+	_addSubview: function( view, action, opt, async ) {
+        var me = this,
+            pid,
+            pe;
+        
 
+        if ( (!Chassis.isObject( view )) &&  (!Chassis.SubView[ view ]) ) {
+
+            me._addAsyncSubview.call( me, view, action, opt );
+            
+            return;
+        }
+        
+        // TODO 已经加载，而且还是个字符串，那么可以重用
+        // 乾坤大挪移
+        if ( !Chassis.isObject( view ) ) {
+            
+            var viewName = view;
+            
+            view = Chassis.commonView[ view ];
+            
+            switch ( action ) {
+
+                // 不进行DOM处理
+                case 'SETUP': 
+                    break;
+                case 'PREPEND':
+                    view.$el.after( '<div class="__common_subview__" data=' + viewName + '></div>' );
+                    this.$el.prepend( view.$el );
+                    
+                    break;
+                default:
+                    view.$el.after( '<div class="__common_subview__" data=' + viewName + '></div>' );
+                    this.$el.append( view.$el );
+                    break;
+            }
+            
+            
+            //移走了，需要加一个标识，后续恢复
+            
+            return;
+        }
+        
+        
 		if ( view instanceof Chassis.View ) {
 			this.children[ view.cid ] = view;
 			view.parent = this;
+            
+            if ( !async ) {
+                switch ( action ) {
 
-			switch ( action ) {
+                    // 不进行DOM处理
+                    case 'SETUP': 
+                        break;
+                    case 'PREPEND':
+                        this.$el.prepend( view.$el );
+                        break;
+                    default:
+                        this.$el.append( view.$el );
+                        break;
+                }
+                
+                view.$el.hide();
+            }
 
-				// 不进行DOM处理
-				case 'SETUP': 
-					break;
-				case 'PREPEND':
-					this.$el.prepend( view.$el );
-					break;
-				default:
-					this.$el.append( view.$el );
-					break;
-			}
-
-			view.$el.hide();
-
+            if ( async ) {
+                me._triggerAsyncSubviewEvent.call( me, view );
+            }
 		} else {
 			throw new Error( 'view is not an instance of Chassis.View.' );
 		}
-	}
+	},
+    
+    _addAsyncSubview : function( view, action, opt, async ) {
+        var me = this,
+            pid,
+            pe;
+            
+        pid = Chassis.uniqueId( 'subview-placeholder-' );
+        pe = $( '<div id="' + pid + '"></div>' );
+        
+        me._asyncSubView.subview[ view ] = {
+            id : pid,
+            event : []
+             
+        };
+        
+        switch ( action ) {
+            case 'SETUP' : 
+                break;
+            case 'PREPEND' :
+                me.$el.prepend( pe );
+                break;
+            default :
+                me.$el.append( pe );
+                break;
+        }
+        
+        Chassis.load( 'subview-' + view, function() {
+            var placeHolder = me.$el.find( '#' + pid  ),
+                subView;
+            
+            if ( !Chassis.SubView[ view ] ) {
+                return;
+            }
+            
+            subView = new Chassis.SubView[ view ]( opt, me );
+            
+            // 需要做一个key-value
+            Chassis.commonView[ view ] = subView;
+            
+            
+            switch ( action ) {
+				case 'SETUP': 
+					break;
+				case 'PREPEND':
+                    placeHolder.replaceWith( subView.$el );
+                    break;
+				default:
+                    placeHolder.replaceWith( subView.$el );
+					break;
+			}
+            
+            me._addSubview.call( me, subView, action, opt, true );
+        } );
+        
+        return;
+    },
+    
+    _triggerAsyncSubviewEvent : function( view ) {
+        var me = this;
+        
+        Chassis.$.each( me._asyncSubView.global, function( key, value ) {
+            view.trigger( value.event, value.params );
+        } );
+    },
+    
+    
+    _repairCommonSubView : function(){
+        var me = this;
+        
+        me.$el.find( '.__common_subview__').each(function(k, v) {
+        
+            var subviewName = $( v ).attr( 'data' ),
+                subView = Chassis.commonView[ subviewName ],
+                cloneView = subView.$el.clone();
+            
+            cloneView.attr( 'shadow', subviewName );
+            
+            if ( subView.$el.next().attr( 'shadow' )  !== subviewName ) {
+                subView.$el.after( cloneView );
+            }
+            
+            subView.$el.after( '<div class="__common_subview__" data=' + subviewName + '></div>' );
+            $( v ).replaceWith( subView.$el );
+            
+            me.$el.find( '[shadow=' + subviewName + ']' ).remove();
+            
+        } );
+    }
 } );
 
-View.extend = Chassis.extend;
-/*jshint camelcase:false*/
+// 引入view.loading.js后会在view的原型增加以下方法
+
+/**
+ * 显示页面Loading
+ * @method showLoading
+ */
+
+/**
+ * 隐藏页面Loading
+ * @method hideLoading
+ */
+
+/**
+ * 显示全局Loading
+ * @method showGLoading
+ */
+
+/**
+ * 隐藏全局Loading
+ * @method hideGLoading
+ */
+
+Chassis.mixin( View, {
+
+    /**
+     * 创建自定义视图类，Chassis.View的子类中可用。
+     * @method define
+     * @param  {string} viewId      视图ID，确保在相同类型视图下是唯一的。
+     * @param  {object} protoProps  视图原型方法和属性。
+     * @param  {object} staticProps 视图静态方法和属性。
+     * @static
+     * @example
+     *     // 定义PageView
+     *     Chassis.PageView.define( 'home', {} );
+     *
+     *     // 定义PageView下面的SubView（SubView ID建议加上所属PageView的ID）
+     *     Chassis.SubView.define( 'home.banner', {} );
+     */
+    define: function( viewId, protoProps, staticProps ) {
+        
+        /*
+        if ( this[ viewId ] ) {
+            throw new Error( 'View ' + viewId + ' exists already.' );
+        }
+        */
+
+        this[ viewId ] = this.extend( protoProps, staticProps );
+
+    },
+
+    /**
+     * 获取自定义视图类，Chassis.View的子类中可用。
+     * @method get
+     * @static
+     * @param  {string} viewId 视图ID
+     * @return {view}
+     */
+    get: function( viewId ) {
+        return this[ viewId ];
+    },
+
+    /**
+     * 创建自定义视图类实例，Chassis.View的子类中可用。
+     * @method create
+     * @static
+     * @param  {string} viewId 视图ID
+     * @param  {object} opts1  创建实例参数（不同类型的视图类具有不同的参数）
+     * @param  {object} opts2  创建实例参数（不同类型的视图类具有不同的参数）
+     * @return {view}
+     */
+    create: function( viewId, opts1, opts2  ) {
+
+        var klass = this.get( viewId );
+
+        return klass ? (new klass( opts1, opts2 )) : null;
+    },
+
+    extend: Chassis.extend
+} );
+/*jshint camelcase:false,undef:false*/
 
 /**
  * @fileOverview 子视图
@@ -2118,8 +2996,43 @@ var SubView = Chassis.SubView = View.SubView = View.extend({
 
 		this.parent = parent;
 
+        // 自动监听SUBPAGE事件
+        this.listenTo( this, 'beforeswitchin', this.onBeforeSwitchIn );
+        this.listenTo( this, 'afterswitchin', this.onAfterSwitchIn );
+        
+        this.listenTo( this, 'beforepagein', this.onBeforePageIn );
+        this.listenTo( this, 'afterpagein', this.onAfterPageIn );
+
 		SubView.__super__._initialize.call( this, opts );
-	}
+	},
+
+    /**
+     * View所属SubPage即将显示前调用，需子类实现。
+     * @method onBeforeSwitchIn
+     * @param {object} e
+     *      e.from: 当前显示但是即将被替换的子页面
+     *      e.to: 即将显示的子页面
+     *      e.params: 路由参数
+     *          e.params.from: 路由切换时的源页面
+     *          e.params.to: 路由切换时的目标页面
+     *          e.params.params: 路由参数
+     * @override
+     */
+    onBeforeSwitchIn: noop,
+
+    /**
+     * View所属SubPage显示后前调用，需子类实现。
+     * @method onAfterSwitchIn
+     * @param {object} e
+     *      e.from: 当前显示但是即将被替换的子页面
+     *      e.to: 即将显示的子页面
+     *      e.params: 路由参数
+     *          e.params.from: 路由切换时的源页面
+     *          e.params.to: 路由切换时的目标页面
+     *          e.params.params: 路由参数
+     * @override
+     */
+    onAfterSwitchIn: noop
 
 });
 /*jshint camelcase:false*/
@@ -2184,11 +3097,11 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
  * 子页面管理器
  * @class SubPageMgr
  * @constructor
- * @namespace View
+ * @namespace Chassis.View
  * @param  {object} opts
  * opts.owner {view} 子页面所属视图
  * [opts.max] {int} 子页面并存上限，超过此上限将回收
- * opts.kclass {view} 子页面实例对应的视图类
+ * opts.klass {view} 子页面实例对应的视图类
  * [opts.transition] {string|function} 子页面切换效果，如果是字符串则会从
  * `Chassis.FX[transition]`中调用切换方法；如果是函数则直接调用改函数来处理切换。
  * 对于自定义页面切换函数将接收以下参数：
@@ -2305,10 +3218,15 @@ Chassis.mixin( SPM.prototype, Events, {
 		var dir = -1,
 			fromPage = params.from,
 			toPage = params.to,
-			me = this;
+			me = this,
+			evt = {
+				from: from,
+				to: to,
+				params: params
+			};
 
 		// 派发事件
-		to.trigger( 'beforeswitchin', params );
+		to.trigger( 'beforeswitchin', evt );
 
 		to.$el.show();
 
@@ -2333,7 +3251,7 @@ Chassis.mixin( SPM.prototype, Events, {
 
 				me._setCurrent( to );
 
-				to.trigger( 'afterswtichin', params );
+				to.trigger( 'afterswitchin', evt );
 
 				// 子页面回收
 				me.recycle();
@@ -2347,7 +3265,7 @@ Chassis.mixin( SPM.prototype, Events, {
 
 			this._setCurrent( to );
 
-			to.trigger( 'afterswtichin', params );
+			to.trigger( 'afterswitchin', evt );
 
 			this.recycle();
 		}
@@ -2399,8 +3317,18 @@ Chassis.mixin( SPM.prototype, Events, {
 	 */
 	_boundToView: function() {
 
-		this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
-		this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+		var listenTarget = this.owner.root || this.owner;
+
+		// 监听PageView的beforepagein和afterpagein事件
+		this.listenTo( listenTarget, 'beforepagein', this._beforePageIn );
+		this.listenTo( listenTarget, 'afterpagein', this._afterPageIn );
+		
+        if ( this.owner !== listenTarget ) {
+            this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
+            this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+        }
+        
+        
 		this.listenTo( this.owner, 'beforedestroy', this._destroy );
 
 	},
@@ -2433,7 +3361,9 @@ Chassis.mixin( SPM.prototype, Events, {
 	 */
 	_doSwitch: function( from, to, dir, transitionEnd ) {
 
-		var fxFn;
+		var toEl = to.$el,
+			fromEl,
+			fxFn;
 
 		if ( Chassis.isFunction( this.transition ) ) {
 			fxFn = this.transition;
@@ -2445,7 +3375,11 @@ Chassis.mixin( SPM.prototype, Events, {
 			return;
 		}
 
-		fxFn( from, to, dir, transitionEnd );
+		if ( from ) {
+			fromEl = from.$el;
+		}
+
+		fxFn( fromEl, toEl, dir, transitionEnd );
 	},
 
 	/**
@@ -2477,21 +3411,33 @@ Chassis.mixin( SPM.prototype, Events, {
 
 	_afterPageIn: function( e ) {
 
-		var params = e.params,
-			owner = this.owner,
-			stamp = this.getStamp( params ),
-			target = this.getBy( 'stamp', stamp ),
+		var me = this,
+            params = e.params,
+			owner = me.owner,
+			stamp = me.getStamp( params ),
+			target = me.getBy( 'stamp', stamp ),
 			subpage;
 
 		// 如果子页面不存在则自动创建
 		if ( !target ) {
-
+            
+            if ( !Chassis.isObject( me.klass ) ) {
+                Chassis.load( 'subview-' + me.klass, function() {
+                    me.klass = Chassis.SubView[ me.klass ];
+                    
+                    if ( me.klass ) {
+                        me._afterPageIn.call( me, e );
+                    }
+                } );
+                return;
+            }
+            
 			// TODO: 某些数据可能不允许自动生成subview
-			subpage = new this.kclass( params || {}, owner );
+			subpage = new me.klass( params || {}, owner );
 			subpage.stamp = stamp;
 
 			owner.append( subpage );
-			this.register( subpage );
+			me.register( subpage );
 
 			target = subpage;
 		}
@@ -2563,20 +3509,18 @@ var GlobalView = Chassis.GlobalView = View.GlobalView = View.extend({
      * 默认路由事件响应函数
      * @param params.from 起始页面视图
      * @param params.to 目标页面视图
-     * @param params.pageviews 页面视图列表，以action为索引
+     * @param params.views 页面视图列表，以action为索引
+     * @param params.params 路由中的参数
      */
     _onRouteChange: function( params ) {
-        var from = params.from,
-            to = params.to,
-            pageviews = params.pageviews;
-    
-
+        
         /**
          * 路由事件
          * @event routechange
          * @param {pageview} params.from 起始页面视图
          * @param {pageview} params.to 目标页面视图
-         * @param {object} params.pageviews 页面视图列表，以action为索引
+         * @param {object} params.views 页面视图列表，以action为索引
+         * @param {object} params.params 路由中的参数
          */
         this.trigger( 'routechange', Chassis.mixin( {}, params ) );
     },
@@ -2641,6 +3585,7 @@ Chassis.FX.slider = (function() {
 					
 					if ( toEl ) {
 						$( toEl ).show();
+                        
 					}
 
 				}
@@ -2721,6 +3666,7 @@ Chassis.FX.slider = (function() {
 
 						if ( transitionEnd ) {
 							transitionEnd();
+                            
 						}
 					}, 0 );
 				}, 400 );
@@ -2736,7 +3682,7 @@ Chassis.FX.slider = (function() {
 /**
  * Loading管理
  * @class Loading
- * @namespace View
+ * @namespace Chassis.View
  */
 var Loading = View.Loading = Chassis.Loading = (function() {
 
@@ -2777,13 +3723,14 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 		/**
 		 * 全局Loading
 		 * @class Global
-		 * @namespace Loading
+		 * @namespace Chassis.View.Loading
 		 */
 		Global: {
 
 			/**
 			 * 设置Loading元素，可以是已经存在元素的选择符或HTML结构。
 			 * @method setup
+			 * @static
 			 * @param {mixed} el
 			 */
 			setup: setup,
@@ -2791,6 +3738,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 显示全局Loading
 			 * @method show
+			 * @static
 			 */
 			show: function() {
 				this.$el.show();
@@ -2799,6 +3747,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 隐藏全局Loading
 			 * @method hide
+			 * @static
 			 */
 			hide: function() {
 				this.$el.hide();
@@ -2808,13 +3757,14 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 		/**
 		 * 视图Loading
 		 * @class View
-		 * @namespace Loading
+		 * @namespace Chassis.View.Loading
 		 */
 		View: {
 
 			/**
 			 * 设置Loading元素，可以是已经存在元素的选择符或HTML结构。
 			 * @method setup
+			 * @static
 			 * @param {mixed} el
 			 */
 			setup: setup,
@@ -2822,6 +3772,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 将Loading元素插入View中并显示（如果不指定View则直接显示）
 			 * @method show
+			 * @static
 			 * @param  {View} [view]
 			 */
 			show: function( view ) {
@@ -2839,6 +3790,7 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			/**
 			 * 隐藏Loading
 			 * @method hide
+			 * @static
 			 */
 			hide: function() {
 
@@ -2847,6 +3799,11 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 			}
 		},
 
+		/**
+		 * 将全局方法添加到view中作为原型方法。
+		 * @method mixToView
+		 * @static
+		 */
 		mixToView: function() {
 
 			var GL = Loading.Global,
@@ -2875,5 +3832,6 @@ var Loading = View.Loading = Chassis.Loading = (function() {
 })();
 
 Loading.mixToView();
+
 
 })()

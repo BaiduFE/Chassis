@@ -1,0 +1,82 @@
+/*页面视图id，与action同名，以_page为后缀*/
+.say_page{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    /*最低高度，确保即使没内容，loading也可以展示，同时能遮住下方内容*/
+    min-height:600px;
+
+    /*阻止文本选中*/
+    -webkit-user-select:none;
+    -moz-user-select:none;
+}
+
+.say_page_header{
+    height:40px;
+    text-align:center;
+    background:#eee;
+    font:bold 18px/40px normal;
+    border:1px outset #ddd;
+}
+
+.say-page-header-backbtn{
+    position:relative;
+    float:left;
+    display:inline-block;
+    padding-left:20px;
+}
+
+.say-page-header-backbtn span{
+    position:absolute;
+    display:inline-block;
+    left:0;
+    top:50%;
+    margin-top:-9px;
+    background-image:url("../../../img/icons-36-black.png");
+    background-position:-142px 50%;
+    background-size:776px 18px;
+    width:18px;
+    height:18px;
+}
+
+.say_page_content{
+    /*作为绝对定位的loading样式的容器，需要使用relative定位*/
+    position:relative;
+    padding-top:10px;
+    font-size:12px;
+    padding:10px;
+    line-height:22px;
+    text-indent:24px;
+}
+
+.say_page_content a{
+    display:block;
+    margin:3px 3px 0;
+    padding-left:5px;
+    background:#eee;
+    border:1px outset #ddd;
+    border-radius:4px;
+    font:normal 16px/40px Arial;
+    color:#000;
+    text-decoration:none;
+}
+
+.say_page_content *{
+    -webkit-transform:translateZ(0);
+}
+
+.say_page_content h2{
+    text-align:center;
+    font:bold 26px/50px Arial;
+    text-shadow:rgba(64, 64, 64, 0.3) 3px -3px 2px;
+}
+

@@ -13,6 +13,9 @@
         <urlmap match="/^\/articles\/list_articles.php$/" 
             rewrite="data/list_articles.php" 
             header="Content-Type:text/javascript; charset=UTF-8"/>
+        <urlmap match="/^\/articles\/data\/info.php$/" 
+            rewrite="data/info.php" 
+            header="Content-Type:text/javascript; charset=UTF-8"/>
         <!--urlmap match="/^\/index$/" 
             rewrite="data/rocket_framework_introduction.json" 
             header="Content-Type:text/javascript; charset=UTF-8"/-->
@@ -44,10 +47,49 @@
             <import>rocket.init.js</import>
 
             <!-- page -->
-            <import>/page/*.js</import>
+            
 
         </app>
 
+        <subview-index_header>
+            <import>/page/index/js/view/rocket.subview.index_header.js</import>
+        </subview-index_header>
+        
+        <subview-index_content>
+            <import>/page/index/js/view/rocket.subview.index_content.js</import>
+        </subview-index_content>
+        
+
+        
+        <subview-sayhello_content>
+            <import>/page/sayhello/js/view/rocket.subview.sayhello_content.js</import>
+        </subview-sayhello_content>
+        
+        <subview-say_header>
+            <import>/page/say/js/view/rocket.subview.say_header.js</import>
+        </subview-say_header>
+        
+        <subview-say_content>
+            <import>/page/say/js/view/rocket.subview.say_content.js</import>
+        </subview-say_content>
+        
+        <subview-say_content_detail>
+            <import>/page/say/js/model/*.js</import>
+            <import>/page/say/js/view/rocket.subview.say_content_detail.js</import>
+        </subview-say_content_detail>
+        
+        <pageview-index>
+            <import>/page/index/js/view/rocket.pageview.index.js</import>
+        </pageview-index>
+        
+        <pageview-sayhello>
+            <import>/page/sayhello/js/view/rocket.pageview.sayhello.js</import>
+        </pageview-sayhello>
+        
+        <pageview-say>
+            <import>/page/say/js/view/rocket.pageview.say.js</import>
+        </pageview-say>
+        
     </merge>
 
     <!--task name="refresh_manifest">

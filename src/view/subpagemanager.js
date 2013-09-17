@@ -156,7 +156,7 @@ Chassis.mixin( SPM.prototype, Events, {
 			this._doSwitch( from, to, dir, function() {
 
 				// 隐藏已切出子页面
-				if ( from ) {
+				if ( from && from.$el ) {
 					from.$el.hide();
 				}
 
@@ -190,7 +190,10 @@ Chassis.mixin( SPM.prototype, Events, {
 	recycle: function() {
 		var list = this.pagesList,
 			page;
-
+		
+		if ( !list ) {
+			return;
+		}
 		while ( list.length > this.max ) {
 			page = list.shift();
 
@@ -234,6 +237,12 @@ Chassis.mixin( SPM.prototype, Events, {
 		this.listenTo( listenTarget, 'beforepagein', this._beforePageIn );
 		this.listenTo( listenTarget, 'afterpagein', this._afterPageIn );
 		
+        if ( this.owner !== listenTarget ) {
+            this.listenTo( this.owner, 'beforepagein', this._beforePageIn );
+            this.listenTo( this.owner, 'afterpagein', this._afterPageIn );
+        }
+        
+        
 		this.listenTo( this.owner, 'beforedestroy', this._destroy );
 
 	},
@@ -316,21 +325,44 @@ Chassis.mixin( SPM.prototype, Events, {
 
 	_afterPageIn: function( e ) {
 
-		var params = e.params,
-			owner = this.owner,
-			stamp = this.getStamp( params ),
-			target = this.getBy( 'stamp', stamp ),
+		var me = this,
+            params = e.params,
+			owner = me.owner,
+			stamp = me.getStamp( params ),
+			target = me.getBy( 'stamp', stamp ),
+			subViewName = me.klass,
+			kkls,
 			subpage;
-
+			
+		if ( !e.to.$el ) {
+			return;
+		}
+		
 		// 如果子页面不存在则自动创建
+		
 		if ( !target ) {
+            
+			me.klass = Chassis.View.getSubViewInstance( subViewName, 
+					function() {
+						me.klass = Chassis.SubView[ subViewName ];
+						
+						if ( me.klass ) {
+							me._afterPageIn.call( me, e );
+						}
+					} );
 
+			if ( !me.klass ) {
+				return;
+			}
+			
+            
+            
 			// TODO: 某些数据可能不允许自动生成subview
-			subpage = new this.klass( params || {}, owner );
+			subpage = new me.klass( params || {}, owner );
 			subpage.stamp = stamp;
 
 			owner.append( subpage );
-			this.register( subpage );
+			me.register( subpage );
 
 			target = subpage;
 		}

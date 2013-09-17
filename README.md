@@ -24,7 +24,7 @@ Chassis源于百度内部的Rocket项目，是一套以提高Webapp开发效率�
 
 ##2. Chassis有多轻量级？
 
-Chassis在实现上采用了多种组件化方案，开发者可以根据需求实现灵活定制。在体积上，轻量级版本Chassis只有 `4.8KB` (gzip)。
+Chassis在实现上采用了多种组件化方案，开发者可以根据需求实现灵活定制。在体积上，轻量级版本Chassis只有 `4.8KB` (gzip)。为百度地图webapp定制的精简版仅`3.5K`(gzip，同时替换掉underscore.js)。
 
 ##3. Chassis适合什么样开发场景？
 
@@ -109,7 +109,7 @@ routes: {
     </div>
     <ul class="list">
         {{#list}}
-        <li class="song url log song-40153340">
+        <li class="song url log song-{{album_id}}">
                 <div class="left">
                     <div class="rank equal">{{rank}}</div>
                     <div class="info">

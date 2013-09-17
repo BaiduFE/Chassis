@@ -5,7 +5,9 @@ rocket.subview.index_content = rocket.subview.extend({
     el: '#index_page_content'
 
     ,events: {
-        'click a': 'onclick'
+        'click a'  : 'onclick',
+        'click dd' : 'ondetail',
+        'click #testnopageview' : 'testnopageview'
     }
 
     ,init: function(options){
@@ -21,6 +23,16 @@ rocket.subview.index_content = rocket.subview.extend({
 
     ,onclick: function(e){
 		rocket.history.navigate('#sayhello'); 
+    }
+    
+    ,ondetail: function(e){
+        var me = this,
+            id = $(e.target).attr('data-id')
+		rocket.history.navigate('#say/' + id); 
+    }
+    ,testnopageview: function(e){
+        var me = this;
+		rocket.history.navigate('#error'); 
     }
 	
 	, onBeforePageIn : function(){

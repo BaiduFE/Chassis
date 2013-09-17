@@ -26,7 +26,9 @@ History.Pushstate = History.extend({
      * @return 
      **/
     start : function( opts ) {
-        var me = this;
+        var me = this,
+			pathname = window.location.pathname,
+			atRoot;
 
         if ( History.start ) {
             return;
@@ -40,16 +42,34 @@ History.Pushstate = History.extend({
         
         
         if ( opts.root ) {
-            me.root = opts.root;
+            me.root = (opts.root.indexOf( '/' ) === 0) ? 
+				opts.root : ('/' + opts.root);
         }
         
+		// 注释掉的原因是和backbone保持一致：路由不匹配就不执行
+		
+		// 如果当前设置的root和URL中的root不同
+		// 则重写URL为当前root
+		/*
+		atRoot = 
+			pathname.replace( /[^\/]$/, '$&/' ) === me.root;
+		
+		if ( !atRoot ) {
+			history.replaceState( {}, document.title, me.root );
+		}
+		*/
+		
+		me.curFragment = me.getFragment();
+		
         // 当浏览器前进后退时触发
         $( window ).on( 'popstate', function() {
-			if ( !me._load ) {
-				me._load  = true;
+			
+			if ( me.curFragment === me.getFragment() ) {
 				return;
 			}
-            me.loadUrl.call( me, me.getFragment() );
+			
+			me.curFragment = me.getFragment();
+            me.loadUrl.call( me, me.curFragment );
         } );
         
         // 处理当前pushState
@@ -79,7 +99,10 @@ History.Pushstate = History.extend({
             opts = { trigger : true };
         }
         
+        fragment = this.getFragment( fragment );
         
+        this.curFragment = fragment;
+		
         me._setPushState( fragment );
         
         
@@ -98,10 +121,16 @@ History.Pushstate = History.extend({
      * @param {string} fragment
      * @return 
      **/
-    _setPushState : function( fragment ) {
+    _setPushState : function( fragment, replace ) {
 
-        fragment = fragment || this.root;
-        history.pushState( {}, document.title, fragment );
+        fragment = this.root + fragment;
+		
+		if ( replace ) {
+			history.replaceState( {}, document.title, fragment );
+		} else {
+			history.pushState( {}, document.title, fragment );
+		}
+        
         return this;
         
     },
@@ -113,13 +142,12 @@ History.Pushstate = History.extend({
      * @method getFragment
      * @return 
      **/
-    getFragment : function() {
-        
-        return window.location.href
-                .split( /\// )
-                .slice( 3 )
-                .join( '/' )
-                .substring( this.root.length - 1 );
+    getFragment : function( fragment ) {
+       
+        return (fragment !== undefined) ? 
+			fragment : 
+			window.location.pathname
+				.replace( new RegExp( '^' + this.root ), '' );
     }
     
     

@@ -263,6 +263,19 @@ Chassis.object = function( list, values ) {
     return result;
 };
 
+
+
+Chassis.load = function( pkg, callback ) {
+    var pkgs = Chassis.load.config.ruler( pkg );
+    if ( pkgs ) {
+        Chassis.F.load( pkgs, callback );
+    }
+};
+Chassis.load.config = {
+    ruler : function( pkg ) {}
+};
+
+
 $.support = Chassis.mixin( $.support || {}, {
     has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
 } );

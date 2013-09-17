@@ -1,16 +1,18 @@
 $(document).ready(function() {
 
-  module("Chassis.noConflict");
+	module("Chassis.noConflict");
 
-  test('noConflict', 2, function() {
-    var originalChassis = window.Chassis,
-        noConflictChassis = Chassis.noConflict();
+	asyncTest('noConflict', 2, function() {
+		var originalChassis = window.Chassis,
+			noConflictChassis = Chassis.noConflict();
 
-    equal(window.Chassis, undefined, 'Returned window.Chassis');
+		equal(window.Chassis, undefined, 'Returned window.Chassis');
 
-    window.Chassis = noConflictChassis;
+		window.Chassis = noConflictChassis;
 
-    equal(window.Chassis, originalChassis, 'Chassis is still pointing to the original Chassis');
-  });
+		equal(window.Chassis, originalChassis, 'Chassis is still pointing to the original Chassis');
+		
+		start();
+	});
 
 });

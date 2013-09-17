@@ -21,6 +21,15 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
 
 		this._tops = {};
 		this._logicString = this._getLogicString( opts );
+		
+		this._saveHTML( opts, action );
+		
+		this._recycle();
+		
+		Chassis.PageView.AllPageView = 
+			Chassis.PageView.AllPageView ? Chassis.PageView.AllPageView : [];
+		
+		Chassis.PageView.AllPageView.push( this );
 
 		PageView.__super__._initialize.call( this, opts );
 	},
@@ -48,5 +57,83 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
         setTimeout( function() {
             window.scrollTo( 0, me._tops[ cls ] || 0 );
         }, 0 );
-    }
+    },
+	
+	_saveHTML : function( opts, action ) {
+	
+		var me = this;
+		
+		Chassis.PageView.AllPageViewBox = 
+			Chassis.PageView.AllPageViewBox || {};
+		
+		Chassis.PageView.AllPageViewBox[ me.$el.selector ] = 
+			$( '<div>' ).append( me.$el.clone() ).html();
+
+	},
+	
+	_recycle : function() {
+		var me = this,
+			max = 0,
+			maxView = null,
+			selector = null,
+			parent = null,
+			recycleKey = null;
+		
+		if ( !Chassis.PageView.AllPageView ) {
+			return;
+		}
+		
+		if ( Chassis.PageView.AllPageView.length < Chassis.View.MaxPageView ) {
+			return;
+		}
+		
+		Chassis.$.each( Chassis.PageView.AllPageView, function( k, v ) {
+			var len = me._getChildrenLength( v );
+			
+			if ( (len > max) || (k === 0) ) {
+				max = len;
+				maxView = v;
+				recycleKey = k;
+			}
+		} );
+		
+		
+		Chassis.PageView.AllPageView.splice( recycleKey, 1 );
+		
+		selector = maxView.$el.selector;
+		
+		parent = maxView.$el.parent();
+		
+		maxView.destroy();
+		
+		// 重新回归
+		
+		parent.append( Chassis.PageView.AllPageViewBox[ selector ] );
+		
+		// 被删除后，再重新调用时需要重新create
+		
+	},
+	
+	_getChildrenLength : function( child ) {
+		
+		var me = this, 
+			len = 0,
+			keys = Object.keys( child.children || {} );
+		
+		len = keys.length;
+		
+		Chassis.$.each( keys, function( k, v ) {
+			var _cur = child.children[ v ],
+				_keys = Object.keys( _cur.children || {} );
+				
+			if ( _keys.length ) {
+				len += me._getChildrenLength( _cur );
+			}
+		} );
+		
+		// 循环计算子节点
+		
+		
+		return len;
+	}
 });

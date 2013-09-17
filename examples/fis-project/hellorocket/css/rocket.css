@@ -13,3 +13,10 @@
 /*page*/
 @import url("../page/index/css/index.css")
 @import url("../page/sayhello/css/sayhello.css")
+@import url("../page/say/css/say.css")
+
+#_common__page {
+    display:none;
+    text-align:center;
+    padding:100px 0;
+}

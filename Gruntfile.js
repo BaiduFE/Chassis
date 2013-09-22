@@ -33,7 +33,10 @@ module.exports = function(grunt) {
           'src/view/globalview.js',
           'src/view/view.fx.slider.js',
           'src/view/view.loading.js',
-		  'src/view/view.async.js',
+		      'src/view/view.async.js',
+          'src/ui/base/widgetview.js',
+          'src/ui/base/panel.js',
+          'src/ui/gmu/*.js'
 		  
         ],
         dest: 'build/<%= pkg.name %>.js'

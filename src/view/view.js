@@ -8,6 +8,7 @@
 var viewOptions = [ 'model', 'el', 'id', 'attributes', 'className',
 		'tagName', 'events' ],
     rDelegateEventSplitter = /^(\S+)\s*(.*)$/,
+    widgetEventPrefix = 'widget.',
     noop = function() {};
 
 /**
@@ -129,13 +130,21 @@ Chassis.mixin( View.prototype, Events, {
      * @example
      *      //格式为 {"event[ selector]": "callback"}
      *      {
+     *          // DOM事件
      *          'mousedown .title': 'edit',
      *          'click .button': 'save',
      *          'click .open': function( e ){},
      *          'orientationchange window': 'refresh',
      *          'click document': 'close',
+     *          
+     *          // View事件
      *          'beforepagein view': 'onBeforePageIn',
-     *          'change model': 'render'
+     *
+     *          // Model事件
+     *          'change model': 'render',
+     *
+     *          // Widget事件
+     *          'slide widget#topSlider': 'slide'
      *      }
      */
     delegateEvents: function( events ) {
@@ -145,6 +154,7 @@ Chassis.mixin( View.prototype, Events, {
             match,
             eventName,
             selector,
+            widgetId,
             fullEventName;
 
         if ( !(events || (events = this.events)) ) {
@@ -178,10 +188,15 @@ Chassis.mixin( View.prototype, Events, {
 
                 fullEventName = eventName + '.delegateEvents' + this.cid;
 
+                if ( selector.indexOf( 'widget#' ) === 0 ) {
+                    widgetId = selector.substring( 7 );
+                    selector = 'widget';
+                }
+
                 switch ( selector ) {
                     case 'window':
                     case 'document':
-                        Chassis.$( window[ selector ] )
+                        Chassis.$(window[ selector ])
                                 .on( fullEventName, method );
                         break;
                     case 'view':
@@ -191,6 +206,18 @@ Chassis.mixin( View.prototype, Events, {
                         if ( this.model ) {
                             this.listenTo( this.model, eventName, method );
                         }
+                        break;
+                    case: 'widget': 
+                        var widgetView = this.widgets[ widgetId ];
+
+                        if ( !widgetView ) {
+                            throw new Error( 
+                                'widgetview#' + widgetId + ' does not exists.');
+                        }
+
+                        this.listenTo( 
+                            widgetview, widgetEventPrefix + eventName, method );
+
                         break;
                     case '':
                         this.$el.on( fullEventName, method );

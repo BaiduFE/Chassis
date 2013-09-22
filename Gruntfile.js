@@ -36,6 +36,8 @@ module.exports = function(grunt) {
 		      'src/view/view.async.js',
           'src/ui/base/widgetview.js',
           'src/ui/base/panel.js',
+          'src/ui/base/slider.js',
+          'src/ui/base/toolbar.js',
           'src/ui/gmu/*.js'
 		  
         ],

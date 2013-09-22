@@ -1,5 +1,8 @@
 /*jshint camelcase:false,undef:false*/
 
+/**
+ * @fileOverview GMU Toolbar实现
+ */
 UI.GMUToolbarView = ToolbarView.extend({
     createWidget: function( options ) {
         return $.ui.toolbar( this.$el, options );

@@ -1,10 +1,11 @@
-/*jshint camelcase:false*/
+/*jshint camelcase:false, undef:false*/
 
 /**
  * @fileOverview 将其他UI库组件封装成ChassisUI组件的基类
  */
-var UI = Chassis.UI = {};
-var WidgetView = UI.WidgetView = Chassis.SubView.extend({
+var UI = Chassis.UI = {},
+    widgetEventPrefix = 'widget.',
+    WidgetView = UI.WidgetView = Chassis.SubView.extend({
     _initialize: function( opts, parent ) {
         this._applyProtocol();
         WidgetView.__super__._initialize.apply( this, arguments );
@@ -24,6 +25,7 @@ var WidgetView = UI.WidgetView = Chassis.SubView.extend({
         Chassis.$.each( events, function( idx, event ) {
             me.widget.on( event, function() {
                 var args = [].slice.call( arguments );
+                
                 // 区分widget事件与其他事件，加上widget前缀
                 args.unshift( widgetEventPrefix + event );
 
@@ -80,7 +82,7 @@ var WidgetView = UI.WidgetView = Chassis.SubView.extend({
         // 处理events，只能listenTo protocol中的事件
         this.on = function( eventName, callback, context ) {
             var isWidgetEvent = 
-                ( eventName.indexOf( widgetEventPrefix ) === 0 );
+                (eventName.indexOf( widgetEventPrefix ) === 0);
 
             if ( isWidgetEvent && events.indexOf( eventName ) === -1 ) {
                 throw new Error( 
@@ -93,7 +95,7 @@ var WidgetView = UI.WidgetView = Chassis.SubView.extend({
         };
         
     },
-    onBeforePageIn : function(){
+    onBeforePageIn : function() {
         this.widget = this.createWidget( this.widgetOptions );
         this.bindEvents();
         this.$el.show();
@@ -124,3 +126,29 @@ var WidgetView = UI.WidgetView = Chassis.SubView.extend({
         options: []
     }
 });
+
+View.Plugin.add( 'widgetView', {
+    delegateEvents: function( eventName, selector, method ) {
+        var widgetId,
+            widgetView;
+
+        if ( selector.indexOf( 'widget#' ) === 0 ) {
+            widgetId = selector.substring( 7 );
+            selector = 'widget';
+
+            widgetView = this.widgets[ widgetId ];
+
+            if ( !widgetView ) {
+                throw new Error( 
+                    'widgetview#' + widgetId + ' does not exists.' );
+            }
+
+            this.listenTo( 
+                widgetView, widgetEventPrefix + eventName, method );
+
+            return false;
+        }
+
+        return true;
+    }
+} );

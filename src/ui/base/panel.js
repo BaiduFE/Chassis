@@ -12,7 +12,8 @@ var PanelView = UI.PanelView = WidgetView.extend({
             'open', 
             'beforeclose', 
             'close', 
-            'destroy' ],
+            'destroy'
+        ],
 
         options: [ 'contentWrap', 'display', 'position' ]
     }

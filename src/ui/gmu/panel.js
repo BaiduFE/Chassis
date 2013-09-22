@@ -1,5 +1,8 @@
 /*jshint camelcase:false,undef:false*/
 
+/**
+ * @fileOverview GMU Panel实现
+ */
 UI.GMUPanelView = PanelView.extend({
     createWidget: function( options ) {
         return $.ui.panel( this.$el, options );

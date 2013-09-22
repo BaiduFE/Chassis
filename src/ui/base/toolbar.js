@@ -5,19 +5,22 @@
 var ToolbarView = UI.ToolbarView = WidgetView.extend({
     protocol: {
         methods: [ 
-            'addBtns', 'show', 'hide', 'toggle' ],
+            'addBtns', 'show', 'hide', 'toggle'
+        ],
         
         events: [ 
             'show',
             'hide',
             'ready', 
-            'destroy' ],
+            'destroy'
+        ],
 
         options: [ 
             'container', 
             'title', 
             'leftBtns', 
             'rightBtns', 
-            'fixed' ]
+            'fixed'
+        ]
     }
 });

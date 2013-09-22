@@ -8,7 +8,6 @@
 var viewOptions = [ 'model', 'el', 'id', 'attributes', 'className',
 		'tagName', 'events' ],
     rDelegateEventSplitter = /^(\S+)\s*(.*)$/,
-    widgetEventPrefix = 'widget.',
     noop = function() {};
 
 /**
@@ -111,6 +110,13 @@ Chassis.mixin( View.prototype, Events, {
         }
 
         this.$el = el instanceof Chassis.$ ? el : Chassis.$( el );
+
+        el = View.Plugin.invoke( 'setElement', this, el, delegate );
+
+        if ( el ) {
+            this.$el = el;
+        }
+
         this.el = this.$el[ 0 ];
 
         if ( delegate !== false ) {
@@ -154,7 +160,6 @@ Chassis.mixin( View.prototype, Events, {
             match,
             eventName,
             selector,
-            widgetId,
             fullEventName;
 
         if ( !(events || (events = this.events)) ) {
@@ -188,9 +193,9 @@ Chassis.mixin( View.prototype, Events, {
 
                 fullEventName = eventName + '.delegateEvents' + this.cid;
 
-                if ( selector.indexOf( 'widget#' ) === 0 ) {
-                    widgetId = selector.substring( 7 );
-                    selector = 'widget';
+                if ( View.Plugin.invoke( 'delegateEvents', this, eventName, 
+                        selector, method ) === false ) {
+                    continue;
                 }
 
                 switch ( selector ) {
@@ -206,18 +211,6 @@ Chassis.mixin( View.prototype, Events, {
                         if ( this.model ) {
                             this.listenTo( this.model, eventName, method );
                         }
-                        break;
-                    case: 'widget': 
-                        var widgetView = this.widgets[ widgetId ];
-
-                        if ( !widgetView ) {
-                            throw new Error( 
-                                'widgetview#' + widgetId + ' does not exists.');
-                        }
-
-                        this.listenTo( 
-                            widgetview, widgetEventPrefix + eventName, method );
-
                         break;
                     case '':
                         this.$el.on( fullEventName, method );
@@ -242,6 +235,8 @@ Chassis.mixin( View.prototype, Events, {
         Chassis.$( document ).off( eventName );
 
         this.stopListening();
+
+        View.Plugin.invoke( 'undelegateEvents', this );
 
         return this;
     },
@@ -455,6 +450,17 @@ Chassis.mixin( View.prototype, Events, {
             pe,
             viewElement,
 			_subView;
+
+        if ( View.Plugin.invoke( 
+                'addSubView', 
+                this, 
+                view, 
+                action, 
+                opt, 
+                async, 
+                trigger ) === false ) {
+            return;
+        }
 		
 		me._removeRecycleView();
 		
@@ -784,6 +790,62 @@ Chassis.mixin( View, {
 		return view;
 	},
 
+    /**
+     * View插件，允许针对setElement/delegateEvents/undelegateEvents/addSubView
+     * 补充自定义操作
+     */
+    Plugin: {
+        _plugins: {},
+
+        /**
+         * 添加View插件
+         * @param {[type]} id             视图插件ID
+         * @param {[type]} implementation 视图插件实现
+         */
+        add: function( id, implementation ) {
+            var plugin = this._plugins[ id ];
+
+            if ( plugin ) {
+                throw new Error( 'Plugin ' + id + ' already exists.' );
+            }
+
+            this._plugins[ id ] = implementation;
+        },
+
+        /**
+         * 调用视图插件
+         * @param  {string} methodName 函数名
+         * @param  {object} context    函数context
+         * @return {object}            如果存在多个插件的话则返回数组，
+         * 否则返回插件函数返回值
+         */
+        invoke: function( methodName, context /*[, args]*/ ) {
+            var plugins = this._plugins,
+                results = [],
+                args = [].slice.call( arguments, 2 ),
+                plugin,
+                pluginId,
+                method,
+                result;
+
+            for ( pluginId in plugins  ) {
+                if ( plugins.hasOwnProperty( pluginId ) ) {
+                    plugin = plugins[ pluginId ];
+                    method = plugin[ methodName ];
+
+                    if ( method ) {
+                        result = method.apply( context, args );
+                        
+                        if ( result !== undefined ) {
+                            results.push( result );
+                        }
+                    }
+                }
+            }
+
+            return results.length <= 1 ? results[ 0 ] : results;
+        }
+    },
 
     extend: Chassis.extend
 } );

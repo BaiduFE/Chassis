@@ -108,7 +108,7 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
 		
 		// 重新回归
 		
-		parent.append( Chassis.PageView.AllPageViewBox[ selector ] );
+		parent.append(Chassis.PageView.AllPageViewBox[ selector ]);
 		
 		// 被删除后，再重新调用时需要重新create
 		

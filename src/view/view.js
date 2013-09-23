@@ -110,6 +110,14 @@ Chassis.mixin( View.prototype, Events, {
         }
 
         this.$el = el instanceof Chassis.$ ? el : Chassis.$( el );
+
+        el = View.Plugin.invoke( 
+            'setElement', this, this.$el, this.$el, delegate );
+
+        if ( el ) {
+            this.$el = el;
+        }
+
         this.el = this.$el[ 0 ];
 
         if ( delegate !== false ) {
@@ -129,13 +137,21 @@ Chassis.mixin( View.prototype, Events, {
      * @example
      *      //格式为 {"event[ selector]": "callback"}
      *      {
+     *          // DOM事件
      *          'mousedown .title': 'edit',
      *          'click .button': 'save',
      *          'click .open': function( e ){},
      *          'orientationchange window': 'refresh',
      *          'click document': 'close',
+     *          
+     *          // View事件
      *          'beforepagein view': 'onBeforePageIn',
-     *          'change model': 'render'
+     *
+     *          // Model事件
+     *          'change model': 'render',
+     *
+     *          // Widget事件
+     *          'slide widget#topSlider': 'slide'
      *      }
      */
     delegateEvents: function( events ) {
@@ -178,10 +194,15 @@ Chassis.mixin( View.prototype, Events, {
 
                 fullEventName = eventName + '.delegateEvents' + this.cid;
 
+                if ( View.Plugin.invoke( 'delegateEvents', this, true, 
+                        eventName, selector, method ) === false ) {
+                    continue;
+                }
+
                 switch ( selector ) {
                     case 'window':
                     case 'document':
-                        Chassis.$( window[ selector ] )
+                        Chassis.$(window[ selector ])
                                 .on( fullEventName, method );
                         break;
                     case 'view':
@@ -215,6 +236,8 @@ Chassis.mixin( View.prototype, Events, {
         Chassis.$( document ).off( eventName );
 
         this.stopListening();
+
+        View.Plugin.invoke( 'undelegateEvents', this );
 
         return this;
     },
@@ -428,6 +451,18 @@ Chassis.mixin( View.prototype, Events, {
             pe,
             viewElement,
 			_subView;
+
+        if ( View.Plugin.invoke( 
+                'addSubView', 
+                this, 
+                true,
+                view, 
+                action, 
+                opt, 
+                async, 
+                trigger ) === false ) {
+            return;
+        }
 		
 		me._removeRecycleView();
 		
@@ -757,6 +792,98 @@ Chassis.mixin( View, {
 		return view;
 	},
 
+    /**
+     * View插件，允许针对setElement/delegateEvents/undelegateEvents/addSubView
+     * 补充自定义操作；
+     * 此外还允许增加原型方法；
+     */
+    Plugin: {
+        _plugins: {},
+
+        /**
+         * 添加View插件
+         * @param {[type]} id             视图插件ID
+         * @param {[type]} implementation 视图插件实现，包括inject和proto两个部分，
+         * inject中的方法会在预定义的位置被调用，包括setElement/delegateEvents/
+         * undelegateEvents/addSubView四种注入；proto方法则会被添加到原型上；
+         */
+        add: function( id, implementation ) {
+            var plugin = this._plugins[ id ];
+
+            if ( plugin ) {
+                throw new Error( 'Plugin ' + id + ' already exists.' );
+            }
+
+            this._plugins[ id ] = implementation;
+
+            if ( implementation.proto ) {
+                Chassis.mixin( View.prototype, implementation.proto );
+            }
+        },
+
+        /**
+         * 调用视图插件中的inject方法
+         * @param  {string} methodName 函数名
+         * @param  {object} context    函数context
+         * @param  {object} defaultVal 如果插件未处理时的默认返回值
+         * @return {object}            如果存在多个插件的话则返回数组，
+         * 否则返回插件函数返回值
+         */
+        invoke: function( methodName, context, defaultVal /*[, args]*/ ) {
+            var plugins = this._plugins,
+                results = [],
+                args = [].slice.call( arguments, 3 ),
+                finalResult = defaultVal,
+                plugin,
+                pluginId,
+                method,
+                i,
+                result;
+
+            for ( pluginId in plugins  ) {
+                if ( plugins.hasOwnProperty( pluginId ) ) {
+                    plugin = plugins[ pluginId ];
+
+                    if ( !plugin.inject ) {
+                        continue;
+                    }
+
+                    method = plugin.inject[ methodName ];
+
+                    if ( method ) {
+
+                        /**
+                         * 插件方法的返回值结构：
+                         * {
+                         *     valid: true/false,
+                         *     value: mixed
+                         * }
+                         * valid为true表示方法对输入进行了处理，输出为value;
+                         * valid为false表示方法未处理，可以忽略；
+                         * 在多个插件时，对于某个方法（例如setElement）应该只有一个结果
+                         * 中的valid为true，否则invoke的返回值为最后一个invalid为true
+                         * 的value值。
+                         */
+                        result = method.apply( context, args );
+                        
+                        if ( result !== undefined ) {
+                            results.push( result );
+                        }
+                    }
+                }
+            }
+
+            for ( i = 0 ; i < results.length; i++ ) {
+                result =  results[ i ];
+
+                if ( result && result.valid ) {
+                    finalResult = result.value;
+                }
+            }
+
+            return finalResult;
+        }
+    },
 
     extend: Chassis.extend
 } );

@@ -111,7 +111,8 @@ Chassis.mixin( View.prototype, Events, {
 
         this.$el = el instanceof Chassis.$ ? el : Chassis.$( el );
 
-        el = View.Plugin.invoke( 'setElement', this, el, delegate );
+        el = View.Plugin.invoke( 
+            'setElement', this, this.$el, this.$el, delegate );
 
         if ( el ) {
             this.$el = el;
@@ -193,8 +194,8 @@ Chassis.mixin( View.prototype, Events, {
 
                 fullEventName = eventName + '.delegateEvents' + this.cid;
 
-                if ( View.Plugin.invoke( 'delegateEvents', this, eventName, 
-                        selector, method ) === false ) {
+                if ( View.Plugin.invoke( 'delegateEvents', this, true, 
+                        eventName, selector, method ) === false ) {
                     continue;
                 }
 
@@ -454,6 +455,7 @@ Chassis.mixin( View.prototype, Events, {
         if ( View.Plugin.invoke( 
                 'addSubView', 
                 this, 
+                true,
                 view, 
                 action, 
                 opt, 
@@ -792,7 +794,8 @@ Chassis.mixin( View, {
 
     /**
      * View插件，允许针对setElement/delegateEvents/undelegateEvents/addSubView
-     * 补充自定义操作
+     * 补充自定义操作；
+     * 此外还允许增加原型方法；
      */
     Plugin: {
         _plugins: {},
@@ -800,7 +803,9 @@ Chassis.mixin( View, {
         /**
          * 添加View插件
          * @param {[type]} id             视图插件ID
-         * @param {[type]} implementation 视图插件实现
+         * @param {[type]} implementation 视图插件实现，包括inject和proto两个部分，
+         * inject中的方法会在预定义的位置被调用，包括setElement/delegateEvents/
+         * undelegateEvents/addSubView四种注入；proto方法则会被添加到原型上；
          */
         add: function( id, implementation ) {
             var plugin = this._plugins[ id ];
@@ -810,30 +815,55 @@ Chassis.mixin( View, {
             }
 
             this._plugins[ id ] = implementation;
+
+            if ( implementation.proto ) {
+                Chassis.mixin( View.prototype, implementation.proto );
+            }
         },
 
         /**
-         * 调用视图插件
+         * 调用视图插件中的inject方法
          * @param  {string} methodName 函数名
          * @param  {object} context    函数context
+         * @param  {object} defaultVal 如果插件未处理时的默认返回值
          * @return {object}            如果存在多个插件的话则返回数组，
          * 否则返回插件函数返回值
          */
-        invoke: function( methodName, context /*[, args]*/ ) {
+        invoke: function( methodName, context, defaultVal /*[, args]*/ ) {
             var plugins = this._plugins,
                 results = [],
-                args = [].slice.call( arguments, 2 ),
+                args = [].slice.call( arguments, 3 ),
+                finalResult = defaultVal,
                 plugin,
                 pluginId,
                 method,
+                i,
                 result;
 
             for ( pluginId in plugins  ) {
                 if ( plugins.hasOwnProperty( pluginId ) ) {
                     plugin = plugins[ pluginId ];
-                    method = plugin[ methodName ];
+
+                    if ( !plugin.inject ) {
+                        continue;
+                    }
+
+                    method = plugin.inject[ methodName ];
 
                     if ( method ) {
+
+                        /**
+                         * 插件方法的返回值结构：
+                         * {
+                         *     valid: true/false,
+                         *     value: mixed
+                         * }
+                         * valid为true表示方法对输入进行了处理，输出为value;
+                         * valid为false表示方法未处理，可以忽略；
+                         * 在多个插件时，对于某个方法（例如setElement）应该只有一个结果
+                         * 中的valid为true，否则invoke的返回值为最后一个invalid为true
+                         * 的value值。
+                         */
                         result = method.apply( context, args );
                         
                         if ( result !== undefined ) {
@@ -843,7 +873,15 @@ Chassis.mixin( View, {
                 }
             }
 
-            return results.length <= 1 ? results[ 0 ] : results;
+            for ( i = 0 ; i < results.length; i++ ) {
+                result =  results[ i ];
+
+                if ( result && result.valid ) {
+                    finalResult = result.value;
+                }
+            }
+
+            return finalResult;
         }
     },
 

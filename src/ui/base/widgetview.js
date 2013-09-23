@@ -25,7 +25,7 @@ var UI = Chassis.UI = {},
         Chassis.$.each( events, function( idx, event ) {
             me.widget.on( event, function() {
                 var args = [].slice.call( arguments );
-                
+
                 // 区分widget事件与其他事件，加上widget前缀
                 args.unshift( widgetEventPrefix + event );
 
@@ -128,27 +128,35 @@ var UI = Chassis.UI = {},
 });
 
 View.Plugin.add( 'widgetView', {
-    delegateEvents: function( eventName, selector, method ) {
-        var widgetId,
-            widgetView;
+    inject: {
+        delegateEvents: function( eventName, selector, method ) {
+            var valid = false,
+                value = true,
+                widgetId,
+                widgetView;
 
-        if ( selector.indexOf( 'widget#' ) === 0 ) {
-            widgetId = selector.substring( 7 );
-            selector = 'widget';
+            if ( selector.indexOf( 'widget#' ) === 0 ) {
+                widgetId = selector.substring( 7 );
+                selector = 'widget';
 
-            widgetView = this.widgets[ widgetId ];
+                widgetView = this.widgets[ widgetId ];
 
-            if ( !widgetView ) {
-                throw new Error( 
-                    'widgetview#' + widgetId + ' does not exists.' );
+                if ( !widgetView ) {
+                    throw new Error( 
+                        'widgetview#' + widgetId + ' does not exists.' );
+                }
+
+                this.listenTo( 
+                    widgetView, widgetEventPrefix + eventName, method );
+
+                valid = true;
+                value = false;
             }
 
-            this.listenTo( 
-                widgetView, widgetEventPrefix + eventName, method );
-
-            return false;
+            return {
+                valid: valid,
+                value: value
+            };
         }
-
-        return true;
     }
 } );

@@ -82,6 +82,8 @@ $(document).ready(function() {
             }
         }, action);
 
+        $( '#testElement' ).append( view.$el );
+
 
         view.$el.find( '#testDelegate1' ).trigger( 'click' );
         view.$el.find( '#testDelegate2' ).trigger( 'click' );

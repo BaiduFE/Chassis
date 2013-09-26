@@ -34,11 +34,6 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
 		PageView.__super__._initialize.call( this, opts );
 	},
 
-	isActive: function() {
-        var display = this.$el.css( 'display' );
-		return  display !== 'none' && display !== '';
-	},
-
 	_getLogicString: function( opts ) {
         return Chassis.$.param( opts || {} ) || '__empty_logic_string__'; 
     },
@@ -67,7 +62,7 @@ var PageView = Chassis.PageView = View.PageView = View.extend({
 			Chassis.PageView.AllPageViewBox || {};
 		
 		Chassis.PageView.AllPageViewBox[ me.$el.selector ] = 
-			$( '<div>' ).append( me.$el.clone() ).html();
+			Chassis.$( '<div>' ).append( me.$el.clone() ).html();
 
 	},
 	

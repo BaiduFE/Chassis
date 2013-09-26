@@ -1,6 +1,6 @@
 /*jshint camelcase:false,undef:false*/
 /**
- * @fileOverview Panel组件基类
+ * @fileOverview Slider组件基类
  */
 UI.GMUSliderView = SliderView.extend({
     createWidget: function( options ) {

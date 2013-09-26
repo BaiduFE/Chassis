@@ -33,17 +33,6 @@ $(document).ready(function() {
 
 	} );
 
-	asyncTest('pageview isActive api', 2, function(){
-		var view = new Chassis.PageView();
-
-		ok(!view.isActive());
-
-		view.$el.show();
-		ok(view.isActive());
-		
-		start();
-	});
-
 	asyncTest( 'static methods', 4, function() {
 
 		PageView.define( 'home', {

@@ -127,8 +127,8 @@ Chassis.mixin( History.prototype, Events, {
         this.root = '/';
         this.handler = [];
         this.cacheOptions = null;
-        $( window ).off( 'hashchange' );
-        $( window ).off( 'popstate' );
+        Chassis.$( window ).off( 'hashchange' );
+        Chassis.$( window ).off( 'popstate' );
         History.start = false;
         
         // 销毁后重新指向原始的History，方便重新调用

@@ -544,7 +544,7 @@ Chassis.mixin( View.prototype, Events, {
             pe;
             
         pid = Chassis.uniqueId( 'subview-placeholder-' );
-        pe = $( '<div id="' + pid + '"></div>' );
+        pe = Chassis.$( '<div id="' + pid + '"></div>' );
         
         me._asyncSubView.subview[ view ] = {
             id : pid,
@@ -618,7 +618,7 @@ Chassis.mixin( View.prototype, Events, {
         
         me.$el.find( '.__common_subview__' ).each(function( k, v ) {
         
-            var subviewName = $( v ).attr( 'data' ),
+            var subviewName = Chassis.$( v ).attr( 'data' ),
                 subView = Chassis.commonView[ subviewName ],
                 cloneView = subView.$el.clone();
             
@@ -631,7 +631,7 @@ Chassis.mixin( View.prototype, Events, {
             
             subView.$el.after( '<div class="__common_subview__" data=' + 
                                 subviewName + '></div>' );
-            $( v ).replaceWith( subView.$el );
+            Chassis.$( v ).replaceWith( subView.$el );
             
             me.$el.find( '[shadow=' + subviewName + ']' ).remove();
             

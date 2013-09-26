@@ -4,9 +4,9 @@
 Chassis.FX.slider = (function() {
 
 	function generateTransform( x, y, z ) {
-        return 'translate' + ($.support.has3d ? '3d' : '') + 
+        return 'translate' + (Chassis.$.support.has3d ? '3d' : '') + 
 				'(' + x + 'px, ' + y + 'px' +
-				($.support.has3d ? (', ' + z + 'px)') : ')');
+				(Chassis.$.support.has3d ? (', ' + z + 'px)') : ')');
     }
 
 	return {
@@ -21,11 +21,11 @@ Chassis.FX.slider = (function() {
 
 					// 先隐藏当前，避免当前页面残留，确保切换效果
 					if ( fromEl ) {
-						$( fromEl ).hide();
+						Chassis.$( fromEl ).hide();
 					}
 					
 					if ( toEl ) {
-						$( toEl ).show();
+						Chassis.$( toEl ).show();
 					}
 
 				}
@@ -38,8 +38,8 @@ Chassis.FX.slider = (function() {
 			}
 
 			// 准备位置
-			toEl = $( toEl );
-			fromEl = $( fromEl );
+			toEl = Chassis.$( toEl );
+			fromEl = Chassis.$( fromEl );
 
 			fromEl.css({
 				'-webkit-transition-property': '-webkit-transform',

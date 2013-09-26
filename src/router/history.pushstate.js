@@ -62,7 +62,7 @@ History.Pushstate = History.extend({
 		me.curFragment = me.getFragment();
 		
         // 当浏览器前进后退时触发
-        $( window ).on( 'popstate', function() {
+        Chassis.$( window ).on( 'popstate', function() {
 			
 			if ( me.curFragment === me.getFragment() ) {
 				return;

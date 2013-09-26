@@ -96,6 +96,9 @@ $(document).ready(function() {
 
 		var view = new Chassis.View({el: '<p><a id="test"></a></p>'});
 		view.increment = function(){ counter1++; };
+
+		$( '#testElement' ).append( view.$el );
+
 		view.$el.on('click', function(){ counter2++; });
 
 		var events = {'click #test': 'increment'};
@@ -172,6 +175,9 @@ $(document).ready(function() {
 
 		var view = new Chassis.View({el: '<p><a id="test"></a></p>'});
 		view.increment = function(){ counter1++; };
+
+		$( '#testElement' ).append( view.$el );
+
 		view.$el.on('click', function(){ counter2++; });
 
 		var events = {'click #test': 'increment'};
@@ -382,21 +388,24 @@ $(document).ready(function() {
 		var counter = 0;
 
 		var View = Chassis.View.extend({
-			el: '<p><a id="test"></a></p>',
+			el: '<p><a class="test"></a></p>',
 			increment: function() {
 				counter++;
 			}
 		});
 
-		var view = new View({events:{'click #test':'increment'}});
-		var view2 = new View({events:{'click #test':'increment'}});
+		var view = new View({events:{'click .test':'increment'}});
+		var view2 = new View({events:{'click .test':'increment'}});
 
-		view.$('#test').trigger('click');
-		view2.$('#test').trigger('click');
+		$( '#testElement' ).append( view.$el );
+		$( '#testElement' ).append( view2.$el );
+
+		view.$('.test').trigger('click');
+		view2.$('.test').trigger('click');
 		equal(counter, 2);
 
-		view.$('#test').trigger('click');
-		view2.$('#test').trigger('click');
+		view.$('.test').trigger('click');
+		view2.$('.test').trigger('click');
 		equal(counter, 4);
 		
 		start();

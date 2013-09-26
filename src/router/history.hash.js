@@ -42,7 +42,7 @@ History.Hash = History.extend({
                 ((typeof document.documentMode === 'undefined') ||
                 document.documentMode === 8) ) {
 
-            $( window ).on( 'hashchange', function( e ) {
+            Chassis.$( window ).on( 'hashchange', function( e ) {
                 if ( me.curFragment === me.getFragment() ) {
                     return;
                 }

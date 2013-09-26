@@ -276,7 +276,7 @@ Chassis.load.config = {
 };
 
 
-$.support = Chassis.mixin( $.support || {}, {
+Chassis.$.support = Chassis.mixin( Chassis.$.support || {}, {
     has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
 } );
 

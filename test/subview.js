@@ -48,6 +48,8 @@ $(document).ready(function() {
 			id: 'sub2'
 		}, sub1);
 
+		// zepto trigger时元素必须在document上，否则事件不响应
+		$( '#testElement' ).append( sub1.$el );
 		sub1.$('button').trigger('click');
 		equal( counter, 1 );
 

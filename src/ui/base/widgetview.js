@@ -4,7 +4,7 @@
  * @fileOverview 将其他UI库组件封装成ChassisUI组件的基类
  */
 var UI = Chassis.UI = {},
-    widgetEventPrefix = 'widget.',
+    widgetEventPrefix = 'widget_',
     WidgetView = UI.WidgetView = Chassis.SubView.extend({
     _initialize: function( opts, parent ) {
         this._applyProtocol();
@@ -29,7 +29,8 @@ var UI = Chassis.UI = {},
                 // 区分widget事件与其他事件，加上widget前缀
                 args.unshift( widgetEventPrefix + event );
 
-                me.trigger.apply( me, args );
+                // 通过$el来代理事件
+                me.$el.trigger.apply( me.$el, args );
             } );
         } );
     },
@@ -46,8 +47,8 @@ var UI = Chassis.UI = {},
 
         // 处理options
         Chassis.$.each( options, function( idx, optionName ) {
-            if ( model && optionName in model ) {
-                widgetOptions[ optionName ] = model[ optionName ];
+            if ( model && model.ui && (optionName in model.ui) ) {
+                widgetOptions[ optionName ] = model.ui[ optionName ];
             }
         } );
 
@@ -80,6 +81,8 @@ var UI = Chassis.UI = {},
         } );
 
         // 处理events，只能listenTo protocol中的事件
+        
+        /*
         this.on = function( eventName, callback, context ) {
             var isWidgetEvent = 
                 (eventName.indexOf( widgetEventPrefix ) === 0);
@@ -93,11 +96,13 @@ var UI = Chassis.UI = {},
                 _on.apply( me, arguments );
             }
         };
+        */
         
     },
     onBeforePageIn : function() {
         this.widget = this.createWidget( this.widgetOptions );
         this.bindEvents();
+        this.widget.trigger( 'init' );
         this.$el.show();
     },
     protocol: {
@@ -120,7 +125,7 @@ var UI = Chassis.UI = {},
         events: [],
 
         /**
-         * 配置项(从model中获取具体的值)
+         * 配置项(从model.ui中获取具体的值)
          * @type {Array}
          */
         options: []
@@ -132,13 +137,15 @@ View.Plugin.add( 'widgetView', {
         delegateEvents: function( eventName, selector, method ) {
             var valid = false,
                 value = true,
+                fullEventName = widgetEventPrefix + eventName + 
+                    '.delegateEvents' + this.cid,
                 widgetId,
                 widgetView;
 
             if ( selector.indexOf( 'widget#' ) === 0 ) {
                 widgetId = selector.substring( 7 );
-                selector = 'widget';
 
+                /*
                 widgetView = this.widgets[ widgetId ];
 
                 if ( !widgetView ) {
@@ -148,6 +155,10 @@ View.Plugin.add( 'widgetView', {
 
                 this.listenTo( 
                     widgetView, widgetEventPrefix + eventName, method );
+                */
+                // 由于widget本身尚未创建，因此widget的事件通过它的el来触发
+                // 此处则在容器上代理监听它的el事件
+                this.$el.on( fullEventName, '#' + widgetId, method );
 
                 valid = true;
                 value = false;

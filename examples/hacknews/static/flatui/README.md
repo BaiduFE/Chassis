@@ -34,7 +34,7 @@ Thanks for supporting our website and enjoy!
 ## Typeface
 Flat UI Free is made using the Lato typeface, which can be downloaded for free here: http://www.google.com/webfonts/specimen/Lato
 
-##Useful Links (How To)
+## Useful Links (How To)
 
 How to Use UI Kits, Beginners Video Tips:                 [http://designmodo.com/how-to-use/](http://designmodo.com/how-to-use/)
 

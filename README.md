@@ -18,15 +18,15 @@
         * [视图](#4-4-3-%E8%A7%86%E5%9B%BE)
  * [更多文档](#5-%E6%9B%B4%E5%A4%9A%E6%96%87%E6%A1%A3)
 
-##1. Chassis是什么？
+## 1. Chassis是什么？
 
 Chassis源于百度内部的Rocket项目，是一套以提高Webapp开发效率为目的的开发框架。它提供了一套类Backbone的MVC代码架构，在此基础上延伸了视图层管理，优化了路由控制以及更加轻量级的实现。此外，基于Chassis的视图分层和开发规范，可以实现非常灵活的分工协作。
 
-##2. Chassis有多轻量级？
+## 2. Chassis有多轻量级？
 
 Chassis在实现上采用了多种组件化方案，开发者可以根据需求实现灵活定制。在体积上，轻量级版本Chassis只有 `4.8KB` (gzip)。
 
-##3. Chassis适合什么样开发场景？
+## 3. Chassis适合什么样开发场景？
 
 如果你的项目满足以下特点（或需求）将会非常适合使用Chassis作为开发框架：
 
@@ -34,7 +34,7 @@ Chassis在实现上采用了多种组件化方案，开发者可以根据需求�
  * 路由管理
  * 视图管理（视图分层、视图切换、视图智能回收等）
 
-##4. Chassis入门
+## 4. Chassis入门
 
 假设我们需要开发一个非常简单的APP，由两个页面组成：一个列表页以及一个详情页。APP默认页面为列表页，点击列表页会切换到详情页。
 
@@ -42,7 +42,7 @@ Chassis在实现上采用了多种组件化方案，开发者可以根据需求�
 
 手机请访问 `t.cn/zH0WkZn`
 
-###4-1. 准备工作
+### 4-1. 准备工作
 
 首先我们需要引入基础的JS脚本库。Chassis本身唯一的依赖是DOM脚本库，你可以选择使用[zepto](http://zeptojs.com/)、[jQuery](http://jquery.com)或者[ender](https://ender.no.de/)。
 
@@ -56,7 +56,7 @@ Chassis在实现上采用了多种组件化方案，开发者可以根据需求�
 <script src="js/chassis.js"></script>
 ```
 
-###4-2. 路由规则
+### 4-2. 路由规则
 
 接下来我们需要确定APP的路由规则，这直接影响到视图层的组织。本例中包含两个页面：首页以及详情页，我们给每个页面分配一个ID：`index`和`detail`。页面对应的访问路径分别是：`http://yourdomain.com`和`http://yourdomain.com#/detail/123`
 
@@ -93,13 +93,13 @@ routes: {
 
 更多信息请参考[《Chassis的路由使用》](https://github.com/BaiduFE/Chassis/issues/9)。
 
-###4-3. 开发首页
+### 4-3. 开发首页
 
 在路由确定后我们就可以正式进行视图开发了，让我们先来完成首页。
 
 首先，我们需要为页面数据的显示准备相应的模板，这里使用`Mustache`语法，如下。
 
-####4-3-1. 模板
+#### 4-3-1. 模板
 
 ```html
 <script id="index-template" type="text/x-template">
@@ -128,7 +128,7 @@ routes: {
 
 现在我们需要定义视图对应的数据。
 
-####4-3-2. Model
+#### 4-3-2. Model
 
 ```javascript
 Chassis.Model.define( 'index', {
@@ -154,7 +154,7 @@ Chassis.Model.define( 'index', {
 
 这之后就是视图的定义了。
 
-####4-3-3. 视图
+#### 4-3-3. 视图
 
 ```javascript
 Chassis.PageView.define( 'index', {
@@ -257,9 +257,9 @@ onModelChange: function( ) {
 
 至此，首页的代码就完成了。
 
-###4-4. 开发详情页
+### 4-4. 开发详情页
 
-####4-4-1. 模板
+#### 4-4-1. 模板
 
 ```html
 <script id="detail-template" type="text/x-template">
@@ -309,7 +309,7 @@ onModelChange: function( ) {
 </script>
 ```
 
-####4-4-2. Model
+#### 4-4-2. Model
 
 ```javascript
 Chassis.Model.Detail = Chassis.Model.extend( {
@@ -328,7 +328,7 @@ Chassis.Model.Detail = Chassis.Model.extend( {
 } );
 ```
 
-####4-4-3. 视图
+#### 4-4-3. 视图
 
 ```javascript
 Chassis.PageView.define( 'detail', {
@@ -375,7 +375,7 @@ Chassis.PageView.define( 'detail', {
 
 到此一个最简单的Chassis应用就开发完了，关于Chassis的更多细节请参考：
 
-##5. 更多文档
+## 5. 更多文档
 
 [Chassis入门文档](https://github.com/BaiduFE/Chassis/issues/28)
 
